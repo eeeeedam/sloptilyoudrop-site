@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slop ’Til You Drop — Ellie Damashek</title>
+  <meta name="description" content="A map of how AI is rewriting the terms of what we trust, consume, and tolerate. Curated by Ellie Damashek.">
+  <meta property="og:title" content="Slop ’Til You Drop">
+  <meta property="og:description" content="A map of how AI is rewriting the terms of what we trust, consume, and tolerate.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f1e8; --fg: #1a1608; --accent: #c93208; --accent2: #b07d00;
+      --dim: #c8c0b0; --sub: #7a7060; --panel: #ede8de;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--bg); color:var(--fg); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+    body::before {
+      content:''; position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:100; opacity:0.35;
+    }
+
+    /* ── ADMIN / EDIT MODE ── */
+    #btn-admin-unlock { position:fixed; bottom:16px; right:20px; z-index:199; background:none; border:1px solid var(--dim); color:var(--sub); font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; padding:5px 10px; cursor:pointer; opacity:.35; transition:all .18s; }
+    #btn-admin-unlock:hover { opacity:1; border-color:var(--accent); color:var(--accent); }
+    body.edit-mode #btn-admin-unlock { display:none; }
+    #edit-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:var(--fg); color:var(--bg); padding:10px 20px; align-items:center; gap:14px; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; box-shadow:0 4px 24px rgba(0,0,0,0.2); white-space:nowrap; }
+    #edit-bar.visible { display:flex; }
+    .edit-hint { color:rgba(245,241,232,0.45); }
+    .edit-btn { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; padding:6px 14px; border:none; }
+    #btn-save-edit { background:var(--accent); color:#fff; }
+    #btn-cancel-edit { background:rgba(245,241,232,0.12); color:var(--bg); }
+    #save-confirm { display:none; position:fixed; bottom:72px; left:50%; transform:translateX(-50%); z-index:201; background:#1a7a5a; color:#fff; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:10px 20px; }
+    body.edit-mode [data-editable] { outline:1px dashed rgba(201,50,8,0.35); cursor:text; }
+    body.edit-mode [data-editable]:hover { outline:1px solid var(--accent); background:rgba(201,50,8,0.03); }
+    body.edit-mode [data-editable]:focus { outline:2px solid var(--accent); background:rgba(201,50,8,0.05); }
+
+    /* ── NAV ── */
+    nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:var(--bg); border-bottom:1px solid var(--dim); }
+    .nav-wordmark { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.06em; color:var(--fg); text-decoration:none; }
+    .nav-wordmark .red { color:var(--accent); }
+    .nav-wordmark .sub { font-family:'Space Mono',monospace; font-size:10px; color:var(--sub); letter-spacing:.08em; margin-left:10px; vertical-align:middle; }
+    .nav-links { display:flex; gap:0; }
+    .nav-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); text-decoration:none; padding:4px 14px; border-right:1px solid rgba(120,112,96,0.2); transition:color .15s; }
+    .nav-links a:last-child { border-right:none; padding-right:0; }
+    .nav-links a:hover { color:var(--accent); }
+
+    /* ── HERO ── */
+    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; gap:0; padding-top:57px; }
+    .hero-left { display:flex; flex-direction:column; justify-content:flex-end; padding:64px 40px 64px 40px; }
+    .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(64px,9vw,120px); letter-spacing:.02em; line-height:.9; margin-bottom:28px; opacity:0; animation:fade-up .7s .2s forwards; }
+    .hero-title .red { color:var(--accent); display:block; }
+    .hero-title .dark { color:var(--fg); display:block; }
+    .hero-rule { width:40px; height:2px; background:var(--accent); margin-bottom:28px; opacity:0; animation:fade-up .4s .45s forwards; }
+    .hero-cta { display:flex; gap:10px; flex-wrap:wrap; opacity:0; animation:fade-up .5s .6s forwards; }
+    .hero-right { display:flex; flex-direction:column; justify-content:flex-end; padding:64px 40px 64px 32px; border-left:1px solid var(--dim); opacity:0; animation:fade-up .6s .4s forwards; }
+    .hero-letter-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:16px; }
+    .hero-opening { font-family:'DM Sans',sans-serif; font-size:clamp(14px,1.4vw,16px); line-height:1.85; color:var(--fg); margin-bottom:18px; }
+    .hero-divider { border:none; border-top:1px solid var(--dim); margin:28px 0; }
+    .hero-def-block { margin-bottom:20px; }
+    .hero-def-term { font-family:'Space Mono',monospace; font-size:10px; font-weight:700; letter-spacing:.06em; color:var(--fg); }
+    .hero-def-term em { font-style:italic; color:var(--sub); font-weight:400; }
+    .hero-def-body { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.65; color:var(--sub); margin-top:5px; }
+    .hero-neutral { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.7; color:var(--sub); font-style:italic; padding-left:14px; border-left:2px solid var(--accent); }
+
+    @keyframes fade-up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── BUTTONS ── */
+    .btn-primary { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--bg); background:var(--fg); padding:13px 28px; text-decoration:none; display:inline-block; transition:background .18s; border:none; cursor:pointer; }
+    .btn-primary:hover { background:var(--accent); }
+    .btn-secondary { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); background:none; border:1px solid var(--dim); padding:12px 20px; text-decoration:none; display:inline-block; transition:color .18s,border-color .18s; }
+    .btn-secondary:hover { color:var(--fg); border-color:var(--fg); }
+
+    /* ── RECENT KEY MOMENTS ── */
+    .moments-section { background:var(--panel); border-top:1px solid var(--dim); border-bottom:1px solid var(--dim); padding:64px 40px; }
+    .moments-inner { max-width:1200px; margin:0 auto; }
+    .moments-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; gap:16px; flex-wrap:wrap; }
+    .moments-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg); text-align:left; }
+    .carousel-nav { display:flex; align-items:center; gap:8px; }
+    .carousel-btn { font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; font-family:monospace; }
+    .carousel-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .carousel-btn:disabled { opacity:.25; cursor:default; }
+    .carousel-counter { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center; }
+    .carousel-track-wrap { overflow:hidden; border:1px solid var(--dim); }
+    .carousel-track { display:flex; transition:transform .36s cubic-bezier(.4,0,.2,1); background:var(--dim); gap:1px; }
+    .moment-card { flex:0 0 calc(33.333% - 1px); min-width:0; background:var(--bg); padding:24px 24px 20px; text-decoration:none; display:flex; flex-direction:column; gap:8px; transition:background .18s; }
+    .moment-card:hover { background:#ede8de; }
+    .moment-card:hover .moment-arrow { opacity:1; transform:translateX(0); }
+    .moment-date { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); }
+    .moment-headline { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; line-height:1.4; color:var(--fg); }
+    .moment-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub); flex:1; }
+    .moment-footer { display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px solid var(--dim); margin-top:4px; }
+    .moment-impact { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; color:var(--sub); }
+    .moment-arrow { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; color:var(--accent); opacity:0; transform:translateX(-4px); transition:all .15s; white-space:nowrap; text-transform:uppercase; }
+    .moment-card-cta { background:var(--fg); flex-direction:column; justify-content:flex-end; }
+    .moment-card-cta:hover { background:#2a2218; }
+    .moment-cta-num { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; color:var(--accent); letter-spacing:.02em; }
+    .moment-cta-text { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.55; color:rgba(245,241,232,0.7); margin-top:6px; }
+    .moment-cta-link { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent2); margin-top:16px; }
+
+    /* ── ABOUT ── */
+    .section { padding:80px 40px; max-width:1200px; margin:0 auto; }
+    .about-body p { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.85; color:var(--fg); margin-bottom:18px; max-width:640px; }
+
+    /* ── HOW IT WORKS ── */
+    .how-section { background:var(--fg); padding:80px 40px; }
+    .how-inner { max-width:1200px; margin:0; }
+    
+    .how-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--bg); margin-bottom:16px; }
+    .how-sub { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.6; color:rgba(245,241,232,0.5); margin-bottom:48px; max-width:440px; }
+    .how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,0.06); }
+    .how-card { padding:32px 28px; background:var(--fg); transition:background .18s; }
+    .how-card:hover { background:#252018; }
+    .how-num { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.14em; color:var(--accent); margin-bottom:14px; }
+    .how-title { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; color:rgba(245,241,232,0.88); margin-bottom:10px; }
+    .how-body { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.7; color:rgba(245,241,232,0.45); }
+
+    /* ── SLOP / SPILL ── */
+    .split-section { display:grid; grid-template-columns:1fr 1fr; min-height:360px; }
+    .split-pane { padding:64px 48px; display:flex; flex-direction:column; justify-content:flex-end; }
+    .split-pane.slop { background:#e8e2d4; border-right:1px solid var(--dim); }
+    .split-pane.spill { background:var(--bg); }
+    .split-label { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:10px; }
+    .split-pane.slop .split-label { color:var(--accent); }
+    .split-pane.spill .split-label { color:var(--accent2); }
+    .split-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); letter-spacing:.03em; line-height:.95; margin-bottom:16px; }
+    .split-pane.slop .split-title { color:var(--accent); }
+    .split-pane.spill .split-title { color:var(--accent2); }
+    .split-body { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--sub); max-width:340px; }
+
+    /* ── BIO ── */
+    .bio-section { padding:80px 40px; max-width:1200px; margin:0; }
+    .bio-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:16px; }
+    .bio-name { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; margin-bottom:20px; text-align:left; }
+    .bio-body { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.85; color:var(--fg); font-style:italic; margin-bottom:24px; }
+    .bio-links { display:flex; gap:16px; }
+    .bio-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(176,125,0,0.3); padding-bottom:2px; transition:color .15s; }
+    .bio-links a:hover { color:var(--accent); }
+
+    /* ── FINAL CTA ── */
+    .cta-section { background:var(--fg); padding:80px 40px; text-align:left; }
+    .cta-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(48px,8vw,96px); letter-spacing:.03em; line-height:.92; color:var(--bg); margin-bottom:20px; }
+    .cta-sub { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.7; color:rgba(245,241,232,0.5); max-width:420px; margin:0 0 32px; }
+
+    /* ── FOOTER ── */
+    footer { border-top:1px solid var(--dim); padding:22px 40px; display:flex; align-items:center; justify-content:space-between; }
+    .footer-copy { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--sub); }
+    .footer-links { display:flex; gap:18px; }
+    .footer-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--sub); text-decoration:none; transition:color .15s; }
+    .footer-links a:hover { color:var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:768px) {
+      nav { padding:14px 20px; }
+      .nav-links a { padding:4px 8px; font-size:7px; }
+      .nav-wordmark .sub { display:none; }
+      .hero { grid-template-columns:1fr; min-height:auto; padding-top:53px; }
+      .hero-left { padding:48px 20px 32px; border-right:none; border-bottom:1px solid var(--dim); }
+      .hero-right { padding:32px 20px 48px; }
+      .moments-section { padding:48px 20px; }
+      .moment-card { flex:0 0 85%; }
+      .section { padding:56px 20px; }
+      .how-section { padding:56px 20px; }
+      .how-grid { grid-template-columns:1fr; }
+      .split-section { grid-template-columns:1fr; }
+      .split-pane { padding:48px 24px; }
+      .split-pane.slop { border-right:none; border-bottom:1px solid var(--dim); }
+      .bio-section { padding:56px 20px; }
+      .cta-section { padding:56px 20px; }
+      footer { padding:18px 20px; flex-direction:column; gap:10px; text-align:center; }
+      #btn-admin-unlock { bottom:64px; }
+    }
+  </style>
+</head>
+<body>
+
+<button id="btn-admin-unlock" onclick="promptAdmin()">✎ edit</button>
+<div id="edit-bar">
+  <span class="edit-hint">✎ click any highlighted text to edit</span>
+  <button class="edit-btn" id="btn-save-edit" onclick="saveEdits()">⬇ export html</button>
+  <button class="edit-btn" id="btn-cancel-edit" onclick="cancelEdit()">exit</button>
+</div>
+<div id="save-confirm">✓ copied — paste into your file and commit</div>
+
+<nav>
+  <a href="#" class="nav-wordmark"><span class="red">Slop</span> 'Til You <span class="red">Drop</span><span class="sub">/ The Slop Galaxy</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#how">How it works</a>
+    <a href="#editor">The editor</a>
+    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Enter the Galaxy ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <h1 class="hero-title">
+      <span class="red" data-editable="hero-line1" contenteditable="false">Slop</span>
+      <span class="dark" data-editable="hero-line2" contenteditable="false">'Til You</span>
+      <span class="red" data-editable="hero-line3" contenteditable="false">Drop.</span>
+    </h1>
+    <div class="hero-rule"></div>
+    <div class="hero-cta">
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Enter the Galaxy →</a>
+      <a href="#how" class="btn-secondary">How it works</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-letter-label" data-editable="hero-letter-label" contenteditable="false">A letter from Ellie</div>
+    <p class="hero-opening" data-editable="hero-p1" contenteditable="false">I started noticing slop in small, innocent ways. A family member shared an image that was...off. Then my social media feed grew increasingly hollow. Wherever I looked, the Internet was flooded with content mimicking humanity but lacking its soul and imperfections.</p>
+    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">The Slop Galaxy tracks the moments when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together they are a record of how a technology is rewriting the terms of what we trust, consume, and tolerate.</p>
+    <p class="hero-opening" data-editable="hero-p3" contenteditable="false">Maybe you have been watching this closely. Maybe you have been trying not to. Either way, something is shifting — and it is worth understanding what and how, in real time.</p>
+    <hr class="hero-divider">
+    <div class="hero-def-block">
+      <div class="hero-def-term">slop <em>n.</em></div>
+      <div class="hero-def-body" data-editable="hero-def" contenteditable="false">Digital content of low quality produced in quantity by artificial intelligence. Merriam-Webster Word of the Year, 2025.</div>
+    </div>
+    <p class="hero-neutral" data-editable="hero-neutral" contenteditable="false">This is not a neutral database. It is a curated map with a point of view: that what we tolerate online shapes what we become offline, and that someone should be keeping track.</p>
+  </div>
+</section>
+
+<!-- RECENT KEY MOMENTS -->
+<section class="moments-section">
+  <div class="moments-inner">
+    <div class="moments-header">
+      <h2 class="moments-heading">Recent Key Moments</h2>
+      <div class="carousel-nav">
+        <button class="carousel-btn" id="carousel-prev" aria-label="Previous">←</button>
+        <span class="carousel-counter"><span id="carousel-cur">1</span> / <span id="carousel-total">6</span></span>
+        <button class="carousel-btn" id="carousel-next" aria-label="Next">→</button>
+      </div>
+    </div>
+    <div class="carousel-track-wrap">
+      <div class="carousel-track" id="carousel-track">
+
+        <a href="https://galaxy.sloptilyoudrop.com?node=39" target="_blank" class="moment-card">
+          <div class="moment-date" data-editable="m1-date" contenteditable="false">March 2026 · Platform</div>
+          <div class="moment-headline" data-editable="m1-head" contenteditable="false">OpenAI kills Sora — and the Disney deal collapses with it</div>
+          <p class="moment-body" data-editable="m1-body" contenteditable="false">Six months after launch, OpenAI shut down its AI video app and dissolved the $1B Disney deal. Compute costs and IPO preparation won over Hollywood ambition.</p>
+          <div class="moment-footer"><span class="moment-impact">Impact 9/10</span><span class="moment-arrow">View in galaxy →</span></div>
+        </a>
+
+        <a href="https://galaxy.sloptilyoudrop.com?node=41" target="_blank" class="moment-card">
+          <div class="moment-date" data-editable="m2-date" contenteditable="false">March 2026 · Media</div>
+          <div class="moment-headline" data-editable="m2-head" contenteditable="false">The paper that exposed AI fraud was itself using AI</div>
+          <p class="moment-body" data-editable="m2-body" contenteditable="false">Days after the NYT broke the Hachette AI novel story, The Atlantic found AI-assisted writing in the NYT's own Modern Love column. The recursion is the story.</p>
+          <div class="moment-footer"><span class="moment-impact">Impact 8/10</span><span class="moment-arrow">View in galaxy →</span></div>
+        </a>
+
+        <a href="https://galaxy.sloptilyoudrop.com?node=42" target="_blank" class="moment-card">
+          <div class="moment-date" data-editable="m3-date" contenteditable="false">March 2026 · Platform</div>
+          <div class="moment-headline" data-editable="m3-head" contenteditable="false">300M views in 17 days — then TikTok banned it</div>
+          <p class="moment-body" data-editable="m3-body" contenteditable="false">Fruit Love Island, a fully AI-generated dating show, became TikTok's fastest-growing account ever. The platform that promoted it then deleted it for “low quality content.”</p>
+          <div class="moment-footer"><span class="moment-impact">Impact 8/10</span><span class="moment-arrow">View in galaxy →</span></div>
+        </a>
+
+        <a href="https://galaxy.sloptilyoudrop.com?node=40" target="_blank" class="moment-card">
+          <div class="moment-date" data-editable="m4-date" contenteditable="false">March 2026 · Media</div>
+          <div class="moment-headline" data-editable="m4-head" contenteditable="false">Hachette pulls a novel — the first major publisher to cancel over AI</div>
+          <p class="moment-body" data-editable="m4-body" contenteditable="false">Horror novel ‘Shy Girl' was pulled after the NYT found AI markers in the text. The author says her editor used it without her knowledge — making her the victim.</p>
+          <div class="moment-footer"><span class="moment-impact">Impact 8/10</span><span class="moment-arrow">View in galaxy →</span></div>
+        </a>
+
+        <a href="https://galaxy.sloptilyoudrop.com?node=9" target="_blank" class="moment-card">
+          <div class="moment-date" data-editable="m5-date" contenteditable="false">May 2024 · Platform</div>
+          <div class="moment-headline" data-editable="m5-head" contenteditable="false">Google told people to eat glue on their pizza</div>
+          <p class="moment-body" data-editable="m5-body" contenteditable="false">Google's AI Overview scraped a Reddit joke and presented it as nutritional guidance. The moment that crystallized public disillusionment with AI search.</p>
+          <div class="moment-footer"><span class="moment-impact">Impact 10/10</span><span class="moment-arrow">View in galaxy →</span></div>
+        </a>
+
+        <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="moment-card moment-card-cta">
+          <div class="moment-cta-num" data-editable="cta-num" contenteditable="false">42</div>
+          <div class="moment-cta-text" data-editable="cta-text" contenteditable="false">moments documented in the galaxy.</div>
+          <div class="moment-cta-link">See all →</div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="how-inner">
+    <h2 class="how-heading">How to read it.</h2>
+    <p class="how-sub" data-editable="how-sub" contenteditable="false">Every node is a documented moment. Here's what you're looking at.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-title" data-editable="how1-title" contenteditable="false">Size indicates impact</div>
+        <p class="how-body" data-editable="how1-body" contenteditable="false">The larger the node, the higher its impact score — a curated judgment of how much this moment changed the world. Scores run 1 to 10.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-title" data-editable="how2-title" contenteditable="false">Slop vs. Spill is indicated by placement</div>
+        <p class="how-body" data-editable="how2-body" contenteditable="false">The sloppier the moment, the lower the node is on the y-axis. The more of a spill — a consequence, a reckoning, legislation — the higher it is.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-title" data-editable="how3-title" contenteditable="false">Click for the full story</div>
+        <p class="how-body" data-editable="how3-body" contenteditable="false">Every node has rich context: what happened, what it tells us, the source, and sometimes an editor's note from Ellie. An amber arc connects the key moments — a curated through-line, visible the moment you open the map.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section id="editor">
+  <div class="bio-section">
+    <div class="bio-label">The editor</div>
+    <h2 class="bio-name" data-editable="bio-name" contenteditable="false">Ellie Damashek</h2>
+    <p class="bio-body" data-editable="bio-body" contenteditable="false">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
+    <div class="bio-links">
+      <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
+      <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <h2 class="cta-heading">Enter the Galaxy.</h2>
+  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Open the Galaxy →</a>
+</section>
+
+<footer>
+  <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn</a>
+    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Galaxy</a>
+  </div>
+</footer>
+
+<script>
+  // ── EDITOR MODE ──────────────────────────────────────────────────────────────
+  const PASS = 'remiagua22';
+  let editMode = false;
+  function promptAdmin() {
+    const pw = prompt('Enter edit password:');
+    if (pw === PASS) enableEdit();
+    else if (pw !== null) alert('Incorrect password.');
+  }
+  function enableEdit() {
+    editMode = true;
+    document.body.classList.add('edit-mode');
+    document.getElementById('edit-bar').classList.add('visible');
+    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
+  }
+  function cancelEdit() {
+    editMode = false;
+    document.body.classList.remove('edit-mode');
+    document.getElementById('edit-bar').classList.remove('visible');
+    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
+  }
+  function saveEdits() {
+    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
+    const html = '<!DOCTYPE html>\\n' + document.documentElement.outerHTML;
+    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
+    navigator.clipboard.writeText(html).then(() => {
+      const c = document.getElementById('save-confirm');
+      c.style.display = 'block';
+      setTimeout(() => c.style.display = 'none', 4000);
+    }).catch(() => {
+      const blob = new Blob([html], {type:'text/html'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sloptilyoudrop-index.html';
+      a.click();
+    });
+  }
+
+  // ── CAROUSEL ─────────────────────────────────────────────────────────────────
+  (function() {
+    const track = document.getElementById('carousel-track');
+    const prev  = document.getElementById('carousel-prev');
+    const next  = document.getElementById('carousel-next');
+    const curEl = document.getElementById('carousel-cur');
+    const totEl = document.getElementById('carousel-total');
+    if (!track) return;
+    const cards = track.querySelectorAll('.moment-card');
+    const total = cards.length;
+    totEl.textContent = total;
+    let cur = 0;
+    function cw() {
+      return window.innerWidth <= 768
+        ? track.parentElement.offsetWidth * 0.86
+        : track.parentElement.offsetWidth / 3;
+    }
+    function go(i) {
+      cur = Math.max(0, Math.min(i, total - 1));
+      track.style.transform = 'translateX(-' + (cur * (cw() + 1)) + 'px)';
+      curEl.textContent = cur + 1;
+      prev.disabled = cur === 0;
+      next.disabled = cur === total - 1;
+    }
+    prev.addEventListener('click', () => go(cur - 1));
+    next.addEventListener('click', () => go(cur + 1));
+    let tx = 0;
+    track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+    }, {passive:true});
+    window.addEventListener('resize', () => go(cur));
+    go(0);
+  })();
+</script>
+
+</body>
+</html>
