@@ -57,7 +57,7 @@
 
     /* ── HERO ── */
     .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; gap:0; padding-top:72px; }
-    .hero-left { display:flex; flex-direction:column; justify-content:flex-end; padding:64px 40px 64px 40px; }
+    .hero-left { display:flex; flex-direction:column; justify-content:flex-start; padding:64px 40px 64px 40px; }
     .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(64px,9vw,120px); letter-spacing:.02em; line-height:.9; margin-bottom:28px; opacity:0; animation:fade-up .7s .2s forwards; }
     .hero-title .red { color:var(--accent); display:block; }
     .hero-title .dark { color:var(--fg); display:block; }
@@ -241,10 +241,10 @@
 <button id="btn-admin-unlock" onclick="promptAdmin()">✎ edit</button>
 <div id="edit-bar">
   <span class="edit-hint">✎ click any highlighted text to edit</span>
-  <button class="edit-btn" id="btn-save-edit" onclick="saveEdits()">⬇ export html</button>
+  <button class="edit-btn" id="btn-save-edit" onclick="saveEdits()">⬇ download html</button>
   <button class="edit-btn" id="btn-cancel-edit" onclick="cancelEdit()">exit</button>
 </div>
-<div id="save-confirm">✓ copied — paste into your file and commit</div>
+<div id="save-confirm">✓ downloading — upload index.html to github and commit</div>
 
 <div id="site-header">
   <div id="header-main">
@@ -278,9 +278,10 @@
   </div>
   <div class="hero-right">
     <div class="hero-letter-label" data-editable="hero-letter-label" contenteditable="false">A letter from Ellie</div>
-    <p class="hero-opening" data-editable="hero-p1" contenteditable="false">I started noticing slop in small, innocent ways. A family member shared an image that was...off. Then my social media feed grew increasingly hollow. Wherever I looked, the Internet was flooded with content mimicking humanity but lacking its soul and imperfections.</p>
-    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">The Slop Galaxy tracks the moments when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together they are a record of how a technology is rewriting the terms of what we trust, consume, and tolerate.</p>
-    <p class="hero-opening" data-editable="hero-p3" contenteditable="false">Maybe you have been watching this closely. Maybe you have been trying not to. Either way, something is shifting — and it is worth understanding what and how, in real time.</p>
+    <p class="hero-opening" data-editable="hero-p1" contenteditable="false">Whether you notice it or not, AI slop is everywhere. I started seeing it in small, innocent ways. A family member shared an image that was off. My social media feed grew increasingly hollow. A trickle became a floodgate of acceptable, passable AI slop permeating every corner of the Internet. It was mimicking humanity but often lacked its patina, randomness, and imperfections.</p>
+    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">As much as I try to avoid it, I can't stop thinking about slop. I'm less consumed by the haunting image of Shrimp Jesus or who's hooking up on Fruit Love Island than what this slop is doing to us — the human Us. What are we accepting as passable entertainment, art, literature, or — in some instances — companionship? And what will we accept as AI-generated content is normalized and increasingly indistinguishable from human work.</p>
+    <p class="hero-opening" data-editable="hero-p3" contenteditable="false">Not even Claude has a crystal ball (and don't believe it if it tells you so), so I decided to track it. A few weeks of vibecoding later (irony! ha), The Slop Galaxy was born. I created this site as a way to track and visualize these moments on a timeline. Moments like: when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together, these start to paint a picture, and keep score, of how a technology is changing the terms of what we trust, consume, and tolerate.</p>
+    <p class="hero-opening" data-editable="hero-p4" contenteditable="false">Maybe you, too, have been watching this closely. Maybe you are blissfully touching grass or carelessly surfing the web. Either way, something is shifting, and this is my attempt at understanding what and how, in real time.</p>
     <hr class="hero-divider">
     <div class="hero-def-block">
       <div class="hero-def-term">slop <em>n.</em></div>
@@ -536,19 +537,16 @@
   }
   function saveEdits() {
     document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
-    const html = '<!DOCTYPE html>\\n' + document.documentElement.outerHTML;
+    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
     document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
-    navigator.clipboard.writeText(html).then(() => {
-      const c = document.getElementById('save-confirm');
-      c.style.display = 'block';
-      setTimeout(() => c.style.display = 'none', 4000);
-    }).catch(() => {
-      const blob = new Blob([html], {type:'text/html'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'sloptilyoudrop-index.html';
-      a.click();
-    });
+    const blob = new Blob([html], {type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    a.click();
+    const c = document.getElementById('save-confirm');
+    c.style.display = 'block';
+    setTimeout(() => c.style.display = 'none', 4000);
   }
 
   // ── CAROUSEL ─────────────────────────────────────────────────────────────────
