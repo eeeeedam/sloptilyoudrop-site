@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" class="dnXmp" style="position: absolute; top: 0px; left: 0px; pointer-events: none; --rem: 16;"></grammarly-extension><head>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Slop ’Til You Drop — Ellie Damashek</title>
@@ -8,8 +9,8 @@
   <meta property="og:description" content="A map of how AI is rewriting the terms of what we trust, consume, and tolerate.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #f5f1e8; --fg: #1a1608; --accent: #c93208; --accent2: #b07d00;
@@ -26,8 +27,8 @@
     }
 
     /* ── ADMIN / EDIT MODE ── */
-    #btn-admin-unlock { position:fixed; bottom:16px; right:20px; z-index:199; background:none; border:1px solid var(--dim); color:var(--sub); font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; padding:5px 10px; cursor:pointer; opacity:.35; transition:all .18s; }
-    #btn-admin-unlock:hover { opacity:1; border-color:var(--accent); color:var(--accent); }
+    #btn-admin-unlock { position:fixed; bottom:16px; right:16px; z-index:199; width:18px; height:18px; border-radius:50%; background:rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.15); cursor:pointer; opacity:1; transition:all .2s; padding:0; }
+    #btn-admin-unlock:hover { background:rgba(0,0,0,0.12); border-color:rgba(0,0,0,0.3); }
     body.edit-mode #btn-admin-unlock { display:none; }
     #edit-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:var(--fg); color:var(--bg); padding:10px 20px; align-items:center; gap:14px; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; box-shadow:0 4px 24px rgba(0,0,0,0.2); white-space:nowrap; }
     #edit-bar.visible { display:flex; }
@@ -235,10 +236,10 @@
     }
   </style>
 </head>
-<body data-new-gr-c-s-check-loaded="14.1280.0" data-gr-ext-installed="" class="edit-mode" data-new-gr-c-s-loaded="14.1280.0">
+<body>
 
-<button id="btn-admin-unlock" onclick="promptAdmin()">✎ edit</button>
-<div id="edit-bar" class="visible">
+<button id="btn-admin-unlock" onclick="promptAdmin()" title="Edit page"></button>
+<div id="edit-bar">
   <span class="edit-hint">✎ click any highlighted text to edit</span>
   <button class="edit-btn" id="btn-save-edit" onclick="saveEdits()">⬇ download html</button>
   <button class="edit-btn" id="btn-cancel-edit" onclick="cancelEdit()">exit</button>
@@ -277,10 +278,10 @@
   </div>
   <div class="hero-right">
     <div class="hero-letter-label" data-editable="hero-letter-label" contenteditable="false">A letter from Ellie</div>
-    <p class="hero-opening" data-editable="hero-p1" contenteditable="false" spellcheck="false">Whether you notice it or not, AI slop is everywhere. I started seeing it in small, innocent ways. A family member shared an image that was off. My social media feed grew increasingly hollow. A trickle became a floodgate of acceptable, passable AI slop permeating every corner of the Internet I visited. What I saw mimicked humanity but lacked its patina, randomness, and imperfections.</p>
-    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">As much as I try to avoid it, I can't stop thinking about slop. I'm less consumed by the haunting image of Shrimp Jesus or who's hooking up on Fruit Love Island than what this slop is doing to us — the human Us. What are we accepting as passable entertainment, art, literature, or — in some instances — companionship? And what will we accept as AI-generated content is normalized and increasingly indistinguishable from human work.</p>
-    <p class="hero-opening" data-editable="hero-p3" contenteditable="false" spellcheck="false">Not even Claude has a crystal ball (and don't believe it if it tells you so), so I decided to track it. A few weeks of vibecoding later (irony! ha), The Slop Galaxy was born. I created this site as a way to track and visualize these moments on a timeline. Moments like: when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together, these start to paint a picture, and keep score, of how a technology is changing the terms of what we trust, consume, and tolerate.</p>
-    <p class="hero-opening" data-editable="hero-p4" contenteditable="false" spellcheck="false">Maybe you, too, have been watching this closely. Maybe you are blissfully touching grass or carelessly surfing the web. Either way, something is shifting, and this is my attempt at understanding what and how, in real time.<br>I invite you to Enter the Galaxy at left, or read on to learn more about how this data is visualized.</p>
+    <p class="hero-opening" data-editable="hero-p1" contenteditable="false">Whether you notice it or not, AI slop is everywhere. I started seeing it in small, innocent ways. A family member shared an image that was off. My social media feed grew increasingly hollow. A trickle became a floodgate of acceptable, passable AI slop permeating every corner of the Internet. It was mimicking humanity but often lacked its patina, randomness, and imperfections.</p>
+    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">As much as I try to avoid it, I can't stop thinking about slop. I'm less consumed by the haunting image of <a href="https://galaxy.sloptilyoudrop.com?node=10" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Shrimp Jesus</a> or who's hooking up on <a href="https://galaxy.sloptilyoudrop.com?node=42" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Fruit Love Island</a> than what this slop is doing to us — the human Us. What are we accepting as passable entertainment, art, literature, or — in some instances — companionship? And what will we accept when AI-generated content is normalized and increasingly indistinguishable from human work.</p>
+    <p class="hero-opening" data-editable="hero-p3" contenteditable="false">Not even Claude has a crystal ball (and don't believe it if it tells you so), so I decided to track it. A few weeks of vibecoding later (irony! ha), The Slop Galaxy was born. I created this site as a way to track and visualize these moments on a timeline. Moments like: when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together, these start to paint a picture, and keep score, of how a technology is changing the terms of what we trust, consume, and tolerate.</p>
+    <p class="hero-opening" data-editable="hero-p4" contenteditable="false">Maybe you, too, have been watching this closely. Maybe you are blissfully touching grass or carelessly surfing the web. Either way, something is shifting, and this is my attempt to understand what and how, in real time.</p>
     <hr class="hero-divider">
     <div class="hero-def-block">
       <div class="hero-def-term">slop <em>n.</em></div>
@@ -296,13 +297,13 @@
     <div class="moments-header">
       <h2 class="moments-heading">Recent Key Moments</h2>
       <div class="carousel-nav">
-        <button class="carousel-btn" id="carousel-prev" aria-label="Previous" disabled="">←</button>
+        <button class="carousel-btn" id="carousel-prev" aria-label="Previous">←</button>
         <span class="carousel-counter"><span id="carousel-cur">1</span> / <span id="carousel-total">6</span></span>
         <button class="carousel-btn" id="carousel-next" aria-label="Next">→</button>
       </div>
     </div>
     <div class="carousel-track-wrap">
-      <div class="carousel-track" id="carousel-track" style="transform: translateX(0px);">
+      <div class="carousel-track" id="carousel-track">
 
         <a href="https://galaxy.sloptilyoudrop.com?node=39" target="_blank" class="moment-card">
           <div class="moment-date" data-editable="m1-date" contenteditable="false">March 2026 · Platform</div>
@@ -357,13 +358,13 @@
   <div class="guide-header">
     <h2 class="guide-heading">How to Navigate</h2>
     <div class="guide-nav">
-      <button class="guide-btn" id="guide-prev" disabled="">←</button>
+      <button class="guide-btn" id="guide-prev" disabled>←</button>
       <span class="guide-counter"><span id="guide-cur">1</span> / 4</span>
       <button class="guide-btn" id="guide-next">→</button>
     </div>
   </div>
   <div class="guide-track-wrap">
-    <div class="guide-track" id="guide-track" style="transform: translateX(0%);">
+    <div class="guide-track" id="guide-track">
 
       <!-- SLIDE 1: Reading nodes -->
       <div class="guide-slide">
@@ -613,5 +614,5 @@
   })();
 </script>
 
-
-</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration><grammarly-popups data-grammarly-shadow-root="true" class="dnXmp" style="--rem: 16;"></grammarly-popups><grammarly-popups data-grammarly-shadow-root="true" class="dnXmp" style="--rem: 16;"></grammarly-popups><grammarly-popups data-grammarly-shadow-root="true" class="dnXmp" style="--rem: 16;"></grammarly-popups></html>
+</body>
+</html>
