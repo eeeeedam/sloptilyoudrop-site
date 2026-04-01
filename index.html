@@ -41,18 +41,22 @@
     body.edit-mode [data-editable]:hover { outline:1px solid var(--accent); background:rgba(201,50,8,0.03); }
     body.edit-mode [data-editable]:focus { outline:2px solid var(--accent); background:rgba(201,50,8,0.05); }
 
-    /* ── NAV ── */
-    nav { position:fixed; top:0; left:0; right:0; z-index:50; display:flex; align-items:center; justify-content:space-between; padding:16px 40px; background:var(--bg); border-bottom:1px solid var(--dim); }
-    .nav-wordmark { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:.06em; color:var(--fg); text-decoration:none; }
-    .nav-wordmark .red { color:var(--accent); }
-    .nav-wordmark .sub { font-family:'Space Mono',monospace; font-size:10px; color:var(--sub); letter-spacing:.08em; margin-left:10px; vertical-align:middle; }
-    .nav-links { display:flex; gap:0; }
-    .nav-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); text-decoration:none; padding:4px 14px; border-right:1px solid rgba(120,112,96,0.2); transition:color .15s; }
-    .nav-links a:last-child { border-right:none; padding-right:0; }
-    .nav-links a:hover { color:var(--accent); }
+    /* ── NAV — two-row, matches galaxy ── */
+    #site-header { position:fixed; top:0; left:0; right:0; z-index:50; background:var(--bg); }
+    #header-main { padding:12px 28px 8px; display:flex; align-items:flex-end; justify-content:space-between; }
+    #header-main h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3vw,44px); letter-spacing:.04em; line-height:1; color:var(--fg); text-decoration:none; display:block; }
+    #header-main h1 .red { color:var(--accent); }
+    #header-main .sub-brand { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); text-transform:uppercase; }
+    #header-subnav { padding:4px 28px 6px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(128,120,100,0.18); }
+    #header-subnav-left { display:flex; gap:0; }
+    .hn-btn { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); background:none; border:none; border-right:1px solid rgba(128,120,100,0.2); padding:3px 14px; cursor:pointer; text-decoration:none; display:inline-block; transition:color .15s; }
+    .hn-btn:first-child { padding-left:0; }
+    .hn-btn:last-child { border-right:none; }
+    .hn-btn:hover { color:var(--accent); }
+    .hn-btn-active { color:var(--accent); background:rgba(201,50,8,0.06); }
 
     /* ── HERO ── */
-    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; gap:0; padding-top:57px; }
+    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; gap:0; padding-top:72px; }
     .hero-left { display:flex; flex-direction:column; justify-content:flex-end; padding:64px 40px 64px 40px; }
     .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(64px,9vw,120px); letter-spacing:.02em; line-height:.9; margin-bottom:28px; opacity:0; animation:fade-up .7s .2s forwards; }
     .hero-title .red { color:var(--accent); display:block; }
@@ -176,6 +180,60 @@
       footer { padding:18px 20px; flex-direction:column; gap:10px; text-align:center; }
       #btn-admin-unlock { bottom:64px; }
     }
+
+    /* ── GUIDE SECTION ── */
+    .guide-section { padding:0; background:var(--bg); border-top:1px solid var(--dim); }
+    .guide-header { padding:48px 40px 0; max-width:1200px; margin:0; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:32px; }
+    .guide-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg); }
+    .guide-nav { display:flex; align-items:center; gap:8px; }
+    .guide-btn { font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; font-family:monospace; }
+    .guide-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .guide-btn:disabled { opacity:.25; cursor:default; }
+    .guide-counter { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center; }
+    .guide-track-wrap { overflow:hidden; border-top:1px solid var(--dim); }
+    .guide-track { display:flex; transition:transform .38s cubic-bezier(.4,0,.2,1); }
+
+    /* Each slide */
+    .guide-slide { flex:0 0 100%; min-width:0; display:grid; grid-template-columns:1fr 1fr; min-height:480px; }
+    .guide-slide-left { padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim); }
+    .guide-slide-right { padding:48px 40px 48px 48px; display:flex; flex-direction:column; justify-content:center; background:var(--panel); }
+    .guide-slide-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px; }
+    .guide-slide-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,46px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px; }
+    .guide-slide-body { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); }
+    .guide-slide-body p { margin-bottom:12px; }
+    .guide-slide-body p:last-child { margin-bottom:0; }
+    .guide-row { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
+    .guide-row:last-child { margin-bottom:0; }
+    .guide-row-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase; }
+    .guide-row-text { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub); }
+    .guide-cat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .guide-cat { display:flex; align-items:flex-start; gap:8px; }
+    .guide-cat-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:3px; }
+    .guide-cat-name { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px; }
+    .guide-cat-desc { font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub); }
+    .guide-spill-slop { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .guide-ss-block { padding:16px; border-left:2px solid; }
+    .guide-ss-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; margin-bottom:6px; }
+    .guide-ss-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub); }
+    .guide-ss-eg { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; line-height:1.7; opacity:.65; }
+    .guide-node-field { margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim); }
+    .guide-node-field:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+    .guide-node-field-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px; }
+    .guide-node-field-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg); }
+    @media (max-width:768px) {
+      .guide-header { padding:40px 20px 0; }
+      .guide-slide { grid-template-columns:1fr; min-height:auto; }
+      .guide-slide-left { padding:36px 20px 24px; border-right:none; border-bottom:1px solid var(--dim); }
+      .guide-slide-right { padding:24px 20px 36px; }
+    }
+
+    /* ── BIO PHOTO ── */
+    .bio-grid { display:grid; grid-template-columns:200px 1fr; gap:48px; align-items:start; }
+    .bio-photo { width:200px; height:260px; object-fit:cover; object-position:center top; display:block; filter:grayscale(15%); }
+    @media (max-width:768px) {
+      .bio-grid { grid-template-columns:1fr; gap:28px; }
+      .bio-photo { width:140px; height:180px; }
+    }
   </style>
 </head>
 <body>
@@ -188,15 +246,21 @@
 </div>
 <div id="save-confirm">✓ copied — paste into your file and commit</div>
 
-<nav>
-  <a href="#" class="nav-wordmark"><span class="red">Slop</span> 'Til You <span class="red">Drop</span><span class="sub">/ The Slop Galaxy</span></a>
-  <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#how">How it works</a>
-    <a href="#editor">The editor</a>
-    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Enter the Galaxy ↗</a>
+<div id="site-header">
+  <div id="header-main">
+    <a href="/" style="text-decoration:none;"><h1><span class="red">Slop</span> 'Til You <span class="red">Drop</span></h1></a>
+    <span class="sub-brand">sloptilyoudrop.com</span>
   </div>
-</nav>
+  <div id="header-subnav">
+    <div id="header-subnav-left">
+      <a href="#" class="hn-btn hn-btn-active">Home</a>
+      <a href="#guide" class="hn-btn">Guide</a>
+      <a href="#how" class="hn-btn">How to read it</a>
+      <a href="#editor" class="hn-btn">About Ellie</a>
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="hn-btn">The Slop Galaxy ↗</a>
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -204,7 +268,7 @@
     <h1 class="hero-title">
       <span class="red" data-editable="hero-line1" contenteditable="false">Slop</span>
       <span class="dark" data-editable="hero-line2" contenteditable="false">'Til You</span>
-      <span class="red" data-editable="hero-line3" contenteditable="false">Drop.</span>
+      <span class="red" data-editable="hero-line3" contenteditable="false">Drop</span>
     </h1>
     <div class="hero-rule"></div>
     <div class="hero-cta">
@@ -222,7 +286,7 @@
       <div class="hero-def-term">slop <em>n.</em></div>
       <div class="hero-def-body" data-editable="hero-def" contenteditable="false">Digital content of low quality produced in quantity by artificial intelligence. Merriam-Webster Word of the Year, 2025.</div>
     </div>
-    <p class="hero-neutral" data-editable="hero-neutral" contenteditable="false">This is not a neutral database. It is a curated map with a point of view: that what we tolerate online shapes what we become offline, and that someone should be keeping track.</p>
+    <p class="hero-neutral" data-editable="hero-neutral" contenteditable="false">This is not a neutral database. It is a curated record with a point of view: that what we tolerate online shapes what we become offline, and that someone should be keeping track.</p>
   </div>
 </section>
 
@@ -288,10 +352,111 @@
 
 
 
+<!-- GUIDE -->
+<section id="guide" class="guide-section">
+  <div class="guide-header">
+    <h2 class="guide-heading">How to Navigate</h2>
+    <div class="guide-nav">
+      <button class="guide-btn" id="guide-prev" disabled>←</button>
+      <span class="guide-counter"><span id="guide-cur">1</span> / 4</span>
+      <button class="guide-btn" id="guide-next">→</button>
+    </div>
+  </div>
+  <div class="guide-track-wrap">
+    <div class="guide-track" id="guide-track">
+
+      <!-- SLIDE 1: Reading nodes -->
+      <div class="guide-slide">
+        <div class="guide-slide-left">
+          <div class="guide-slide-label">01 of 04</div>
+          <h3 class="guide-slide-heading">The galaxy is made of nodes</h3>
+          <div class="guide-slide-body">
+            <p>Every node is a real, documented event — a moment when AI-generated content entered the world in a meaningful way.</p>
+            <p>Each node has the same anatomy. Here is how to read what you are looking at.</p>
+          </div>
+        </div>
+        <div class="guide-slide-right">
+          <div class="guide-row"><span class="guide-row-label">Size</span><span class="guide-row-text">Reflects impact on the world, scored 1 to 10. Bigger node, bigger moment.</span></div>
+          <div class="guide-row"><span class="guide-row-label">Color</span><span class="guide-row-text">Tells you the category: Platform, Media, Cultural, Legislation, Research, or Societal.</span></div>
+          <div class="guide-row"><span class="guide-row-label">Time</span><span class="guide-row-text">Left to right is earlier to more recent. Pan with one finger, pinch to zoom.</span></div>
+          <div class="guide-row"><span class="guide-row-label">Click</span><span class="guide-row-text">Expand any node to read the full story: what happened, what it means, and sometimes a note from Ellie.</span></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Slop vs Spill -->
+      <div class="guide-slide">
+        <div class="guide-slide-left">
+          <div class="guide-slide-label">02 of 04</div>
+          <h3 class="guide-slide-heading">Slop and Spill are separated by height</h3>
+          <div class="guide-slide-body">
+            <p>The vertical position of each node shows whether this moment is Slop — the content itself — or a Spill — the consequence it triggered.</p>
+            <p>Many events are both. The spectrum is the point.</p>
+          </div>
+        </div>
+        <div class="guide-slide-right">
+          <div class="guide-spill-slop">
+            <div class="guide-ss-block" style="border-color:var(--accent2);">
+              <div class="guide-ss-title" style="color:var(--accent2);">▲ Spill</div>
+              <div class="guide-ss-body">The consequences. Legislation, lawsuits, platform policies, cultural reckonings.</div>
+              <div class="guide-ss-eg" style="color:var(--accent2);">WGA strike · EU AI Act · Merriam-Webster names slop</div>
+            </div>
+            <div class="guide-ss-block" style="border-color:var(--accent);">
+              <div class="guide-ss-title" style="color:var(--accent);">▼ Slop</div>
+              <div class="guide-ss-body">The artifacts. Fake images, AI-written articles, synthetic personas, generated audio and video.</div>
+              <div class="guide-ss-eg" style="color:var(--accent);">CNET secret AI articles · Shrimp Jesus · Google eats glue</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Categories -->
+      <div class="guide-slide">
+        <div class="guide-slide-left">
+          <div class="guide-slide-label">03 of 04</div>
+          <h3 class="guide-slide-heading">Six categories, one color each</h3>
+          <div class="guide-slide-body">
+            <p>The color of each node tells you what kind of moment it is. Use the filters in the galaxy to focus on what interests you most.</p>
+          </div>
+        </div>
+        <div class="guide-slide-right">
+          <div class="guide-cat-grid">
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#fb923c;"></div><div><div class="guide-cat-name">Platform</div><div class="guide-cat-desc">Social networks, recommendation systems, hosting</div></div></div>
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#ffd166;"></div><div><div class="guide-cat-name">Media</div><div class="guide-cat-desc">News, publishing, journalism, broadcast</div></div></div>
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#06d6a0;"></div><div><div class="guide-cat-name">Cultural</div><div class="guide-cat-desc">Art, music, entertainment, public discourse</div></div></div>
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#a78bfa;"></div><div><div class="guide-cat-name">Legislation</div><div class="guide-cat-desc">Laws, regulations, court rulings, policy</div></div></div>
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#38bdf8;"></div><div><div class="guide-cat-name">Research</div><div class="guide-cat-desc">Studies, findings, academic and industry reports</div></div></div>
+            <div class="guide-cat"><div class="guide-cat-dot" style="background:#f472b6;"></div><div><div class="guide-cat-name">Societal</div><div class="guide-cat-desc">Behavior shifts, norms, trust, public psychology</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Reading a node -->
+      <div class="guide-slide">
+        <div class="guide-slide-left">
+          <div class="guide-slide-label">04 of 04</div>
+          <h3 class="guide-slide-heading">Every node tells a story</h3>
+          <div class="guide-slide-body">
+            <p>Click any node to open its full record. Each one carries the same fields.</p>
+            <p>The amber arc connecting key nodes across the galaxy is a curated through-line — the spine of the story as Ellie sees it. Toggle it with ◆ Through-Line in the top nav.</p>
+          </div>
+        </div>
+        <div class="guide-slide-right">
+          <div class="guide-node-field"><div class="guide-node-field-label">What Happened</div><div class="guide-node-field-body">The documented fact. No editorializing.</div></div>
+          <div class="guide-node-field"><div class="guide-node-field-label">What It Tells Us</div><div class="guide-node-field-body">Why this moment matters beyond the headline.</div></div>
+          <div class="guide-node-field"><div class="guide-node-field-label">Impact Score</div><div class="guide-node-field-body">1–10. Drives the node size in the galaxy.</div></div>
+          <div class="guide-node-field"><div class="guide-node-field-label">Source</div><div class="guide-node-field-body">Where to read the primary reporting.</div></div>
+          <div class="guide-node-field"><div class="guide-node-field-label">Editor's Note</div><div class="guide-node-field-body">Some nodes carry a personal note from Ellie. Look for the speech bubble icon in the galaxy.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section id="how" class="how-section">
   <div class="how-inner">
-    <h2 class="how-heading">How to read it.</h2>
+    <h2 class="how-heading">How to read it</h2>
     <p class="how-sub" data-editable="how-sub" contenteditable="false">Every node is a documented moment. Here's what you're looking at.</p>
     <div class="how-grid">
       <div class="how-card">
@@ -307,29 +472,35 @@
       <div class="how-card">
         <div class="how-num">03</div>
         <div class="how-title" data-editable="how3-title" contenteditable="false">Click for the full story</div>
-        <p class="how-body" data-editable="how3-body" contenteditable="false">Every node has rich context: what happened, what it tells us, the source, and sometimes an editor's note from Ellie. An amber arc connects the key moments — a curated through-line, visible the moment you open the map.</p>
+        <p class="how-body" data-editable="how3-body" contenteditable="false">Every node has rich context: what happened, what it tells us, the source, and sometimes an editor's note from Ellie. An amber arc connects the key moments — a curated through-line, visible the moment you open the galaxy.</p>
       </div>
     </div>
   </div>
 </section>
 
+
 <!-- EDITOR -->
 <section id="editor">
   <div class="bio-section">
-    <div class="bio-label">The editor</div>
-    <h2 class="bio-name" data-editable="bio-name" contenteditable="false">Ellie Damashek</h2>
-    <p class="bio-body" data-editable="bio-body" contenteditable="false">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
-    <div class="bio-links">
-      <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
-      <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
-      <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
+    <div class="bio-grid">
+      <img src="https://raw.githubusercontent.com/eeeeedam/sloptilyoudrop-site/8a183874b0539b46ab7d9ebb0a2805c644103820/IMG_9290.jpg" alt="Ellie Damashek" class="bio-photo">
+      <div>
+        <div class="bio-label">The editor</div>
+        <h2 class="bio-name" data-editable="bio-name" contenteditable="false">Ellie Damashek</h2>
+        <p class="bio-body" data-editable="bio-body" contenteditable="false">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
+        <div class="bio-links">
+          <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
+          <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
+          <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- FINAL CTA -->
 <section class="cta-section">
-  <h2 class="cta-heading">Enter the Galaxy.</h2>
+  <h2 class="cta-heading">Enter the Galaxy</h2>
   <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Open the Galaxy →</a>
 </section>
 
@@ -413,6 +584,34 @@
       if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
     }, {passive:true});
     window.addEventListener('resize', () => go(cur));
+    go(0);
+  })();
+
+  // ── GUIDE SLIDESHOW ──────────────────────────────────────────────────────────
+  (function() {
+    const track = document.getElementById('guide-track');
+    const prev  = document.getElementById('guide-prev');
+    const next  = document.getElementById('guide-next');
+    const curEl = document.getElementById('guide-cur');
+    if (!track) return;
+    const slides = track.querySelectorAll('.guide-slide');
+    const total  = slides.length;
+    let cur = 0;
+    function go(i) {
+      cur = Math.max(0, Math.min(i, total - 1));
+      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+      curEl.textContent = cur + 1;
+      prev.disabled = cur === 0;
+      next.disabled = cur === total - 1;
+    }
+    prev.addEventListener('click', () => go(cur - 1));
+    next.addEventListener('click', () => go(cur + 1));
+    let tx = 0;
+    track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+    }, {passive:true});
     go(0);
   })();
 </script>
