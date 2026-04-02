@@ -292,7 +292,7 @@
 </section>
 
 <!-- RECENT KEY MOMENTS -->
-<section class="moments-section">
+<section id="moments" class="moments-section">
   <div class="moments-inner">
     <div class="moments-header">
       <h2 class="moments-heading">Recent Key Moments</h2>
@@ -337,6 +337,84 @@
   </div>
 </section>
 
+
+<!-- GUIDE -->
+<section id="guide" style="background:var(--bg); border-top:1px solid var(--dim);">
+  <div style="max-width:1200px; margin:0; padding:0;">
+    <div style="padding:48px 40px 0; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:32px;">
+      <h2 style="font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg);">How to Navigate</h2>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button onclick="guidePrev()" id="guide-prev-btn" style="font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; font-family:monospace; transition:all .15s;" disabled>←</button>
+        <span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center;"><span id="guide-cur-num">1</span> / 4</span>
+        <button onclick="guideNext()" id="guide-next-btn" style="font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; font-family:monospace; transition:all .15s;">→</button>
+      </div>
+    </div>
+    <div style="overflow:hidden; border-top:1px solid var(--dim);">
+      <div id="guide-slides-track" style="display:flex; transition:transform .38s cubic-bezier(.4,0,.2,1);">
+
+        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
+          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
+            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">01 of 04</div>
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">The galaxy is made of nodes</h3>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">Every node is a real, documented event — a moment when AI-generated content entered the world in a meaningful way.</p>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">Each node has the same anatomy. Here is how to read what you are looking at.</p>
+          </div>
+          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:flex; flex-direction:column; gap:14px; justify-content:center;">
+            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Size</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Reflects impact on the world, scored 1 to 10. Bigger node, bigger moment.</span></div>
+            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Color</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Tells you the category: Platform, Media, Cultural, Legislation, Research, or Societal.</span></div>
+            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Time</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Left to right is earlier to more recent. Pan with one finger, pinch to zoom.</span></div>
+            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Click</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Expand any node to read the full story: what happened, what it means, and sometimes a note from Ellie.</span></div>
+          </div>
+        </div>
+
+        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
+          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
+            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">02 of 04</div>
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Slop and Spill are separated by height</h3>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">The vertical position of each node shows whether this moment is Slop — the content itself — or a Spill — the consequence it triggered.</p>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">Many events are both. The spectrum is the point.</p>
+          </div>
+          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:grid; grid-template-columns:1fr 1fr; gap:16px; align-content:center;">
+            <div style="padding:16px; border-left:2px solid var(--accent2);"><div style="font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; color:var(--accent2); margin-bottom:6px;">▲ Spill</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub);">Consequences, legislation, lawsuits, cultural reckonings.</div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; color:var(--accent2); opacity:.7; line-height:1.7;">WGA strike · EU AI Act · Wikipedia ban</div></div>
+            <div style="padding:16px; border-left:2px solid var(--accent);"><div style="font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; color:var(--accent); margin-bottom:6px;">▼ Slop</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub);">Fake images, AI articles, synthetic personas, generated video.</div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; color:var(--accent); opacity:.7; line-height:1.7;">Shrimp Jesus · Google eats glue · Fruit Love Island</div></div>
+          </div>
+        </div>
+
+        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
+          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
+            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">03 of 04</div>
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Six categories, one color each</h3>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">The color of each node tells you what kind of moment it is. Use the filters in the galaxy to focus on what interests you most.</p>
+          </div>
+          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:grid; grid-template-columns:1fr 1fr; gap:14px; align-content:center;">
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#fb923c; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Platform</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Social networks, hosting, recommendation systems</div></div></div>
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#ffd166; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Media</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">News, publishing, journalism, broadcast</div></div></div>
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#06d6a0; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Cultural</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Art, music, entertainment, public discourse</div></div></div>
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#a78bfa; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Legislation</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Laws, regulations, court rulings, policy</div></div></div>
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#38bdf8; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Research</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Studies, findings, academic and industry reports</div></div></div>
+            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#f472b6; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Societal</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Behavior shifts, norms, trust, public psychology</div></div></div>
+          </div>
+        </div>
+
+        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
+          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
+            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">04 of 04</div>
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Every node tells a story</h3>
+            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">Click any node to open its full record. The amber arc connecting key nodes across the galaxy is a curated through-line — the spine of the story. Toggle it with ◆ Through-Line in the top nav.</p>
+          </div>
+          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:flex; flex-direction:column; gap:0; justify-content:center;">
+            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">What Happened</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">The documented fact. No editorializing.</div></div>
+            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">What It Tells Us</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Why this moment matters beyond the headline.</div></div>
+            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Impact Score</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">1–10. Drives the node size on the galaxy.</div></div>
+            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Source</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Where to read the primary reporting.</div></div>
+            <div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Editor's Note</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Some nodes carry a personal note from Ellie. Look for the speech bubble icon.</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- EDITOR -->
 <section id="editor">
@@ -604,6 +682,32 @@ const STATIC_FALLBACK = [
     track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
     track.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+    }, {passive:true});
+    go(0);
+  })();
+
+  // ── GUIDE SLIDESHOW ──────────────────────────────────────────────────────────
+  (function() {
+    var track = document.getElementById('guide-slides-track');
+    var prevBtn = document.getElementById('guide-prev-btn');
+    var nextBtn = document.getElementById('guide-next-btn');
+    var curNum = document.getElementById('guide-cur-num');
+    if (!track) return;
+    var cur = 0; var total = 4;
+    function go(i) {
+      cur = Math.max(0, Math.min(i, total - 1));
+      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+      if (curNum) curNum.textContent = cur + 1;
+      if (prevBtn) prevBtn.disabled = cur === 0;
+      if (nextBtn) nextBtn.disabled = cur === total - 1;
+    }
+    window.guidePrev = function() { go(cur - 1); };
+    window.guideNext = function() { go(cur + 1); };
+    var tx = 0;
+    track.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - tx;
       if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
     }, {passive:true});
     go(0);
