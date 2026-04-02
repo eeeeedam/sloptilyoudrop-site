@@ -407,6 +407,15 @@
     setTimeout(() => c.style.display = 'none', 4000);
   }
 
+const STATIC_FALLBACK = [
+  {id:47,title:'The New Yorker Asks What AI Is Doing to Culture',date:'September 2025',category:'Media',impact:9,description:'The New Yorker published a long-form piece examining AI\'s effect on culture — not as a technology story but as a question about what art, meaning, and human cre…'},
+  {id:49,title:'Wikipedia Bans AI-Generated Content After Editors Are Overwhelmed',date:'March 2026',category:'Legislation',impact:9,description:'After months of debate, Wikipedia\'s volunteer editors voted to prohibit the use of large language models to generate or rewrite article content. The policy stat…'},
+  {id:51,title:'Iran Is Winning the AI Slop Propaganda War',date:'March 2026',category:'Societal',impact:9,description:'An AI-generated LEGO video from Iran\'s \'Explosive News Team\' — depicting Trump as a warmongering villain set to a viral rap — spread across American social medi…'},
+  {id:45,title:'Anthropic Opens \'Zero Slop Zone\' Pop-Up in NYC — Entry Requires Downloading Claude',date:'March 2026',category:'Platform',impact:8,description:'Anthropic opened a pop-up in New York\'s West Village described as a \'Zero Slop Zone,\' encouraging visitors to disconnect from devices, drink coffee, and read a …'},
+  {id:48,title:'WebinarTV Is Secretly Recording Your Zoom Calls and Turning Them into AI Podcasts',date:'March 2026',category:'Platform',impact:8,description:'WebinarTV, which bills itself as a search engine for webinars, was found to be scanning the internet for Zoom meeting links, recording calls without permission,…'}
+];
+  const STATIC_TOTAL = 50;
+
   // ── CAROUSEL — dynamic, pulls from galaxy SEED ─────────────────────────────
   (function() {
     const track  = document.getElementById('carousel-track');
@@ -426,20 +435,62 @@
     fetch(GALAXY)
       .then(r => r.text())
       .then(html => {
-        // Extract SEED: find each node's key fields with targeted regex
-        // This avoids eval entirely — parse only what we need
+        // Extract nodes by scanning line by line for field patterns
+        // This avoids regex issues with } inside string values
         const nodes = [];
-        const nodeRe = /\{ id:(\d+),\s*year:(\d+),\s*title:"([^"]*)"[^}]*?date:"([^"]*)"[^}]*?category:"([^"]*)"[^}]*?impact:(\d+)[^}]*?(?:spill:(true|false))?[^}]*?description:"((?:[^"\\]|\\.)*)"[^}]*?(?:significance:"(?:[^"\\]|\\.)*"[^}]*?)?(?:date_added:"([^"]*)")?[^}]*?\}/g;
-        let m;
-        while ((m = nodeRe.exec(html)) !== null) {
-          nodes.push({
-            id: +m[1], year: +m[2], title: m[3], date: m[4],
-            category: m[5], impact: +m[6],
-            spill: m[7] === 'true',
-            description: m[8].replace(/\\'/g, "'").replace(/\\n/g, ' '),
-            date_added: m[9] || ''
-          });
+        const lines = html.split('\n');
+        let current = null;
+
+        const unesc = function(s) {
+          return s.replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\n/g, ' ');
+        };
+        const getField = function(line, key) {
+          // Match key:"value" or key:'value'
+          var dq = new RegExp(key + ':\\s*"((?:[^"\\\\]|\\\\.)*)"');
+          var sq = new RegExp(key + ":\\s*'((?:[^'\\\\]|\\\\.)*)'");
+          var m = dq.exec(line) || sq.exec(line);
+          return m ? unesc(m[1]) : null;
+        };
+        const getNum = function(line, key) {
+          var m = new RegExp(key + ':\\s*([\\d.]+)').exec(line);
+          return m ? parseFloat(m[1]) : null;
+        };
+
+        for (var li = 0; li < lines.length; li++) {
+          var line = lines[li];
+          // New node starts with { id:N,
+          var idMatch = /^\s*\{\s*id:(\d+),/.exec(line);
+          if (idMatch) {
+            if (current && current.id) nodes.push(current);
+            current = { id: parseInt(idMatch[1]) };
+          }
+          if (!current) continue;
+
+          // Extract fields from current line (nodes are mostly one per line but
+          // description/significance can span — we collect into a buffer)
+          if (!current.title) { var v = getField(line, 'title'); if (v) current.title = v; }
+          if (!current.date && current.title) { var v = getField(line, 'date'); if (v) current.date = v; }
+          if (!current.category) { var v = getField(line, 'category'); if (v) current.category = v; }
+          if (!current.impact) { var v = getNum(line, 'impact'); if (v) current.impact = v; }
+          if (!current.description) { var v = getField(line, 'description'); if (v) current.description = v; }
+          if (!current.date_added) {
+            // Try string format first
+            var ds = getField(line, 'date_added');
+            if (ds && /^\d{4}-/.test(ds)) { current.date_added = ds; }
+            else {
+              // Try numeric timestamp
+              var dm = /date_added:\s*(\d{10,13})/.exec(line);
+              if (dm) {
+                var ts = parseInt(dm[1]);
+                var d = new Date(ts);
+                current.date_added = d.getFullYear() + '-' +
+                  String(d.getMonth()+1).padStart(2,'0') + '-' +
+                  String(d.getDate()).padStart(2,'0');
+              }
+            }
+          }
         }
+        if (current && current.id) nodes.push(current);
         if (!nodes.length) throw new Error('No nodes parsed');
         const SEED = nodes;
 
@@ -451,46 +502,7 @@
             if (db !== da) return db.localeCompare(da);
             return (b.impact || 0) - (a.impact || 0);
           });
-
-        // Take top 5
-        const top5 = sorted.slice(0, 5);
-
-        // Build cards
-        const cards = top5.map(function(n) {
-          const label = CAT_LABELS[n.category] || n.category;
-          const dateStr = n.date || '';
-          const impact  = n.impact || '';
-          const url     = GALAXY + '?node=' + n.id;
-          const desc    = n.description ? n.description.slice(0,160) + (n.description.length > 160 ? '\u2026' : '') : '';
-          const card = document.createElement('a');
-          card.href = url;
-          card.target = '_blank';
-          card.className = 'moment-card';
-          card.innerHTML =
-            '<div class="moment-date">' + dateStr + ' \u00b7 ' + label + '</div>' +
-            '<div class="moment-headline">' + n.title + '</div>' +
-            '<p class="moment-body">' + desc + '</p>' +
-            '<div class="moment-footer">' +
-              '<span class="moment-impact">Impact ' + impact + '/10</span>' +
-              '<span class="moment-arrow">View in galaxy \u2192</span>' +
-            '</div>';
-          return card;
-        });
-
-        // Add see-all CTA slide
-        const ctaEl = document.createElement('a');
-        ctaEl.href = GALAXY;
-        ctaEl.target = '_blank';
-        ctaEl.className = 'moment-card moment-card-cta';
-        ctaEl.innerHTML =
-          '<div class="moment-cta-num">' + SEED.length + '</div>' +
-          '<div class="moment-cta-text">moments documented in the galaxy.</div>' +
-          '<div class="moment-cta-link">See all \u2192</div>';
-
-        track.innerHTML = '';
-        cards.forEach(function(c) { track.appendChild(c); });
-        track.appendChild(ctaEl);
-        init();
+        renderCards(sorted.slice(0, 5), SEED.length);
       })
       .catch(() => {
         // Fallback: show static link if fetch fails
@@ -502,6 +514,38 @@
         track.innerHTML = ''; track.appendChild(fb);
         init();
       });
+
+    function renderCards(top5, nodeTotal) {
+      const cards = top5.map(function(n) {
+        const label = CAT_LABELS[n.category] || n.category;
+        const dateStr = n.date || '';
+        const impact  = n.impact || '';
+        const url     = GALAXY + '?node=' + n.id;
+        const desc    = n.description ? n.description.slice(0,160) + (n.description.length > 160 ? '\u2026' : '') : '';
+        const card = document.createElement('a');
+        card.href = url; card.target = '_blank'; card.className = 'moment-card';
+        card.innerHTML =
+          '<div class="moment-date">' + dateStr + ' \u00b7 ' + label + '</div>' +
+          '<div class="moment-headline">' + n.title + '</div>' +
+          '<p class="moment-body">' + desc + '</p>' +
+          '<div class="moment-footer">' +
+            '<span class="moment-impact">Impact ' + impact + '/10</span>' +
+            '<span class="moment-arrow">View in galaxy \u2192</span>' +
+          '</div>';
+        return card;
+      });
+      const ctaEl = document.createElement('a');
+      ctaEl.href = GALAXY; ctaEl.target = '_blank';
+      ctaEl.className = 'moment-card moment-card-cta';
+      ctaEl.innerHTML =
+        '<div class="moment-cta-num">' + nodeTotal + '</div>' +
+        '<div class="moment-cta-text">moments documented in the galaxy.</div>' +
+        '<div class="moment-cta-link">See all \u2192</div>';
+      track.innerHTML = '';
+      cards.forEach(function(c) { track.appendChild(c); });
+      track.appendChild(ctaEl);
+      init();
+    }
 
     let cur = 0;
     let total = 1;
