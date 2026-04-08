@@ -91,9 +91,14 @@
     .carousel-btn:hover { border-color:var(--accent); color:var(--accent); }
     .carousel-btn:disabled { opacity:.25; cursor:default; }
     .carousel-counter { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center; }
-    .carousel-track-wrap { overflow:hidden; border:1px solid var(--dim); }
+    .carousel-track-wrap { overflow:hidden; border:1px solid var(--dim); position:relative; }
     .carousel-track { display:flex; transition:transform .36s cubic-bezier(.4,0,.2,1); background:var(--dim); gap:1px; }
-    .moment-card { flex:0 0 calc(33.333% - 1px); min-width:0; background:var(--bg); padding:24px 24px 20px; text-decoration:none; display:flex; flex-direction:column; gap:8px; transition:background .18s; }
+    .moment-img { width:100%; height:140px; overflow:hidden; flex-shrink:0; }
+    .moment-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+    .moment-img-credit { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.08em; color:var(--sub); background:rgba(0,0,0,0.04); padding:2px 8px; }
+    .moment-card:hover .moment-img img { transform:scale(1.04); }
+    .moment-card-body { padding:24px 24px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
+    .moment-card { flex:0 0 calc(33.333% - 1px); min-width:0; background:var(--bg); padding:0; text-decoration:none; display:flex; flex-direction:column; transition:background .18s; overflow:hidden; }
     .moment-card:hover { background:#ede8de; }
     .moment-card:hover .moment-arrow { opacity:1; transform:translateX(0); }
     .moment-date { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); }
@@ -257,6 +262,7 @@
       <a href="#guide" class="hn-btn">Guide</a>
       <a href="#how" class="hn-btn">How to read it</a>
       <a href="#editor" class="hn-btn">About Ellie</a>
+      <a href="#submit" class="hn-btn">Submit some slop</a>
       <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="hn-btn">The Slop Galaxy ↗</a>
     </div>
   </div>
@@ -333,6 +339,10 @@
         <div class="how-title" data-editable="how3-title" contenteditable="false">Click for the full story</div>
         <p class="how-body" data-editable="how3-body" contenteditable="false">Every node has rich context: what happened, what it tells us, the source, and sometimes an editor's note from Ellie. An amber arc connects the key moments — a curated through-line, visible the moment you open the galaxy.</p>
       </div>
+    </div>
+    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--dim);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.65;color:var(--sub);margin:0;max-width:480px;">Spotted something that belongs here? The galaxy is built on human attention — submit a moment and Ellie will review it.</p>
+      <a href="#submit" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:var(--accent);color:#f5f1e8;padding:12px 24px;text-decoration:none;white-space:nowrap;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='var(--accent)'">SUBMIT SOME SLOP →</a>
     </div>
   </div>
 </section>
@@ -429,6 +439,7 @@
           <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
           <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
           <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
+          <a href="mailto:ellie@sloptilyoudrop.com">ellie@sloptilyoudrop.com</a>
         </div>
       </div>
     </div>
@@ -441,12 +452,97 @@
   <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Open the Galaxy →</a>
 </section>
 
+
+<!-- SUBMIT A NODE -->
+<section id="submit" style="background:var(--fg);border-top:1px solid rgba(245,241,232,0.1);padding:72px 40px;">
+  <div style="max-width:680px;">
+
+    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,241,232,0.4);margin-bottom:16px;">Contribute</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,56px);letter-spacing:.02em;line-height:1;color:#f5f1e8;margin-bottom:20px;">Submit some slop</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">The galaxy grows by human attention. If you spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it. Ellie reviews every submission. If yours makes it in, your name appears on the node.</p>
+
+    <div id="submit-form-wrap">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your name <span style="color:#c93208">*</span></label>
+          <input id="sub-name" type="text" placeholder="Eva" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+        </div>
+        <div>
+          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your email <span style="color:#c93208">*</span></label>
+          <input id="sub-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Article or page URL <span style="color:#c93208">*</span></label>
+        <input id="sub-url" type="url" placeholder="https://..." style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+      </div>
+      <div style="margin-bottom:24px;">
+        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Why does this belong in the galaxy? <span style="opacity:.5">(optional)</span></label>
+        <textarea id="sub-note" placeholder="What crossed the line here. What it means." rows="3" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:vertical;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'"></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <button id="sub-btn" onclick="submitNode()" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:#c93208;color:#f5f1e8;border:none;padding:13px 28px;cursor:pointer;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='#c93208'">SUBMIT FOR REVIEW →</button>
+        <span id="sub-status" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:rgba(245,241,232,0.5);"></span>
+      </div>
+    </div>
+
+    <div id="submit-thanks" style="display:none;">
+      <div style="border-left:2px solid #c93208;padding:20px 24px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;color:#f5f1e8;margin-bottom:8px;">Received.</div>
+        <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;color:rgba(245,241,232,0.7);margin:0;">Ellie reviews every submission. You'll hear back either way — check your inbox. If your submission makes it into the galaxy, your name will be on the node.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwHMmWocCZJ-p6uwDGf6SBDwzifh10LY5ZyEE3mVyoXrUV6xNfqRfxAVCKCzkBom5od/exec';
+
+function submitNode() {
+  const name  = document.getElementById('sub-name').value.trim();
+  const email = document.getElementById('sub-email').value.trim();
+  const url   = document.getElementById('sub-url').value.trim();
+  const note  = document.getElementById('sub-note').value.trim();
+  const btn    = document.getElementById('sub-btn');
+  const status = document.getElementById('sub-status');
+
+  if (!name)  { status.textContent = 'Name is required.'; status.style.color='#c93208'; return; }
+  if (!email) { status.textContent = 'Email is required.'; status.style.color='#c93208'; return; }
+  if (!url || !url.startsWith('http')) { status.textContent = 'A valid URL is required.'; status.style.color='#c93208'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'SENDING…';
+  status.textContent = '';
+
+  fetch(SUBMIT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, url, note })
+  })
+  .then(() => {
+    document.getElementById('submit-form-wrap').style.display = 'none';
+    document.getElementById('submit-thanks').style.display = 'block';
+  })
+  .catch(() => {
+    btn.disabled = false;
+    btn.textContent = 'SUBMIT FOR REVIEW →';
+    status.textContent = 'Something went wrong — try again.';
+    status.style.color = '#c93208';
+  });
+}
+</script>
+
 <footer>
   <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
   <div class="footer-links">
-    <a href="#about">About</a>
+    <a href="#editor">About</a>
     <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn</a>
     <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Galaxy</a>
+    <a href="#" onclick="event.preventDefault();document.getElementById('footer-contact-popup').style.display=document.getElementById('footer-contact-popup').style.display==='block'?'none':'block';" style="position:relative;">Contact
+      <span id="footer-contact-popup" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:'Space Mono',monospace;font-size:9px;padding:8px 14px;white-space:nowrap;letter-spacing:.06em;z-index:100;"><a href="mailto:ellie@sloptilyoudrop.com" style="color:var(--bg);text-decoration:none;">ellie@sloptilyoudrop.com</a></span>
+    </a>
   </div>
 </footer>
 
@@ -551,6 +647,8 @@ const STATIC_FALLBACK = [
           if (!current.category) { var v = getField(line, 'category'); if (v) current.category = v; }
           if (!current.impact) { var v = getNum(line, 'impact'); if (v) current.impact = v; }
           if (!current.description) { var v = getField(line, 'description'); if (v) current.description = v; }
+          if (!current.image) { var v = getField(line, 'image'); if (v) current.image = v; }
+          if (!current.image_credit) { var v = getField(line, 'image_credit'); if (v) current.image_credit = v; }
           if (!current.date_added) {
             // Try string format first
             var ds = getField(line, 'date_added');
@@ -602,13 +700,19 @@ const STATIC_FALLBACK = [
         const desc    = n.description ? n.description.slice(0,160) + (n.description.length > 160 ? '\u2026' : '') : '';
         const card = document.createElement('a');
         card.href = url; card.target = '_blank'; card.className = 'moment-card';
+        var imgHTML = n.image
+          ? '<div class="moment-img"><img src="' + n.image + '" alt="" onerror="this.parentNode.style.display=\'none\'"><div class="moment-img-credit">' + (n.image_credit ? '\u00a9 ' + n.image_credit : '') + '</div></div>'
+          : '';
         card.innerHTML =
+          imgHTML +
+          '<div class="moment-card-body">' +
           '<div class="moment-date">' + dateStr + ' \u00b7 ' + label + '</div>' +
           '<div class="moment-headline">' + n.title + '</div>' +
           '<p class="moment-body">' + desc + '</p>' +
           '<div class="moment-footer">' +
             '<span class="moment-impact">Impact ' + impact + '/10</span>' +
             '<span class="moment-arrow">View in galaxy \u2192</span>' +
+          '</div>' +
           '</div>';
         return card;
       });
