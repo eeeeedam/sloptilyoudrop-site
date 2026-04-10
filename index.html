@@ -1,301 +1,684 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slop ’Til You Drop — Ellie Damashek</title>
-  <meta name="description" content="A map of how AI is rewriting the terms of what we trust, consume, and tolerate. Curated by Ellie Damashek.">
-  <meta property="og:title" content="Slop ’Til You Drop">
-  <meta property="og:description" content="A map of how AI is rewriting the terms of what we trust, consume, and tolerate.">
-  <meta property="og:type" content="website">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f5f1e8; --fg: #1a1608; --accent: #c93208; --accent2: #b07d00;
-      --dim: #c8c0b0; --sub: #7a7060; --panel: #ede8de;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior:smooth; }
-    body { background:var(--bg); color:var(--fg); font-family:'DM Sans',sans-serif; min-height:100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slop 'Til You Drop</title>
+<meta name="description" content="A living record of the AI slop era — documenting every moment AI-generated content crossed a line.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
 
-    body::before {
-      content:''; position:fixed; inset:0;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events:none; z-index:100; opacity:0.35;
-    }
+:root {
+  --bg:       #F5F5F0;
+  --fg:       #121210;
+  --yellow:   #E8F000;   /* aggressive yellow — primary CTA */
+  --lime:     #8FE000;   /* lime green — replaces olive */
+  --lav:      #A8A8E8;   /* lavender */
+  --lav-dark: #6060A8;   /* readable lavender for text on white */
+  --forest:   #1A3A2A;   /* deep forest — dark sections */
+  --sub:      #5A5A50;
+  --dim:      #DDDDD5;
+  --panel:    #EBEBE5;
+}
 
-    /* ── ADMIN / EDIT MODE ── */
-    #btn-admin-unlock { position:fixed; bottom:16px; right:16px; z-index:199; width:18px; height:18px; border-radius:50%; background:rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.15); cursor:pointer; opacity:1; transition:all .2s; padding:0; }
-    #btn-admin-unlock:hover { background:rgba(0,0,0,0.12); border-color:rgba(0,0,0,0.3); }
-    body.edit-mode #btn-admin-unlock { display:none; }
-    #edit-bar { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:var(--fg); color:var(--bg); padding:10px 20px; align-items:center; gap:14px; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; box-shadow:0 4px 24px rgba(0,0,0,0.2); white-space:nowrap; }
-    #edit-bar.visible { display:flex; }
-    .edit-hint { color:rgba(245,241,232,0.45); }
-    .edit-btn { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; padding:6px 14px; border:none; }
-    #btn-save-edit { background:var(--accent); color:#fff; }
-    #btn-cancel-edit { background:rgba(245,241,232,0.12); color:var(--bg); }
-    #save-confirm { display:none; position:fixed; bottom:72px; left:50%; transform:translateX(-50%); z-index:201; background:#1a7a5a; color:#fff; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; padding:10px 20px; }
-    body.edit-mode [data-editable] { outline:1px dashed rgba(201,50,8,0.35); cursor:text; }
-    body.edit-mode [data-editable]:hover { outline:1px solid var(--accent); background:rgba(201,50,8,0.03); }
-    body.edit-mode [data-editable]:focus { outline:2px solid var(--accent); background:rgba(201,50,8,0.05); }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--fg); font-family:'Plus Jakarta Sans',sans-serif; -webkit-font-smoothing:antialiased; }
 
-    /* ── NAV — two-row, matches galaxy ── */
-    #site-header { position:fixed; top:0; left:0; right:0; z-index:50; background:var(--bg); }
-    #header-main { padding:12px 28px 8px; display:flex; align-items:flex-end; justify-content:space-between; }
-    #header-main h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3vw,44px); letter-spacing:.04em; line-height:1; color:var(--fg); text-decoration:none; display:block; }
-    #header-main h1 .red { color:var(--accent); }
-    #header-main .sub-brand { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); text-transform:uppercase; }
-    #header-subnav { padding:4px 28px 6px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid rgba(128,120,100,0.18); }
-    #header-subnav-left { display:flex; gap:0; }
-    .hn-btn { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); background:none; border:none; border-right:1px solid rgba(128,120,100,0.2); padding:3px 14px; cursor:pointer; text-decoration:none; display:inline-block; transition:color .15s; }
-    .hn-btn:first-child { padding-left:0; }
-    .hn-btn:last-child { border-right:none; }
-    .hn-btn:hover { color:var(--accent); }
-    .hn-btn-active { color:var(--accent); background:rgba(201,50,8,0.06); }
+/* ── SWATCH BAR ── */
+.swatch-bar { display:flex; height:8px; }
+.sw { flex:1; }
 
-    /* ── HERO ── */
-    .hero { min-height:100vh; display:grid; grid-template-columns:1fr 1fr; gap:0; padding-top:72px; }
-    .hero-left { display:flex; flex-direction:column; justify-content:flex-start; padding:64px 40px 64px 40px; }
-    .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(64px,9vw,120px); letter-spacing:.02em; line-height:.9; margin-bottom:28px; opacity:0; animation:fade-up .7s .2s forwards; }
-    .hero-title .red { color:var(--accent); display:block; }
-    .hero-title .dark { color:var(--fg); display:block; }
-    .hero-rule { width:40px; height:2px; background:var(--accent); margin-bottom:28px; opacity:0; animation:fade-up .4s .45s forwards; }
-    .hero-cta { display:flex; gap:10px; flex-wrap:wrap; opacity:0; animation:fade-up .5s .6s forwards; }
-    .hero-right { display:flex; flex-direction:column; justify-content:flex-end; padding:64px 40px 64px 32px; border-left:1px solid var(--dim); opacity:0; animation:fade-up .6s .4s forwards; }
-    .hero-letter-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:16px; }
-    .hero-opening { font-family:'DM Sans',sans-serif; font-size:clamp(14px,1.4vw,16px); line-height:1.85; color:var(--fg); margin-bottom:18px; }
-    .hero-divider { border:none; border-top:1px solid var(--dim); margin:28px 0; }
-    .hero-def-block { margin-bottom:20px; }
-    .hero-def-term { font-family:'Space Mono',monospace; font-size:10px; font-weight:700; letter-spacing:.06em; color:var(--fg); }
-    .hero-def-term em { font-style:italic; color:var(--sub); font-weight:400; }
-    .hero-def-body { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.65; color:var(--sub); margin-top:5px; }
-    .hero-neutral { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.7; color:var(--sub); font-style:italic; padding-left:14px; border-left:2px solid var(--accent); }
+/* ── NAV ── */
+nav {
+  position:sticky; top:0; z-index:100;
+  background:var(--bg);
+  border-bottom:1.5px solid var(--fg);
+  display:flex; align-items:stretch; justify-content:space-between;
+  height:52px;
+}
+.nav-brand {
+  font-family:'Instrument Serif',serif;
+  font-size:18px;
+  color:var(--fg);
+  text-decoration:none;
+  display:flex; align-items:center;
+  padding:0 24px;
+  letter-spacing:-.01em;
+  border-right:1px solid var(--dim);
+}
+.nav-brand 
+.nav-brand 
+.nav-links { display:flex; align-items:stretch; }
+.nav-links a {
+  font-family:'Space Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--sub);
+  text-decoration:none;
+  display:flex; align-items:center;
+  padding:0 18px;
+  border-left:1px solid var(--dim);
+  transition:color .15s;
+}
+.nav-links a:hover { color:var(--fg); }
+.nav-links a.submit { color:#5A9000; }
+.nav-links a.cta {
+  background:var(--yellow);
+  color:var(--fg);
+  font-weight:700;
+  border-left:1.5px solid var(--fg);
+}
+.nav-links a.cta:hover { background:var(--lime); }
 
-    @keyframes fade-up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+/* ── TICKER ── */
+.ticker {
+  background:var(--forest);
+  height:32px;
+  display:flex; align-items:center;
+  overflow:hidden;
+  border-bottom:1.5px solid var(--fg);
+}
+.ticker-inner {
+  display:inline-flex; gap:32px;
+  white-space:nowrap;
+  font-family:'Space Mono',monospace;
+  font-size:7px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.4);
+  animation:tick 28s linear infinite;
+}
+.ticker-inner 
+.ticker-inner 
+@keyframes tick { from { transform:translateX(0); } to { transform:translateX(-50%); } } to{transform:translateX(-50%)} }
 
-    /* ── BUTTONS ── */
-    .btn-primary { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--bg); background:var(--fg); padding:13px 28px; text-decoration:none; display:inline-block; transition:background .18s; border:none; cursor:pointer; }
-    .btn-primary:hover { background:var(--accent); }
-    .btn-secondary { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); background:none; border:1px solid var(--dim); padding:12px 20px; text-decoration:none; display:inline-block; transition:color .18s,border-color .18s; }
-    .btn-secondary:hover { color:var(--fg); border-color:var(--fg); }
+/* ── HERO ── */
+.hero {
+  display:grid;
+  grid-template-columns:5fr 6fr;
+  border-bottom:1.5px solid var(--fg);
+  min-height:min(calc(100vh - 84px), 680px);
+}
+.hero-left {
+  background:var(--forest);
+  border-right:1.5px solid var(--fg);
+  padding:48px 40px 40px 40px;
+  display:flex; flex-direction:column;
+}
 
-    /* ── RECENT KEY MOMENTS ── */
-    .moments-section { background:var(--panel); border-top:1px solid var(--dim); border-bottom:1px solid var(--dim); padding:64px 40px; }
-    .moments-inner { max-width:1200px; margin:0 auto; }
-    .moments-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; gap:16px; flex-wrap:wrap; }
-    .moments-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg); text-align:left; }
-    .carousel-nav { display:flex; align-items:center; gap:8px; }
-    .carousel-btn { font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; font-family:monospace; }
-    .carousel-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .carousel-btn:disabled { opacity:.25; cursor:default; }
-    .carousel-counter { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center; }
-    .carousel-track-wrap { overflow:hidden; border:1px solid var(--dim); position:relative; }
-    .carousel-track { display:flex; transition:transform .36s cubic-bezier(.4,0,.2,1); background:var(--dim); gap:1px; }
-    .moment-img { width:100%; height:140px; overflow:hidden; flex-shrink:0; }
-    .moment-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
-    .moment-img-credit { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.08em; color:var(--sub); background:rgba(0,0,0,0.04); padding:2px 8px; }
-    .moment-card:hover .moment-img img { transform:scale(1.04); }
-    .moment-card-body { padding:24px 24px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
-    .moment-card { flex:0 0 calc(33.333% - 1px); min-width:0; background:var(--bg); padding:0; text-decoration:none; display:flex; flex-direction:column; transition:background .18s; overflow:hidden; }
-    .moment-card:hover { background:#ede8de; }
-    .moment-card:hover .moment-arrow { opacity:1; transform:translateX(0); }
-    .moment-date { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); }
-    .moment-headline { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; line-height:1.4; color:var(--fg); }
-    .moment-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub); flex:1; }
-    .moment-footer { display:flex; align-items:center; justify-content:space-between; padding-top:10px; border-top:1px solid var(--dim); margin-top:4px; }
-    .moment-impact { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; color:var(--sub); }
-    .moment-arrow { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; color:var(--accent); opacity:0; transform:translateX(-4px); transition:all .15s; white-space:nowrap; text-transform:uppercase; }
-    .moment-card-cta { background:var(--fg); flex-direction:column; justify-content:flex-end; }
-    .moment-card-cta:hover { background:#2a2218; }
-    .moment-cta-num { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:1; color:var(--accent); letter-spacing:.02em; }
-    .moment-cta-text { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.55; color:rgba(245,241,232,0.7); margin-top:6px; }
-    .moment-cta-link { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent2); margin-top:16px; }
+.hero-kicker {
+  font-family:'Space Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(143,224,0,.6);
+  margin-bottom:16px;
+}
+.hero-title {
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(52px,7.5vw,96px);
+  line-height:.88;
+  letter-spacing:-.025em;
+  flex:1;
+  display:flex; flex-direction:column; justify-content:flex-start;
+  padding-top:20px;
+}
+.hero-title 
+.hero-title 
 
-    /* ── ABOUT ── */
-    .section { padding:80px 40px; max-width:1200px; margin:0 auto; }
-    .about-body p { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.85; color:var(--fg); margin-bottom:18px; max-width:640px; }
+.hero-bottom {
+  padding-top:20px;
+  border-top:1px solid rgba(245,245,240,.15);
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+}
+.btn-p {
+  background:var(--lime);
+  color:var(--fg);
+  font-family:'Space Mono',monospace;
+  font-size:8px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:12px 22px;
+  text-decoration:none;
+  font-weight:700;
+  border:1.5px solid var(--fg);
+  transition:background .15s;
+}
+.btn-p:hover { background:#74C400; }
+.btn-s {
+  background:none;
+  color:var(--fg);
+  font-family:'Space Mono',monospace;
+  font-size:8px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  padding:11px 22px;
+  text-decoration:none;
+  border:1.5px solid rgba(10,10,8,.4);
+  transition:all .15s;
+}
+.btn-s:hover { background:rgba(10,10,8,.08); }
 
-    /* ── HOW IT WORKS ── */
-    .how-section { background:var(--fg); padding:80px 40px; }
-    .how-inner { max-width:1200px; margin:0; }
-    
-    .how-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--bg); margin-bottom:16px; }
-    .how-sub { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.6; color:rgba(245,241,232,0.5); margin-bottom:48px; max-width:440px; }
-    .how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(255,255,255,0.06); }
-    .how-card { padding:32px 28px; background:var(--fg); transition:background .18s; }
-    .how-card:hover { background:#252018; }
-    .how-num { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:.14em; color:var(--accent); margin-bottom:14px; }
-    .how-title { font-family:'DM Sans',sans-serif; font-size:15px; font-weight:500; color:rgba(245,241,232,0.88); margin-bottom:10px; }
-    .how-body { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.7; color:rgba(245,241,232,0.45); }
+/* Hero right — lavender panel */
+.hero-right {
+  background:#F0EBE0;
+  padding:48px 40px 40px 40px;
+  display:flex; flex-direction:column; justify-content:flex-start;
+  gap:0;
+}
+.letter-label {
+  font-family:'Space Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--sub);
+  margin-bottom:16px;
+}
+.letter-body {
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13.5px;
+  line-height:1.72;
+  color:var(--fg);
+  flex:1;
+}
+.letter-body p { margin-bottom:1.3em; }
+.letter-body p:last-child { margin-bottom:0; }
+.letter-divider { height:1px; background:var(--dim); margin:28px 0 20px; }
+.slop-def {
+  font-family:'Instrument Serif',serif;
+  font-size:13px;
+  line-height:1.55;
+  color:var(--sub);
+  font-style:italic;
+}
 
-    /* ── SLOP / SPILL ── */
-    .split-section { display:grid; grid-template-columns:1fr 1fr; min-height:360px; }
-    .split-pane { padding:64px 48px; display:flex; flex-direction:column; justify-content:flex-end; }
-    .split-pane.slop { background:#e8e2d4; border-right:1px solid var(--dim); }
-    .split-pane.spill { background:var(--bg); }
-    .split-label { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.18em; text-transform:uppercase; margin-bottom:10px; }
-    .split-pane.slop .split-label { color:var(--accent); }
-    .split-pane.spill .split-label { color:var(--accent2); }
-    .split-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); letter-spacing:.03em; line-height:.95; margin-bottom:16px; }
-    .split-pane.slop .split-title { color:var(--accent); }
-    .split-pane.spill .split-title { color:var(--accent2); }
-    .split-body { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--sub); max-width:340px; }
+/* ── MOMENTS ── */
+.moments-section {
+  padding:56px 40px;
+  border-bottom:1.5px solid var(--fg);
+  background:#fff;
+}
+.section-header {
+  display:flex; align-items:baseline; justify-content:space-between;
+  margin-bottom:0;
+  padding-bottom:16px;
+  border-bottom:1.5px solid var(--fg);
+  flex-wrap:wrap; gap:12px;
+}
+.section-heading {
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(24px,3.5vw,38px);
+  letter-spacing:-.01em;
+  font-style:italic;
+  color:var(--fg);
+}
+.carousel-nav { display:flex; align-items:center; gap:6px; }
+.carousel-btn {
+  background:none; border:1.5px solid var(--fg);
+  color:var(--fg); width:28px; height:28px;
+  cursor:pointer; font-size:11px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s;
+}
+.carousel-btn:hover { background:var(--yellow); border-color:var(--fg); }
+.carousel-counter {
+  font-family:'Space Mono',monospace; font-size:7.5px;
+  letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center;
+}
+.carousel-track-wrap { overflow:hidden; border-bottom:1px solid var(--dim); }
+.carousel-track { display:flex; background:var(--bg); gap:1px; margin-top:1px; }
+.moment-card {
+  flex:0 0 calc(33.333% - 1px);
+  background:var(--bg);
+  padding:24px 24px 20px;
+  text-decoration:none; color:inherit;
+  display:flex; flex-direction:column;
+  transition:background .15s;
+  overflow:hidden;
+}
+.moment-card:hover { background:var(--panel); }
+.moment-card:nth-child(2) { background:var(--forest); }
+.moment-card:nth-child(2):hover { background:#244832; }
+.moment-cat {
+  font-family:'Space Mono',monospace; font-size:7px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--lav-dark); margin-bottom:8px;
+}
+.moment-card:nth-child(2) .moment-cat { color:var(--lime); }
+.moment-headline {
+  font-family:'Instrument Serif',serif; font-size:17px;
+  line-height:1.25; letter-spacing:-.01em;
+  margin-bottom:10px; flex:1;
+}
+.moment-card:nth-child(2) .moment-headline { color:var(--bg); }
+.moment-body { font-size:11.5px; line-height:1.6; color:var(--sub); margin-bottom:14px; }
+.moment-card:nth-child(2) .moment-body { color:rgba(245,245,240,.5); }
+.moment-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:10px; border-top:1px solid var(--dim);
+}
+.moment-card:nth-child(2) .moment-footer { border-color:rgba(255,255,255,.12); }
+.moment-impact { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); }
+.moment-card:nth-child(2) .moment-impact { color:rgba(245,245,240,.4); }
+.moment-arrow { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:var(--lav-dark); }
+.moment-card:nth-child(2) .moment-arrow { color:var(--lime); }
+/* CTA card */
+.moment-card.cta-card { background:var(--yellow); justify-content:space-between; }
+.moment-card.cta-card:hover { background:#d4dc00; }
+.cta-num { font-family:'Instrument Serif',serif; font-size:64px; line-height:1; letter-spacing:-.03em; color:var(--fg); }
+.cta-text { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:rgba(18,18,16,.6); margin-bottom:12px; }
+.cta-link { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--fg); border-bottom:1px solid var(--fg); display:inline-block; padding-bottom:1px; }
 
-    /* ── BIO ── */
-    .bio-section { padding:80px 40px; max-width:1200px; margin:0; }
-    .bio-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:16px; }
-    .bio-name { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; margin-bottom:20px; text-align:left; }
-    .bio-body { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.85; color:var(--fg); font-style:italic; margin-bottom:24px; }
-    .bio-links { display:flex; gap:16px; }
-    .bio-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent2); text-decoration:none; border-bottom:1px solid rgba(176,125,0,0.3); padding-bottom:2px; transition:color .15s; }
-    .bio-links a:hover { color:var(--accent); }
+/* ── HOW TO READ IT ── */
+.how-section { padding:56px 40px; border-bottom:1.5px solid var(--fg); background:#fff; }
+.how-sub { font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; color:#3A3A34; margin-bottom:32px; margin-top:6px; }
+.how-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border:1.5px solid var(--fg);
+  background:var(--fg);
+  gap:1px;
+}
+.how-card { background:var(--bg); padding:28px 24px 24px; border-top:4px solid var(--lime); }
+.how-card:nth-child(2) { background:var(--lav); border-top:4px solid var(--fg); }
+.how-card:nth-child(3) { border-top:4px solid var(--yellow); }
+.how-num {
+  font-family:'Space Mono',monospace; font-size:7.5px;
+  letter-spacing:.16em; color:var(--fg);
+  margin-bottom:14px; margin-top:8px;
+  display:inline-block;
+}
+.how-card:nth-child(2) .how-num { color:#0A0820; }
+.how-title { font-family:'Instrument Serif',serif; font-size:18px; line-height:1.2; letter-spacing:-.01em; margin-bottom:10px; color:var(--fg); }
+.how-card:nth-child(2) .how-title { color:#0A0820; }
+.how-body { font-size:12px; line-height:1.65; color:#3A3A34; }
+.how-card:nth-child(2) .how-body { color:rgba(10,8,32,.55); }
+.how-cta-row {
+  margin-top:32px; padding-top:24px;
+  border-top:1px solid rgba(10,10,8,.2);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:16px;
+}
+.how-cta-text { font-size:13px; line-height:1.6; color:var(--sub); max-width:440px; }
 
-    /* ── FINAL CTA ── */
-    .cta-section { background:var(--fg); padding:80px 40px; text-align:left; }
-    .cta-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(48px,8vw,96px); letter-spacing:.03em; line-height:.92; color:var(--bg); margin-bottom:20px; }
-    .cta-sub { font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.7; color:rgba(245,241,232,0.5); max-width:420px; margin:0 0 32px; }
+/* ── ABOUT ELLIE ── */
+.editor-section {
+  display:grid; grid-template-columns:1fr 1fr;
+  border-bottom:1.5px solid var(--fg);
+}
+.editor-left {
+  padding:56px 48px 52px 40px;
+  border-right:1.5px solid var(--fg);
+  background:#FAFAF5;
+}
+.editor-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:#6060A8; margin-bottom:20px; }
+.editor-name { font-family:'Instrument Serif',serif; font-size:clamp(36px,5vw,60px); letter-spacing:-.025em; line-height:.9; margin-bottom:24px; color:var(--fg); }
+.editor-bio { font-size:13.5px; line-height:1.75; color:#3A3A34; margin-bottom:28px; }
+.editor-links { display:flex; flex-wrap:wrap; gap:18px; }
+.editor-links a {
+  font-family:'Space Mono',monospace; font-size:7.5px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--fg); text-decoration:none;
+  border-bottom:1.5px solid var(--fg); padding-bottom:2px;
+  transition:color .15s, border-color .15s;
+}
+.editor-links a:hover { color:var(--lav-dark); border-color:var(--lav); }
+.editor-right { overflow:hidden; min-height:480px; position:relative; background:var(--lav); }
+.editor-photo { width:100%; height:100%; min-height:480px; object-fit:cover; object-position:center top; display:block; filter:saturate(0.9); position:absolute; top:0; left:0; }
 
-    /* ── FOOTER ── */
-    footer { border-top:1px solid var(--dim); padding:22px 40px; display:flex; align-items:center; justify-content:space-between; }
-    .footer-copy { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--sub); }
-    .footer-links { display:flex; gap:18px; }
-    .footer-links a { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--sub); text-decoration:none; transition:color .15s; }
-    .footer-links a:hover { color:var(--accent); }
+/* ── CTA ── */
+.cta-section {
+  padding:64px 40px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:24px;
+  background:var(--yellow);
+  border-bottom:1.5px solid var(--fg);
+}
+.cta-heading { font-family:'Instrument Serif',serif; font-size:clamp(40px,6vw,72px); letter-spacing:-.025em; line-height:.88; font-style:italic; color:var(--fg); }
+.btn-cta {
+  background:var(--fg); color:var(--bg);
+  font-family:'Space Mono',monospace; font-size:8.5px;
+  letter-spacing:.12em; text-transform:uppercase;
+  padding:14px 28px; text-decoration:none;
+  transition:background .15s;
+  border:1.5px solid var(--fg);
+  white-space:nowrap;
+}
+.btn-cta:hover { background:var(--forest); }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width:768px) {
-      nav { padding:14px 20px; }
-      .nav-links a { padding:4px 8px; font-size:7px; }
-      .nav-wordmark .sub { display:none; }
-      .hero { grid-template-columns:1fr; min-height:auto; padding-top:53px; }
-      .hero-left { padding:48px 20px 32px; border-right:none; border-bottom:1px solid var(--dim); }
-      .hero-right { padding:32px 20px 48px; }
-      .moments-section { padding:48px 20px; }
-      .moment-card { flex:0 0 85%; }
-      .section { padding:56px 20px; }
-      .how-section { padding:56px 20px; }
-      .how-grid { grid-template-columns:1fr; }
-      .split-section { grid-template-columns:1fr; }
-      .split-pane { padding:48px 24px; }
-      .split-pane.slop { border-right:none; border-bottom:1px solid var(--dim); }
-      .bio-section { padding:56px 20px; }
-      .cta-section { padding:56px 20px; }
-      footer { padding:18px 20px; flex-direction:column; gap:10px; text-align:center; }
-      #btn-admin-unlock { bottom:64px; }
-    }
+/* ── SUBMIT ── */
+.submit-section { background:var(--forest); padding:72px 40px; }
+.submit-inner { max-width:640px; }
+.submit-kicker { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+.submit-heading { font-family:'Instrument Serif',serif; font-size:clamp(36px,5.5vw,56px); letter-spacing:-.02em; line-height:.9; color:#F5F5F0; font-style:italic; margin-bottom:20px; }
+.submit-body { font-size:14px; line-height:1.75; color:rgba(245,245,240,.55); margin-bottom:36px; max-width:500px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.form-field label {
+  font-family:'Space Mono',monospace; font-size:7px;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(245,245,240,.35); display:block; margin-bottom:5px;
+}
+.form-field label .req { color:var(--lime); }
+.form-field input, .form-field textarea {
+  width:100%;
+  background:rgba(245,245,240,.06);
+  border:1px solid rgba(245,245,240,.15);
+  color:#F5F5F0; font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px; padding:10px 12px; outline:none;
+  transition:border .18s;
+}
+.form-field input:focus, .form-field textarea:focus { border-color:var(--lime); }
+.form-full { margin-bottom:10px; }
+.submit-btn {
+  background:var(--yellow); color:var(--fg);
+  font-family:'Space Mono',monospace; font-size:8.5px;
+  letter-spacing:.13em; text-transform:uppercase;
+  border:none; padding:13px 28px; cursor:pointer;
+  font-weight:700; margin-top:14px;
+  transition:background .15s;
+}
+.submit-btn:hover { background:var(--lime); }
 
-    /* ── GUIDE SECTION ── */
-    .guide-section { padding:0; background:var(--bg); border-top:1px solid var(--dim); }
-    .guide-header { padding:48px 40px 0; max-width:1200px; margin:0; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:32px; }
-    .guide-heading { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg); }
-    .guide-nav { display:flex; align-items:center; gap:8px; }
-    .guide-btn { font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; font-family:monospace; }
-    .guide-btn:hover { border-color:var(--accent); color:var(--accent); }
-    .guide-btn:disabled { opacity:.25; cursor:default; }
-    .guide-counter { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center; }
-    .guide-track-wrap { overflow:hidden; border-top:1px solid var(--dim); }
-    .guide-track { display:flex; transition:transform .38s cubic-bezier(.4,0,.2,1); }
+/* ── FOOTER ── */
+footer {
+  background:var(--forest);
+  padding:20px 40px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.footer-copy { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:rgba(245,245,240,.5); }
+.footer-links { display:flex; gap:20px; }
+.footer-links a {
+  font-family:'Space Mono',monospace; font-size:7.5px;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(245,245,240,.5); text-decoration:none;
+  transition:color .15s;
+}
+.footer-links a:hover { color:rgba(245,245,240,.8); }
 
-    /* Each slide */
-    .guide-slide { flex:0 0 100%; min-width:0; display:grid; grid-template-columns:1fr 1fr; min-height:480px; }
-    .guide-slide-left { padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim); }
-    .guide-slide-right { padding:48px 40px 48px 48px; display:flex; flex-direction:column; justify-content:center; background:var(--panel); }
-    .guide-slide-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px; }
-    .guide-slide-heading { font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,46px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px; }
-    .guide-slide-body { font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); }
-    .guide-slide-body p { margin-bottom:12px; }
-    .guide-slide-body p:last-child { margin-bottom:0; }
-    .guide-row { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
-    .guide-row:last-child { margin-bottom:0; }
-    .guide-row-label { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase; }
-    .guide-row-text { font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub); }
-    .guide-cat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    .guide-cat { display:flex; align-items:flex-start; gap:8px; }
-    .guide-cat-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:3px; }
-    .guide-cat-name { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px; }
-    .guide-cat-desc { font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub); }
-    .guide-spill-slop { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .guide-ss-block { padding:16px; border-left:2px solid; }
-    .guide-ss-title { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; margin-bottom:6px; }
-    .guide-ss-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub); }
-    .guide-ss-eg { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; line-height:1.7; opacity:.65; }
-    .guide-node-field { margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim); }
-    .guide-node-field:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
-    .guide-node-field-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px; }
-    .guide-node-field-body { font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg); }
-    @media (max-width:768px) {
-      .guide-header { padding:40px 20px 0; }
-      .guide-slide { grid-template-columns:1fr; min-height:auto; }
-      .guide-slide-left { padding:36px 20px 24px; border-right:none; border-bottom:1px solid var(--dim); }
-      .guide-slide-right { padding:24px 20px 36px; }
-    }
 
-    /* ── BIO PHOTO ── */
-    .bio-grid { display:grid; grid-template-columns:200px 1fr; gap:48px; align-items:start; }
-    .bio-photo { width:200px; height:260px; object-fit:cover; object-position:center top; display:block; filter:grayscale(15%); }
-    @media (max-width:768px) {
-      .bio-grid { grid-template-columns:1fr; gap:28px; }
-      .bio-photo { width:140px; height:180px; }
-    }
-  </style>
+/* ── Editable content styles ── */
+[contenteditable="true"] { outline:none; border-bottom:1px dashed rgba(0,0,0,.2); cursor:text; }
+#edit-btn { position:fixed; bottom:20px; right:20px; z-index:9999; background:var(--forest); color:#F5F5F0; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; border:none; padding:10px 16px; cursor:pointer; display:none; }
+
+
+
+
+
+.hero-left {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left > * { position: relative; z-index: 1; }
+
+/* CTA section: node cluster bottom-right on yellow bg */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section > * { position: relative; z-index: 1; }
+
+/* Submit section: node cluster top-right on forest bg */
+.submit-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-section > * { position: relative; z-index: 1; }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — MOBILE
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* Nav — hide text links, keep brand + galaxy CTA */
+  nav { height: 48px; padding: 0; }
+  .nav-brand { padding: 0 16px; font-size: 16px; border-right: none; }
+  .nav-links a:not(.cta) { display: none; }
+  .nav-links a.cta {
+    padding: 0 16px;
+    font-size: 7px;
+    border-left: 1px solid var(--dim);
+  }
+
+  /* Ticker — smaller */
+  .ticker { height: 28px; }
+  .ticker-inner { font-size: 6.5px; gap: 24px; }
+
+  /* Hero — stack vertically */
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left {
+    padding: 40px 20px 36px;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 1.5px solid var(--fg);
+  }
+  .hero-title {
+    font-size: clamp(64px, 18vw, 96px);
+    padding-top: 20px;
+  }
+  .hero-kicker { margin-bottom: 16px; }
+  .hero-bottom { gap: 8px; margin-top: 28px; }
+  .btn-p, .btn-s { font-size: 7.5px; padding: 10px 16px; }
+
+  .hero-right { padding: 36px 20px 40px; }
+  .letter-label { margin-bottom: 16px; }
+  .letter-body { font-size: 14px; }
+  .letter-body p { margin-bottom: 1.1em; }
+
+  /* Moments — single card visible */
+  .moments-section { padding: 40px 20px; }
+  .moment-card { flex: 0 0 85vw; }
+  .moment-img { height: 140px; }
+
+  /* How to read it — stack cards */
+  .how-section { padding: 40px 20px; }
+  .how-grid { grid-template-columns: 1fr; }
+  .how-card:nth-child(2) { border-top: 4px solid var(--fg); }
+  .how-card:nth-child(3) { border-top: 4px solid var(--yellow); }
+  .how-cta-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+  /* Editor — stack photo below text */
+  .editor-section { grid-template-columns: 1fr; }
+  .editor-left {
+    padding: 40px 20px;
+    border-right: none;
+    border-bottom: 1.5px solid var(--fg);
+  }
+  .editor-right { min-height: 280px; }
+  .editor-photo { width:100%; height:100%; min-height:480px; object-fit:cover; object-position:center top; display:block; filter:saturate(0.9); position:absolute; top:0; left:0; }
+
+  /* CTA */
+  .cta-section { padding: 48px 20px; gap: 20px; flex-direction: column; align-items: flex-start; }
+  .cta-heading { font-size: clamp(40px, 12vw, 64px); }
+
+  /* Submit */
+  .submit-section { padding: 48px 20px; }
+  .form-grid { grid-template-columns: 1fr; }
+
+  /* Footer */
+  footer { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-links { flex-wrap: wrap; gap: 12px; }
+
+  /* Section headings */
+  .section-heading { font-size: clamp(22px, 6vw, 32px); }
+  .how-heading { font-size: clamp(22px, 6vw, 32px); }
+  .editor-name { font-size: clamp(32px, 9vw, 48px); }
+
+  /* Node motif smaller on mobile */
+  
+  
+  
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: clamp(56px, 16vw, 80px); }
+  .nav-brand { font-size: 14px; }
+  .moment-card { flex: 0 0 92vw; }
+}
+
+
+/* ── Carousel card internals (JS-rendered) ── */
+.moment-img {
+  height:140px; overflow:hidden; margin:-24px -24px 16px;
+  position:relative; background:var(--panel);
+}
+.moment-img img { width:100%; height:100%; object-fit:cover; display:block; }
+.moment-img-credit {
+  position:absolute; bottom:6px; right:8px;
+  font-family:'Space Mono',monospace; font-size:6px;
+  letter-spacing:.08em; color:rgba(255,255,255,.5);
+}
+.moment-card-body { display:flex; flex-direction:column; flex:1; }
+.moment-date {
+  font-family:'Space Mono',monospace; font-size:7px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--sub); margin-bottom:8px;
+}
+.moment-headline {
+  font-family:'Instrument Serif',serif; font-size:17px;
+  line-height:1.25; letter-spacing:-.01em;
+  color:var(--fg); margin-bottom:10px; flex:1;
+}
+.moment-body { font-size:11.5px; line-height:1.6; color:var(--sub); margin-bottom:14px; }
+.moment-footer {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:10px; border-top:1px solid var(--dim);
+  margin-top:auto;
+}
+.moment-impact {
+  font-family:'Space Mono',monospace; font-size:7px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--sub);
+}
+.moment-arrow {
+  font-family:'Space Mono',monospace; font-size:7px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--lav-dark);
+}
+/* CTA card */
+.moment-card-cta {
+  background:var(--yellow) !important;
+  display:flex; flex-direction:column; justify-content:space-between;
+  text-decoration:none; color:var(--fg) !important;
+}
+.moment-cta-num {
+  font-family:'Instrument Serif',serif;
+  font-size:72px; line-height:1; letter-spacing:-.03em; color:var(--fg);
+}
+.moment-cta-label {
+  font-family:'Space Mono',monospace; font-size:8px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:rgba(18,18,16,.55); margin-bottom:12px;
+}
+.moment-cta-text {
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:13px;
+  line-height:1.5; color:var(--fg); margin-bottom:16px;
+}
+.moment-cta-link {
+  font-family:'Space Mono',monospace; font-size:7.5px;
+  letter-spacing:.12em; text-transform:uppercase;
+  color:var(--fg); border-bottom:1px solid var(--fg);
+  display:inline-block; padding-bottom:1px;
+}
+
+/* Nav brand color spans */
+.nav-brand .y { color:var(--lime); font-style:italic; }
+.nav-brand .l { color:var(--lav-dark); font-style:italic; }
+
+/* Ticker bullet spans — bright on dark bg */
+.ticker .y { color:var(--yellow); }
+.ticker .l { color:var(--lime); }
+
+.moments-heading { font-family:'Instrument Serif',serif; font-size:clamp(28px,4vw,44px); letter-spacing:-.01em; line-height:1; color:var(--fg); font-style:italic; }
+
+/* Hero-left forest bg — title colors */
+.hero-left .hero-title { color:#F5F5F0; }
+.hero-left .hero-title .y { color:var(--lime); font-style:italic; }
+.hero-left .hero-title .l { color:var(--lav); font-style:italic; }
+
+.hero-left .btn-s {
+  color:rgba(245,245,240,.75);
+  border-color:rgba(245,245,240,.3);
+}
+.hero-left .btn-s:hover {
+  background:rgba(245,245,240,.1);
+  border-color:rgba(245,245,240,.6);
+}
+</style>
 </head>
 <body>
-
-<button id="btn-admin-unlock" onclick="promptAdmin()" title="Edit page"></button>
-<div id="edit-bar">
-  <span class="edit-hint">✎ click any highlighted text to edit</span>
-  <button class="edit-btn" id="btn-save-edit" onclick="saveEdits()">⬇ download html</button>
-  <button class="edit-btn" id="btn-cancel-edit" onclick="cancelEdit()">exit</button>
-</div>
-<div id="save-confirm">✓ downloading — upload index.html to github and commit</div>
-
-<div id="site-header">
-  <div id="header-main">
-    <a href="/" style="text-decoration:none;"><h1><span class="red">Slop</span> 'Til You <span class="red">Drop</span></h1></a>
-    <span class="sub-brand">sloptilyoudrop.com</span>
+<!-- NAV -->
+<nav>
+  <a href="/" class="nav-brand"><span class="y">Slop</span> 'Til You <span class="l">Drop</span></a>
+  <div class="nav-links">
+    <a href="#how">How to read it</a>
+    <a href="#editor">About Ellie</a>
+    <a href="#submit" class="submit">Submit some slop</a>
+    <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="cta">The Slop Galaxy ↗</a>
   </div>
-  <div id="header-subnav">
-    <div id="header-subnav-left">
-      <a href="#" class="hn-btn hn-btn-active">Home</a>
-      <a href="#guide" class="hn-btn">Guide</a>
-      <a href="#how" class="hn-btn">How to read it</a>
-      <a href="#editor" class="hn-btn">About Ellie</a>
-      <a href="#submit" class="hn-btn">Submit some slop</a>
-      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="hn-btn">The Slop Galaxy ↗</a>
-    </div>
+</nav>
+
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="y">◆</span><span>Wikipedia bans AI-generated content</span>
+    <span class="l">◆</span><span>Iran is winning the AI slop propaganda war</span>
+    <span class="y">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
+    <span class="l">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
+    <span class="y">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
+    <span class="l">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
+    <span class="y">◆</span><span>Google tells users to eat glue on their pizza</span>
+    <span class="l">◆</span><span>Fruit Love Island: 300M views, then banned</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="y">◆</span><span>Wikipedia bans AI-generated content</span>
+    <span class="l">◆</span><span>Iran is winning the AI slop propaganda war</span>
+    <span class="y">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
+    <span class="l">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
+    <span class="y">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
+    <span class="l">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
+    <span class="y">◆</span><span>Google tells users to eat glue on their pizza</span>
+    <span class="l">◆</span><span>Fruit Love Island: 300M views, then banned</span>
   </div>
 </div>
+
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
+    <div class="hero-kicker">A living record of the AI slop era</div>
     <h1 class="hero-title">
-      <span class="red" data-editable="hero-line1" contenteditable="false">Slop</span>
-      <span class="dark" data-editable="hero-line2" contenteditable="false">'Til You</span>
-      <span class="red" data-editable="hero-line3" contenteditable="false">Drop</span>
+      <span class="y" data-editable="hero-line1" contenteditable="false">Slop</span>
+      <span data-editable="hero-line2" contenteditable="false">'Til You</span>
+      <span class="l" data-editable="hero-line3" contenteditable="false">Drop</span>
     </h1>
-    <div class="hero-rule"></div>
-    <div class="hero-cta">
-      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Enter the Galaxy →</a>
-      <a href="#how" class="btn-secondary">How it works</a>
+    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.65;color:rgba(245,245,240,.55);margin-bottom:24px;max-width:340px;">Every AI-generated moment that crossed a line — documented, sourced, and placed in time.</p>
+    <div class="hero-bottom">
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-p">Enter the Galaxy →</a>
+      <a href="#how" class="btn-s">How it works</a>
+      <div style="margin-left:auto;text-align:right;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);flex-shrink:0;line-height:1.5;">
+        <span style="font-family:'Instrument Serif',serif;font-size:32px;line-height:1;color:var(--lime);letter-spacing:-.02em;display:block;">51</span>
+        moments documented
+      </div>
     </div>
   </div>
   <div class="hero-right">
-    <div class="hero-letter-label" data-editable="hero-letter-label" contenteditable="false">A letter from Ellie</div>
-    <p class="hero-opening" data-editable="hero-p1" contenteditable="false">Whether you notice it or not, AI slop is everywhere. I started seeing it in small, innocent ways. A family member shared an image that was off. My social media feed grew increasingly hollow. A trickle became a floodgate of acceptable, passable AI slop permeating every corner of the Internet. It was mimicking humanity but often lacked its patina, randomness, and imperfections.</p>
-    <p class="hero-opening" data-editable="hero-p2" contenteditable="false">As much as I try to avoid it, I can't stop thinking about slop. I'm less consumed by the haunting image of <a href="https://galaxy.sloptilyoudrop.com?node=10" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Shrimp Jesus</a> or who's hooking up on <a href="https://galaxy.sloptilyoudrop.com?node=42" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Fruit Love Island</a> than what this slop is doing to us — the human Us. What are we accepting as passable entertainment, art, literature, or — in some instances — companionship? And what will we accept when AI-generated content is normalized and increasingly indistinguishable from human work.</p>
-    <p class="hero-opening" data-editable="hero-p3" contenteditable="false">Not even Claude has a crystal ball (and don't believe it if it tells you so), so I decided to track it. A few weeks of vibecoding later (irony! ha), The Slop Galaxy was born. I created this site as a way to track and visualize these moments on a timeline. Moments like: when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together, these start to paint a picture, and keep score, of how a technology is changing the terms of what we trust, consume, and tolerate.</p>
-    <p class="hero-opening" data-editable="hero-p4" contenteditable="false">Maybe you, too, have been watching this closely. Maybe you are blissfully touching grass or carelessly surfing the web. Either way, something is shifting, and this is my attempt to understand what and how, in real time.</p>
-    <hr class="hero-divider">
-    <div class="hero-def-block">
-      <div class="hero-def-term">slop <em>n.</em></div>
-      <div class="hero-def-body" data-editable="hero-def" contenteditable="false">Digital content of low quality produced in quantity by artificial intelligence. Merriam-Webster Word of the Year, 2025.</div>
+    <div class="letter-label">A letter from Ellie</div>
+    <div class="letter-body">
+      <p>Whether you notice it or not, AI slop is everywhere. I started seeing it in small, innocent ways. A family member shared an image that was off. My social media feed grew increasingly hollow. A trickle became a floodgate of acceptable, passable AI slop permeating every corner of the Internet. It was mimicking humanity but often lacked its patina, randomness, and imperfections.</p>
+      <p>As much as I try to avoid it, I can't stop thinking about slop. I'm less consumed by the haunting image of <a href="https://galaxy.sloptilyoudrop.com?node=10" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Shrimp Jesus</a> or who's hooking up on <a href="https://galaxy.sloptilyoudrop.com?node=42" target="_blank" style="color:inherit;border-bottom:1px solid var(--dim);text-decoration:none;">Fruit Love Island</a> than what this slop is doing to us — the human Us. What are we accepting as passable entertainment, art, literature, or — in some instances — companionship? And what will we accept when AI-generated content is normalized and increasingly indistinguishable from human work.</p>
+      <p>Not even Claude has a crystal ball (and don't believe it if it tells you so), so I decided to track it. A few weeks of vibecoding later (irony! ha), The Slop Galaxy was born. I created this site as a way to track and visualize these moments on a timeline. Moments like: when AI-generated content entered a courtroom, a newsroom, a presidential feed, a child's video stream. Together, these start to paint a picture, and keep score, of how a technology is changing the terms of what we trust, consume, and tolerate.</p>
+      <p>Maybe you, too, have been watching this closely. Maybe you are blissfully touching grass or carelessly surfing the web. Either way, something is shifting, and this is my attempt to understand what and how, in real time.</p>
     </div>
-    <p class="hero-neutral" data-editable="hero-neutral" contenteditable="false">This is not a neutral database. It is a curated record with a point of view: that what we tolerate online shapes what we become offline, and that someone should be keeping track.</p>
+    <div class="letter-divider"></div>
+    <p class="slop-def"><strong>slop</strong> — digital content of low quality, produced in quantity by means of artificial intelligence. <em>Merriam-Webster Word of the Year, 2025.</em></p>
   </div>
 </section>
+
 
 <!-- RECENT KEY MOMENTS -->
 <section id="moments" class="moments-section">
@@ -318,183 +701,118 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section id="how" class="how-section">
-  <div class="how-inner">
-    <h2 class="how-heading">How to read it</h2>
-    <p class="how-sub" data-editable="how-sub" contenteditable="false">Every node is a documented moment. Here's what you're looking at.</p>
-    <div class="how-grid">
-      <div class="how-card">
-        <div class="how-num">01</div>
-        <div class="how-title" data-editable="how1-title" contenteditable="false">Size indicates impact</div>
-        <p class="how-body" data-editable="how1-body" contenteditable="false">The larger the node, the higher its impact score — a curated judgment of how much this moment changed the world. Scores run 1 to 10.</p>
-      </div>
-      <div class="how-card">
-        <div class="how-num">02</div>
-        <div class="how-title" data-editable="how2-title" contenteditable="false">Slop vs. Spill is indicated by placement</div>
-        <p class="how-body" data-editable="how2-body" contenteditable="false">The sloppier the moment, the lower the node is on the y-axis. The more of a spill — a consequence, a reckoning, legislation — the higher it is.</p>
-      </div>
-      <div class="how-card">
-        <div class="how-num">03</div>
-        <div class="how-title" data-editable="how3-title" contenteditable="false">Click for the full story</div>
-        <p class="how-body" data-editable="how3-body" contenteditable="false">Every node has rich context: what happened, what it tells us, the source, and sometimes an editor's note from Ellie. An amber arc connects the key moments — a curated through-line, visible the moment you open the galaxy.</p>
-      </div>
+
+<!-- HOW TO READ IT -->
+<section class="how-section" id="how">
+  <div class="section-header">
+    <h2 class="section-heading">How to read it</h2>
+  </div>
+  <p class="how-sub">Every node is a documented moment. Here's what you're looking at.</p>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-title">Size indicates impact</div>
+      <p class="how-body">The larger the node, the higher its impact score — a curated judgment of how much this moment changed the world. Scores run 1 to 10.</p>
     </div>
-    <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--dim);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-      <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.65;color:var(--sub);margin:0;max-width:480px;">Spotted something that belongs here? The galaxy is built on human attention — submit a moment and Ellie will review it.</p>
-      <a href="#submit" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:var(--accent);color:#f5f1e8;padding:12px 24px;text-decoration:none;white-space:nowrap;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='var(--accent)'">SUBMIT SOME SLOP →</a>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-title">Slop vs. Spill is indicated by placement</div>
+      <p class="how-body">The sloppier the moment, the lower the node is on the y-axis. The more of a spill — a consequence, a reckoning, legislation — the higher it is.</p>
     </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-title">Every node has a story behind it</div>
+      <p class="how-body">Tap any bubble in the galaxy to expand the full story — what happened, what it means, the source, and sometimes an editor's note from Ellie. An arc connects the key moments into a through-line.</p>
+    </div>
+  </div>
+
+
+</section>
+
+
+<!-- ABOUT ELLIE -->
+<section class="editor-section" id="editor">
+  <div class="editor-left">
+    <div class="editor-label">The editor</div>
+    <h2 class="editor-name">Ellie Damashek</h2>
+    <p class="editor-bio">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
+    <div class="editor-links">
+      <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
+      <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
+      <a href="/cdn-cgi/l/email-protection#ff9a9393969abf8c93908f8b969386908a9b8d908fd19c9092"><span class="__cf_email__" data-cfemail="187d7474717d586b7477686c717461776d7c6a7768367b7775">[email&#160;protected]</span></a>
+    </div>
+  </div>
+  <div class="editor-right">
+    <img src="https://raw.githubusercontent.com/eeeeedam/sloptilyoudrop-site/8a183874b0539b46ab7d9ebb0a2805c644103820/IMG_9290.jpg" alt="Ellie Damashek" class="editor-photo">
   </div>
 </section>
 
 
-<!-- GUIDE -->
-<section id="guide" style="background:var(--bg); border-top:1px solid var(--dim);">
-  <div style="max-width:1200px; margin:0; padding:0;">
-    <div style="padding:48px 40px 0; display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:32px;">
-      <h2 style="font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:.02em; line-height:1; color:var(--fg);">How to Navigate</h2>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button onclick="guidePrev()" id="guide-prev-btn" style="font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; font-family:monospace; transition:all .15s;" disabled>←</button>
-        <span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center;"><span id="guide-cur-num">1</span> / 4</span>
-        <button onclick="guideNext()" id="guide-next-btn" style="font-size:13px; background:none; border:1px solid var(--dim); color:var(--sub); width:30px; height:30px; cursor:pointer; font-family:monospace; transition:all .15s;">→</button>
-      </div>
-    </div>
-    <div style="overflow:hidden; border-top:1px solid var(--dim);">
-      <div id="guide-slides-track" style="display:flex; transition:transform .38s cubic-bezier(.4,0,.2,1);">
-
-        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
-            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">01 of 04</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">The galaxy is made of nodes</h3>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">Every node is a real, documented event — a moment when AI-generated content entered the world in a meaningful way.</p>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">Each node has the same anatomy. Here is how to read what you are looking at.</p>
-          </div>
-          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:flex; flex-direction:column; gap:14px; justify-content:center;">
-            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Size</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Reflects impact on the world, scored 1 to 10. Bigger node, bigger moment.</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Color</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Tells you the category: Platform, Media, Cultural, Legislation, Research, or Societal.</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Time</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Left to right is earlier to more recent. Pan with one finger, pinch to zoom.</span></div>
-            <div style="display:flex; gap:10px; align-items:flex-start;"><span style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; color:var(--accent2); flex-shrink:0; width:60px; padding-top:3px; text-transform:uppercase;">Click</span><span style="font-family:'DM Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--sub);">Expand any node to read the full story: what happened, what it means, and sometimes a note from Ellie.</span></div>
-          </div>
-        </div>
-
-        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
-            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">02 of 04</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Slop and Spill are separated by height</h3>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">The vertical position of each node shows whether this moment is Slop — the content itself — or a Spill — the consequence it triggered.</p>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">Many events are both. The spectrum is the point.</p>
-          </div>
-          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:grid; grid-template-columns:1fr 1fr; gap:16px; align-content:center;">
-            <div style="padding:16px; border-left:2px solid var(--accent2);"><div style="font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; color:var(--accent2); margin-bottom:6px;">▲ Spill</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub);">Consequences, legislation, lawsuits, cultural reckonings.</div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; color:var(--accent2); opacity:.7; line-height:1.7;">WGA strike · EU AI Act · Wikipedia ban</div></div>
-            <div style="padding:16px; border-left:2px solid var(--accent);"><div style="font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:.08em; color:var(--accent); margin-bottom:6px;">▼ Slop</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.65; color:var(--sub);">Fake images, AI articles, synthetic personas, generated video.</div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.05em; margin-top:8px; color:var(--accent); opacity:.7; line-height:1.7;">Shrimp Jesus · Google eats glue · Fruit Love Island</div></div>
-          </div>
-        </div>
-
-        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
-            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">03 of 04</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Six categories, one color each</h3>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg);">The color of each node tells you what kind of moment it is. Use the filters in the galaxy to focus on what interests you most.</p>
-          </div>
-          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:grid; grid-template-columns:1fr 1fr; gap:14px; align-content:center;">
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#fb923c; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Platform</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Social networks, hosting, recommendation systems</div></div></div>
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#ffd166; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Media</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">News, publishing, journalism, broadcast</div></div></div>
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#06d6a0; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Cultural</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Art, music, entertainment, public discourse</div></div></div>
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#a78bfa; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Legislation</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Laws, regulations, court rulings, policy</div></div></div>
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#38bdf8; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Research</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Studies, findings, academic and industry reports</div></div></div>
-            <div style="display:flex; align-items:flex-start; gap:8px;"><div style="width:10px; height:10px; border-radius:50%; background:#f472b6; flex-shrink:0; margin-top:3px;"></div><div><div style="font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--fg); margin-bottom:2px;">Societal</div><div style="font-family:'DM Sans',sans-serif; font-size:11px; line-height:1.5; color:var(--sub);">Behavior shifts, norms, trust, public psychology</div></div></div>
-          </div>
-        </div>
-
-        <div style="flex:0 0 100%; display:grid; grid-template-columns:1fr 1fr; min-height:420px;">
-          <div style="padding:48px 48px 48px 40px; display:flex; flex-direction:column; justify-content:center; border-right:1px solid var(--dim);">
-            <div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--sub); margin-bottom:12px;">04 of 04</div>
-            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(28px,3.5vw,44px); letter-spacing:.03em; line-height:1; color:var(--fg); margin-bottom:16px;">Every node tells a story</h3>
-            <p style="font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.75; color:var(--fg); margin-bottom:12px;">Click any node to open its full record. The amber arc connecting key nodes across the galaxy is a curated through-line — the spine of the story. Toggle it with ◆ Through-Line in the top nav.</p>
-          </div>
-          <div style="padding:48px 40px 48px 48px; background:var(--panel); display:flex; flex-direction:column; gap:0; justify-content:center;">
-            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">What Happened</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">The documented fact. No editorializing.</div></div>
-            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">What It Tells Us</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Why this moment matters beyond the headline.</div></div>
-            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Impact Score</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">1–10. Drives the node size on the galaxy.</div></div>
-            <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--dim);"><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Source</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Where to read the primary reporting.</div></div>
-            <div><div style="font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--sub); margin-bottom:3px;">Editor's Note</div><div style="font-family:'DM Sans',sans-serif; font-size:12px; line-height:1.55; color:var(--fg);">Some nodes carry a personal note from Ellie. Look for the speech bubble icon.</div></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EDITOR -->
-<section id="editor">
-  <div class="bio-section">
-    <div class="bio-grid">
-      <img src="https://raw.githubusercontent.com/eeeeedam/sloptilyoudrop-site/8a183874b0539b46ab7d9ebb0a2805c644103820/IMG_9290.jpg" alt="Ellie Damashek" class="bio-photo">
-      <div>
-        <div class="bio-label">The editor</div>
-        <h2 class="bio-name" data-editable="bio-name" contenteditable="false">Ellie Damashek</h2>
-        <p class="bio-body" data-editable="bio-body" contenteditable="false">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
-        <div class="bio-links">
-          <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
-          <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
-          <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
-          <a href="mailto:ellie@sloptilyoudrop.com">ellie@sloptilyoudrop.com</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
+<!-- ENTER THE GALAXY -->
 <section class="cta-section">
-  <h2 class="cta-heading">Enter the Galaxy</h2>
-  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-primary">Open the Galaxy →</a>
+  <h2 class="cta-heading">Enter<br>the Galaxy</h2>
+  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-cta">Open the Galaxy →</a>
 </section>
 
 
 <!-- SUBMIT A NODE -->
-<section id="submit" style="background:var(--fg);border-top:1px solid rgba(245,241,232,0.1);padding:72px 40px;">
+<section id="submit" style="background:var(--forest);border-top:1px solid rgba(245,241,232,0.1);padding:72px 40px;">
   <div style="max-width:680px;">
 
     <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,241,232,0.4);margin-bottom:16px;">Contribute</div>
-    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,56px);letter-spacing:.02em;line-height:1;color:#f5f1e8;margin-bottom:20px;">Submit some slop</h2>
-    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">The galaxy grows by human attention. If you spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it. Ellie reviews every submission. If yours makes it in, your name appears on the node.</p>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);letter-spacing:-.02em;line-height:1;color:#f5f1e8;margin-bottom:20px;">Submit some slop</h2>
+    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">The galaxy grows by human attention. If you spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it. Ellie reviews every submission. If yours makes it in, your name appears on the node.</p>
 
     <div id="submit-form-wrap">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div>
-          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your name <span style="color:#c93208">*</span></label>
-          <input id="sub-name" type="text" placeholder="Eva" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your name <span style="color:var(--lime)">*</span></label>
+          <input id="sub-name" type="text" placeholder="Name" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
         </div>
         <div>
-          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your email <span style="color:#c93208">*</span></label>
-          <input id="sub-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your email <span style="color:var(--lime)">*</span></label>
+          <input id="sub-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
         </div>
       </div>
       <div style="margin-bottom:12px;">
-        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Article or page URL <span style="color:#c93208">*</span></label>
-        <input id="sub-url" type="url" placeholder="https://..." style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Article or page URL <span style="color:var(--lime)">*</span></label>
+        <input id="sub-url" type="url" placeholder="https://..." style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
       </div>
       <div style="margin-bottom:24px;">
         <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Why does this belong in the galaxy? <span style="opacity:.5">(optional)</span></label>
-        <textarea id="sub-note" placeholder="What crossed the line here. What it means." rows="3" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:vertical;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'"></textarea>
+        <textarea id="sub-note" placeholder="What crossed the line here. What it means." rows="3" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:vertical;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'"></textarea>
       </div>
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <button id="sub-btn" onclick="submitNode()" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:#c93208;color:#f5f1e8;border:none;padding:13px 28px;cursor:pointer;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='#c93208'">SUBMIT FOR REVIEW →</button>
+        <button id="sub-btn" onclick="submitNode()" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:#1A3A2A;color:#f5f1e8;border:none;padding:13px 28px;cursor:pointer;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='#c93208'">SUBMIT FOR REVIEW →</button>
         <span id="sub-status" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:rgba(245,241,232,0.5);"></span>
       </div>
     </div>
 
     <div id="submit-thanks" style="display:none;">
       <div style="border-left:2px solid #c93208;padding:20px 24px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;color:#f5f1e8;margin-bottom:8px;">Received.</div>
-        <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;color:rgba(245,241,232,0.7);margin:0;">Ellie reviews every submission. You'll hear back either way — check your inbox. If your submission makes it into the galaxy, your name will be on the node.</p>
+        <div style="font-family:'Instrument Serif',serif;font-size:28px;letter-spacing:.04em;color:#f5f1e8;margin-bottom:8px;">Received.</div>
+        <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.7;color:rgba(245,241,232,0.7);margin:0;">Ellie reviews every submission. You'll hear back either way — check your inbox. If your submission makes it into the galaxy, your name will be on the node.</p>
       </div>
     </div>
 
   </div>
 </section>
+
+
+
+
+<footer>
+  <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
+  <div class="footer-links">
+    <a href="#editor">About</a>
+    <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn</a>
+    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Galaxy</a>
+    <a href="#" onclick="event.preventDefault();document.getElementById('footer-contact-popup').style.display=document.getElementById('footer-contact-popup').style.display==='block'?'none':'block';" style="position:relative;">Contact
+      <span id="footer-contact-popup" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:'Space Mono',monospace;font-size:9px;padding:8px 14px;white-space:nowrap;letter-spacing:.06em;z-index:100;"><a href="mailto:ellie@sloptilyoudrop.com" style="color:var(--bg);text-decoration:none;">ellie@sloptilyoudrop.com</a></span>
+    </a>
+  </div>
+</footer>
 
 <script>
 const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwHMmWocCZJ-p6uwDGf6SBDwzifh10LY5ZyEE3mVyoXrUV6xNfqRfxAVCKCzkBom5od/exec';
@@ -533,19 +851,6 @@ function submitNode() {
   });
 }
 </script>
-
-<footer>
-  <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
-  <div class="footer-links">
-    <a href="#editor">About</a>
-    <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn</a>
-    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Galaxy</a>
-    <a href="#" onclick="event.preventDefault();document.getElementById('footer-contact-popup').style.display=document.getElementById('footer-contact-popup').style.display==='block'?'none':'block';" style="position:relative;">Contact
-      <span id="footer-contact-popup" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:'Space Mono',monospace;font-size:9px;padding:8px 14px;white-space:nowrap;letter-spacing:.06em;z-index:100;"><a href="mailto:ellie@sloptilyoudrop.com" style="color:var(--bg);text-decoration:none;">ellie@sloptilyoudrop.com</a></span>
-    </a>
-  </div>
-</footer>
-
 <script>
   // ── EDITOR MODE ──────────────────────────────────────────────────────────────
   const PASS = 'remiagua22';
@@ -685,8 +990,8 @@ const STATIC_FALLBACK = [
         const fb = document.createElement('a');
         fb.href = GALAXY; fb.target = '_blank';
         fb.className = 'moment-card moment-card-cta';
-        fb.style.minHeight = '200px';
-        fb.innerHTML = '<div class="moment-cta-text" style="color:rgba(245,241,232,0.7);">Visit the galaxy to see all documented moments.</div><div class="moment-cta-link">Enter the Galaxy →</div>';
+        fb.style.minHeight = '200px'; fb.style.flex = '0 0 100%';
+        fb.innerHTML = '<div class="moment-cta-text" style="color:var(--fg);">Every AI-generated moment that crossed a line, documented.</div><div class="moment-cta-link" style="color:var(--fg);border-color:var(--fg);">Enter the Galaxy →</div>';
         track.innerHTML = ''; track.appendChild(fb);
         init();
       });
