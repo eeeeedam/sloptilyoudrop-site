@@ -324,8 +324,8 @@ nav {
   transition:color .15s, border-color .15s;
 }
 .editor-links a:hover { color:var(--lav-dark); border-color:var(--lav); }
-.editor-right { overflow:hidden; max-height:280px; width:100%; position:relative; background:var(--lav); }
-.editor-photo { width:100%; height:280px; object-fit:cover; object-position:top center; display:block; }
+.editor-right { overflow:hidden; max-height:220px; width:100%; position:relative; background:var(--lav); }
+.editor-photo { width:100%; height:220px; object-fit:cover; object-position:center 20%; display:block; }
 
 /* ── CTA ── */
 .cta-section {
@@ -489,8 +489,8 @@ footer {
     border-right: none;
     border-bottom: 1.5px solid var(--fg);
   }
-  .editor-right { overflow:hidden; max-height:280px; width:100%; position:relative; background:var(--lav); }
-  .editor-photo { width:100%; height:280px; object-fit:cover; object-position:top center; display:block; }
+  .editor-right { overflow:hidden; max-height:220px; width:100%; position:relative; background:var(--lav); }
+  .editor-photo { width:100%; height:220px; object-fit:cover; object-position:center 20%; display:block; }
 
   /* CTA */
   .cta-section { padding: 48px 20px; gap: 20px; flex-direction: column; align-items: flex-start; }
@@ -647,7 +647,9 @@ footer {
   background:#F0EBE0;
 }
 .letter-first-line img {
-  width:100%;
+  height:80px;
+  width:auto;
+  max-width:100%;
   display:block;
 }
 .letter-first-line-placeholder {
@@ -767,12 +769,12 @@ footer {
 
   <!-- First sentence — always shows as handwriting (placeholder until photo arrives) -->
   <div class="letter-first-line">
-    <img id="letter-first-line-img" src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Image%20(1).jpg?raw=true" alt="AI slop is seeping into our lives, whether we notice it — or not." style="width:100%;display:block;mix-blend-mode:multiply;">
+    <img id="letter-first-line-img" src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Image%20(1).jpg?raw=true" alt="AI slop is seeping into our lives, whether we notice it — or not." style="height:80px;width:auto;max-width:100%;display:block;mix-blend-mode:multiply;">
   </div>
 
   <!-- Handwritten: full letter photo (minus first line — shown above) -->
   <div class="letter-photo-wrap" id="letter-photo">
-    <img src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Image.jpg?raw=true" alt="Handwritten letter from Ellie" style="width:100%;display:block;mix-blend-mode:multiply;">
+    <img src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Image.jpg?raw=true" alt="Handwritten letter from Ellie" style="height:80px;width:auto;max-width:100%;display:block;mix-blend-mode:multiply;">
   </div>
 
   <!-- Typed: full letter text (first line repeated in type) -->
