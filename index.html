@@ -301,41 +301,16 @@ nav {
 .how-cta-text { font-size:13px; line-height:1.6; color:var(--sub); max-width:440px; }
 
 /* ── ABOUT ELLIE ── */
-.editor-section {
-  display:grid; grid-template-columns:1fr 1fr;
-  border-bottom:1.5px solid var(--fg);
-}
-.editor-left {
-  padding:56px 48px 52px 40px;
-  border-right:1.5px solid var(--fg);
-  background:#FAFAF5;
-}
-.editor-label { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:#6060A8; margin-bottom:20px; }
-.editor-name { font-family:'Instrument Serif',serif; font-size:clamp(36px,5vw,60px); letter-spacing:-.025em; line-height:.9; margin-bottom:24px; color:var(--fg); }
-.editor-bio { font-size:13.5px; line-height:1.75; color:#3A3A34; margin-bottom:28px; }
-.editor-links { display:flex; flex-wrap:wrap; gap:18px; }
-.editor-links a {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:var(--fg); text-decoration:none;
-  border-bottom:1.5px solid var(--fg); padding-bottom:2px;
-  transition:color .15s, border-color .15s;
-}
-.editor-links a:hover { color:var(--lav-dark); border-color:var(--lav); }
-.editor-right {
-  display:flex; align-items:center; justify-content:center;
-  padding:56px 40px;
-  background:var(--panel);
-}
-.editor-photo {
-  width:200px;
-  height:240px;
-  object-fit:cover;
-  object-position:center 15%;
-  display:block;
-  border:1.5px solid var(--fg);
-  flex-shrink:0;
-}
+
+
+
+
+
+
+
+
+
+
 
 /* ── CTA ── */
 .cta-section {
@@ -493,14 +468,10 @@ footer {
   .how-cta-row { flex-direction: column; align-items: flex-start; gap: 12px; }
 
   /* Editor — stack photo below text */
-  .editor-section { grid-template-columns:1fr 1fr; }
-  .editor-left {
-    padding: 40px 20px;
-    border-right: none;
-    border-bottom: 1.5px solid var(--fg);
-  }
-  .editor-right { overflow:hidden; max-height:220px; width:100%; position:relative; background:var(--lav); }
-  .editor-photo { width:100%; height:220px; object-fit:cover; object-position:center 20%; display:block; }
+  
+  
+  
+  
 
   /* CTA */
   .cta-section { padding: 48px 20px; gap: 20px; flex-direction: column; align-items: flex-start; }
@@ -517,7 +488,7 @@ footer {
   /* Section headings */
   .section-heading { font-size: clamp(22px, 6vw, 32px); }
   .how-heading { font-size: clamp(22px, 6vw, 32px); }
-  .editor-name { font-size: clamp(32px, 9vw, 48px); }
+  
 
   /* Node motif smaller on mobile */
   
@@ -649,6 +620,93 @@ footer {
   padding:0 20px 20px;
   flex-shrink:0;
 }
+
+/* ── Editor section — redesigned ── */
+.editor-section {
+  display:grid;
+  grid-template-columns:1fr 420px;
+  border-bottom:1.5px solid var(--fg);
+  min-height:380px;
+  position:relative;
+  overflow:hidden;
+}
+.editor-left {
+  padding:64px 56px 56px 40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  background:#EAE8F5;
+  position:relative;
+  z-index:1;
+}
+.editor-label {
+  font-family:'Space Mono',monospace;
+  font-size:7.5px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--lav-dark);
+  margin-bottom:12px;
+}
+.editor-name {
+  font-family:'Instrument Serif',serif;
+  font-size:clamp(40px,5.5vw,68px);
+  letter-spacing:-.03em; line-height:.9;
+  color:#0E0C28; margin-bottom:28px;
+}
+.editor-bio {
+  font-size:15px; line-height:1.75;
+  color:#1A1830; margin-bottom:32px;
+  max-width:520px;
+}
+.editor-links {
+  display:flex; flex-wrap:wrap; gap:20px;
+}
+.editor-links a {
+  font-family:'Space Mono',monospace;
+  font-size:7.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--fg);
+  text-decoration:none;
+  border-bottom:1.5px solid #0E0C28;
+  padding-bottom:2px;
+  transition:color .15s, border-color .15s;
+  color:#0E0C28;
+}
+.editor-links a:hover { color:var(--lav-dark); border-color:var(--lav); }
+
+/* Right side — photo fills column, tinted panel behind */
+.editor-right {
+  position:relative;
+  background:#EAE8F5;
+  overflow:hidden;
+  min-height:380px;
+}
+
+.editor-photo {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 12%;
+  display:block;
+  position:absolute;
+  top:0; left:0;
+  opacity:0.95;
+}
+
+/* Photo credit / context strip at bottom of photo */
+.editor-photo-label {
+  position:absolute;
+  bottom:16px; right:16px;
+  z-index:2;
+  font-family:'Space Mono',monospace;
+  font-size:7px; letter-spacing:.14em;
+  text-transform:uppercase;
+  color:rgba(10,8,30,.4);
+}
+
+@media(max-width:768px) {
+  .editor-section { grid-template-columns:1fr; }
+  .editor-right { min-height:280px; }
+  .editor-photo { position:relative; width:100%; height:280px; object-fit:cover; }
+  .editor-left { padding:40px 20px; }
+}
 </style>
 </head>
 <body>
@@ -772,18 +830,21 @@ footer {
 <!-- ABOUT ELLIE -->
 <section class="editor-section" id="editor">
   <div class="editor-left">
-    <div class="editor-label">The editor</div>
-    <h2 class="editor-name">Ellie Damashek</h2>
-    <p class="editor-bio">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
+    <div>
+      <div class="editor-label">The editor</div>
+      <h2 class="editor-name">Ellie<br>Damashek</h2>
+      <p class="editor-bio">Strategist and researcher specializing in change management and emerging technology. She has spent her career helping organizations understand and navigate disruption before it becomes a crisis. The Slop Galaxy is her attempt to apply that same instinct to the cultural moment we are all living through.</p>
+    </div>
     <div class="editor-links">
       <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn ↗</a>
       <a href="https://open.substack.com/pin/elliedama" target="_blank">Substack ↗</a>
       <a href="https://galaxy.sloptilyoudrop.com" target="_blank">The Galaxy ↗</a>
-      <a href="/cdn-cgi/l/email-protection#ff9a9393969abf8c93908f8b969386908a9b8d908fd19c9092"><span class="__cf_email__" data-cfemail="187d7474717d586b7477686c717461776d7c6a7768367b7775">[email&#160;protected]</span></a>
+      <a href="mailto:ellie@sloptilyoudrop.com">ellie@sloptilyoudrop.com</a>
     </div>
   </div>
   <div class="editor-right">
     <img src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Gemini_Generated_Image_gh89q4gh89q4gh89.png?raw=true" alt="Ellie Damashek" class="editor-photo">
+    <span class="editor-photo-label">The editor</span>
   </div>
 </section>
 
@@ -801,7 +862,7 @@ footer {
 
     <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,241,232,0.4);margin-bottom:16px;">Contribute</div>
     <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);letter-spacing:-.02em;line-height:1;color:#f5f1e8;margin-bottom:20px;">Submit some slop</h2>
-    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">The galaxy grows by human attention. If you spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it. Ellie reviews every submission. If yours makes it in, your name appears on the node.</p>
+    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">Help the galaxy grow. If you spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it. Ellie reviews every submission. If yours is added to the galaxy, your name appears on the node.</p>
 
     <div id="submit-form-wrap">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
