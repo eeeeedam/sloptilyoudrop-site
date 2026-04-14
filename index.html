@@ -105,6 +105,7 @@ nav {
   border-right:1.5px solid var(--fg);
   padding:48px 40px 40px 40px;
   display:flex; flex-direction:column;
+  overflow:visible;
 }
 
 .hero-kicker {
@@ -385,7 +386,8 @@ footer {
 
 /* ── Editable content styles ── */
 [contenteditable="true"] { outline:none; border-bottom:1px dashed rgba(0,0,0,.2); cursor:text; }
-#edit-btn { position:fixed; bottom:20px; right:20px; z-index:9999; background:var(--forest); color:#F5F5F0; font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; border:none; padding:10px 16px; cursor:pointer; display:none; }
+
+
 
 
 
@@ -708,6 +710,33 @@ footer {
   .editor-right { min-height:280px; }
   .editor-left { padding:40px 20px; }
 }
+
+/* ── CORNER ADMIN BUTTON ── */
+
+
+#admin-btn.active { background:rgba(26,58,42,0.2); border-color:rgba(26,58,42,0.5); }
+
+#admin-btn {
+  width:18px; height:18px; border-radius:50%;
+  background:rgba(245,245,240,0.12); border:1px solid rgba(245,245,240,0.2);
+  cursor:pointer; transition:all .2s; padding:0;
+  flex-shrink:0; display:inline-block;
+  margin-left:16px;
+}
+#admin-btn:hover { background:rgba(245,245,240,0.28); border-color:rgba(245,245,240,0.5); }
+#admin-btn.active { background:rgba(143,224,0,0.2); border-color:rgba(143,224,0,0.5); }
+
+/* ── MELT/DROP SCROLL EFFECT ── */
+
+
+
+
+/* ── HERO DROP EFFECT ── */
+.hero-title .drop-word {
+  display:block;
+  transform-origin:50% 0%;
+  transition:none;
+}
 </style>
 </head>
 <body>
@@ -903,6 +932,7 @@ footer {
 
 
 
+<div style="position:relative;">
 <footer>
   <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
   <div class="footer-links">
@@ -913,6 +943,7 @@ footer {
       <span id="footer-contact-popup" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:'Space Mono',monospace;font-size:9px;padding:8px 14px;white-space:nowrap;letter-spacing:.06em;z-index:100;"><a href="/cdn-cgi/l/email-protection#cbaea7a7a2ae8bb8a7a4bbbfa2a7b2a4beafb9a4bbe5a8a4a6" style="color:var(--bg);text-decoration:none;"><span class="__cf_email__" data-cfemail="67020b0b0e0227140b0817130e0b1e0812031508174904080a">[email&#160;protected]</span></a></span>
     </a>
   </div>
+  <button id="admin-btn" onclick="promptAdmin()" title="Edit mode"></button>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -964,7 +995,7 @@ function submitNode() {
   function enableEdit() {
     editMode = true;
     document.body.classList.add('edit-mode');
-    document.getElementById('edit-bar').classList.add('visible');
+    const eb = document.getElementById('edit-bar'); if(eb) eb.classList.add('visible');
     document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
   }
   function cancelEdit() {
@@ -1237,5 +1268,113 @@ function showLetter(mode) {
 }
 </script>
 
+
+<!-- EDIT BAR -->
+<div id="edit-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--forest);color:#F5F5F0;padding:10px 20px;display:none;align-items:center;justify-content:space-between;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;">
+  <span style="color:rgba(143,224,0,.7);">✎ EDIT MODE — click underlined text to edit</span>
+  <div style="display:flex;gap:10px;">
+    <button onclick="saveEdits()" style="background:var(--lime);color:var(--fg);border:none;padding:7px 16px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Save + Download</button>
+    <button onclick="cancelEdit()" style="background:none;border:1px solid rgba(245,245,240,.3);color:rgba(245,245,240,.7);padding:7px 14px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Cancel</button>
+  </div>
+</div>
+<script>
+
+// ── HERO TITLE MELT / DROP EFFECT ────────────────────────────────────────────
+(function() {
+  var hero = document.querySelector('.hero');
+  var spans = document.querySelectorAll('.hero-title span');
+  if (!hero || !spans.length) return;
+
+  var delays  = [0, 0.18, 0.36];   // each word starts melting later
+  var weights = [1.2, 0.9, 1.6];   // Drop falls hardest
+
+  function onScroll() {
+    var heroH = hero.offsetHeight;
+    var scrollY = window.scrollY || window.pageYOffset;
+    var raw = Math.max(0, Math.min(1, scrollY / (heroH * 0.65)));
+
+    for (var i = 0; i < spans.length; i++) {
+      var p = Math.max(0, Math.min(1, (raw - delays[i]) / (1 - delays[i])));
+      // ease-in curve — slow start, then accelerates
+      var ease = p * p;
+
+      var dropY   = ease * 55 * weights[i];
+      var scaleY  = 1 + ease * 0.14 * weights[i];  // stretches as it falls
+      var scaleX  = 1 - ease * 0.06;
+      var blur    = ease * 5 * weights[i];
+      var opacity = Math.max(0, 1 - ease * 0.88);
+
+      spans[i].style.transform = 'translateY(' + dropY + 'px) scaleX(' + scaleX + ') scaleY(' + scaleY + ')';
+      spans[i].style.filter    = 'blur(' + blur + 'px)';
+      spans[i].style.opacity   = opacity;
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+</script>
+<script>
+
+// ── HERO TITLE DROP EFFECT ────────────────────────────────────────────────────
+(function() {
+  var hero = document.querySelector('.hero-left');
+  var titleEl = document.querySelector('.hero-title');
+  if (!hero || !titleEl) return;
+
+  // Wrap each span text in a positioned container
+  var spans = titleEl.querySelectorAll('span');
+
+  function getProgress() {
+    var heroRect = hero.getBoundingClientRect();
+    var heroH = hero.offsetHeight;
+    // Start effect when hero top goes above 20% of viewport height
+    var scrolled = -heroRect.top;
+    // Full effect over the first 60% of hero height
+    return Math.max(0, Math.min(1, scrolled / (heroH * 0.6)));
+  }
+
+  var ticking = false;
+  function update() {
+    var p = getProgress();
+
+    // Stagger: word 0 (Slop) starts at p=0, word 1 at p=0.1, word 2 (Drop) at p=0.22
+    var offsets = [0, 0.12, 0.26];
+    var masses  = [1.0, 0.8, 1.5]; // Drop is heaviest
+
+    spans.forEach(function(span, i) {
+      var local = Math.max(0, Math.min(1, (p - offsets[i]) / (1 - offsets[i])));
+      // Cubic ease-in for gravity feel
+      var ease = local * local * local;
+
+      var drop    = ease * 180 * masses[i];   // px — very dramatic
+      var scaleY  = 1 + ease * 0.5 * masses[i]; // tall stretch as it falls
+      var scaleX  = 1 - ease * 0.15;             // slight compress
+      var blur    = ease * 12 * masses[i];        // heavy blur
+      var opacity = 1 - ease * 0.95;             // nearly disappears
+
+      span.style.display = 'block';
+      span.style.transform = 'translateY(' + drop + 'px) scaleX(' + scaleX + ') scaleY(' + scaleY + ')';
+      span.style.filter = blur > 0.1 ? 'blur(' + blur.toFixed(1) + 'px)' : '';
+      span.style.opacity = Math.max(0, opacity).toFixed(3);
+      span.style.willChange = 'transform, opacity, filter';
+      span.style.transformOrigin = '50% 0%';
+    });
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  update(); // initial state
+})();
+
+</script>
 </body>
 </html>
