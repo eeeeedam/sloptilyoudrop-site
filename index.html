@@ -796,13 +796,16 @@ footer {
     </div>
   </div>
   <div class="hero-right">
-    <div class="letter-label">A letter from Ellie</div>
+    <div class="letter-label">About the slop 'til you drop project</div>
     <div class="letter-body">
-        <p>I first noticed it in small, innocent ways. My social media feeds grew hollow. An aunt DM’d me AI puppies encouraging me to “never give up.” My mom sent me a toucan made of sashimi. A trickle then became a floodgate of passable slop permeating every corner of my online experience. What I saw was mimicking humanity, but without its randomness, patina, imperfections.</p>
-        <p>What stopped me wasn’t the images. It was the feeling underneath them. Something being worn down. The difference between human-made and machine-made was narrowing, and I wasn’t sure anyone was keeping score.</p>
-        <p>As much as I try to avoid it, I can’t stop thinking about slop. Not the images themselves, though Shrimp Jesus or “Fruit Love Island” are haunting in their own right, but about what this is all destroying or degrading. What are we accepting as passable entertainment, art, literature, music, companionship? And what will we grow to accept as this is further normalized and indistinguishable from human work?</p>
-        <p>That’s what I’m tracking. I’m dipping back into my media studies background, bolstered by some vibecoding and research from scholars at Oxford, Cambridge, and MIT tracking the same systemic patterns.</p>
-        <p>The Slop Galaxy is my attempt to build the record. A living map of every moment AI-generated content crossed a line — into a courtroom, a newsroom, a child’s video feed, a scientific journal. Maybe you, too, have been watching closely. Either way, something’s shifting, and you’re invited to join my attempt to understand what and how, in real time.</p>
+        <p>This is a project about AI slop. Given who I am — a strategist and researcher with a focus in change management, a background in consumer trends, and a media studies degree — of course I'm captivated by AI slop. AI-generated content is the medium du jour, the pixelated embodiment of the times, and how meaning, information, and values are transforming before our eyes.</p>
+        <p>So how did things get "sloppy" enough to get my attention?</p>
+        <p>The first trickles of slop were irreverent and goofy. Relatively innocent — but odd — DMs from family members or posts from old acquaintances. But that trickle quickly progressed into daily examples of slop seeping into the online experience. Work chats, wedding invitations, news, LinkedIn posts. This is all just fun, harmless, right? MS Paint or a Snapchat filter, but in the AI age.</p>
+        <p>But what gave me pause was the I-just-can't-put-my-finger-on-it-feeling — adjacent but in the town over from the Uncanny Valley — that keeps growing as I'm exposed to more slop. The unease rooted in the feeling of loss, without knowing just what I'm losing.</p>
+        <p>This project is about tracking new patterns with the goal of answering: <em>Are we all going to slop 'til we drop?</em></p>
+        <p>In other words: What is the cost of using tools that mimic humanity, but lack its randomness, patina, imperfections? What's degrading? What's destroyed? What is the evolving new norm of passable entertainment, art, literature, music, or companionship? And what will we grow to accept as AI-generated artifacts are further normalized and indistinguishable from human work?</p>
+        <p>The Slop Galaxy is my attempt to build the record: a living map of the key moments AI-generated content crossed a line — into a courtroom, a newsroom, a child's video feed, a scientific journal.</p>
+        <p>Maybe you're watching closely on this "Slop Watch" journey too. Maybe you're still wrapping your head around all of <em>waves 5-fingered hands</em> this. Either way, something is shifting, and you're all invited to join my attempt to understand what and how, in real time.</p>
       </div>
     <div class="letter-divider"></div>
     <p class="slop-def"><strong>slop</strong> — digital content of low quality, produced in quantity by means of artificial intelligence. <em>Merriam-Webster Word of the Year, 2025.</em></p>
@@ -1016,11 +1019,18 @@ function submitNode() {
     const blob = new Blob([html], {type:'text/html'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'index.html';
+    const date = new Date().toISOString().slice(0,10);
+    a.download = 'sloptilyoudrop-' + date + '.html';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     const c = document.getElementById('save-confirm');
-    c.style.display = 'block';
-    setTimeout(() => c.style.display = 'none', 4000);
+    if (c) {
+      c.textContent = '\u2713 Downloaded \u2014 upload to sloptilyoudrop repo as index.html';
+      c.style.display = 'block';
+      setTimeout(() => c.style.display = 'none', 4000);
+    }
   }
 
 const STATIC_FALLBACK = [
@@ -1278,7 +1288,7 @@ function showLetter(mode) {
 <div id="edit-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--forest);color:#F5F5F0;padding:10px 20px;display:none;align-items:center;justify-content:space-between;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;">
   <span style="color:rgba(143,224,0,.7);">✎ EDIT MODE — click underlined text to edit</span>
   <div style="display:flex;gap:10px;">
-    <button onclick="saveEdits()" style="background:var(--lime);color:var(--fg);border:none;padding:7px 16px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Save + Download</button>
+    <button onclick="saveEdits()" style="background:var(--lime);color:var(--fg);border:none;padding:7px 16px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">&#x21E9; Export for Repo</button>
     <button onclick="cancelEdit()" style="background:none;border:1px solid rgba(245,245,240,.3);color:rgba(245,245,240,.7);padding:7px 14px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Cancel</button>
   </div>
 </div>
