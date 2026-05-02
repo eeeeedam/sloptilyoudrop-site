@@ -809,27 +809,27 @@ footer {
       <span class="l" data-editable="hero-line3" contenteditable="false">Drop</span>
     </h1>
     <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.65;color:rgba(245,245,240,.55);margin-bottom:24px;max-width:340px;">Tracking how AI-generated content is reshaping the world, in real time.</p>
-    <div class="hero-bottom" style="align-items:flex-end;">
+    <div class="hero-bottom" style="align-items:flex-start;flex-wrap:wrap;gap:20px;">
       <!-- Left: buttons -->
       <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0;">
         <div style="display:flex;gap:10px;">
           <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-p">Enter the Galaxy →</a>
           <a href="#how" class="btn-s">How it works</a>
         </div>
-        <div style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);line-height:1.5;">
-          <span style="font-family:'Instrument Serif',serif;font-size:28px;line-height:1;color:var(--lime);letter-spacing:-.02em;display:inline;margin-right:6px;" id="hero-node-count">58</span>moments documented
-        </div>
+
       </div>
 
-      <!-- Right: author card -->
-      <div style="margin-left:auto;display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(245,245,240,.1);background:rgba(245,245,240,.04);max-width:260px;">
-        <img src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Gemini_Generated_Image_gh89q4gh89q4gh89.png?raw=true" alt="Ellie Damashek" style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;border:1.5px solid rgba(143,224,0,0.35);flex-shrink:0;">
+      <!-- Right: author card (expanded) -->
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border:1px solid rgba(245,245,240,.1);background:rgba(245,245,240,.04);max-width:340px;">
+        <img src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Gemini_Generated_Image_gh89q4gh89q4gh89.png?raw=true" alt="Ellie Damashek" style="width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:center top;border:1.5px solid rgba(143,224,0,0.35);flex-shrink:0;margin-top:2px;">
         <div>
-          <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:15px;color:rgba(245,245,240,.9);line-height:1.1;margin-bottom:3px;">Ellie Damashek</div>
-          <div style="font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);margin-bottom:6px;">Strategist &amp; Researcher</div>
-          <div style="display:flex;gap:10px;">
-            <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank" rel="noopener" style="font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,245,240,.35);text-decoration:none;border-bottom:1px solid rgba(245,245,240,.15);padding-bottom:1px;transition:color .2s;">LinkedIn ↗</a>
-            <a href="mailto:ellie@sloptilyoudrop.com" style="font-family:'Space Mono',monospace;font-size:6.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,245,240,.35);text-decoration:none;border-bottom:1px solid rgba(245,245,240,.15);padding-bottom:1px;transition:color .2s;">Email</a>
+          <div style="font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:var(--lime);margin-bottom:6px;">About the author</div>
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;line-height:1.7;color:rgba(245,245,240,.65);margin:0 0 8px;">Slop ‘Til You Drop is a project by <strong style="color:rgba(245,245,240,.9);">Ellie Damashek</strong>, a strategist and researcher based in Seattle. I help organizations navigate disruption before it becomes a crisis. I created the Slop Galaxy to apply that same lens to this moment.</p>
+          <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:11.5px;line-height:1.7;color:rgba(245,245,240,.65);margin:0 0 10px;">You’re invited to explore, and to <a href="#submit" style="color:var(--lime);text-decoration:underline;text-underline-offset:3px;">contribute a sighting</a> using the submission tool below.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank" rel="noopener" style="font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);text-decoration:none;border-bottom:1px solid rgba(245,245,240,.2);padding-bottom:1px;transition:color .2s;">LinkedIn ↗</a>
+            <a href="mailto:ellie@sloptilyoudrop.com" style="font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);text-decoration:none;border-bottom:1px solid rgba(245,245,240,.2);padding-bottom:1px;transition:color .2s;">Email</a>
+            <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" style="font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.4);text-decoration:none;border-bottom:1px solid rgba(245,245,240,.2);padding-bottom:1px;transition:color .2s;">The Galaxy ↗</a>
           </div>
         </div>
       </div>
@@ -855,7 +855,10 @@ footer {
 <section id="moments" class="moments-section">
   <div class="moments-inner">
     <div class="moments-header">
-      <h2 class="moments-heading">Recent Key Moments</h2>
+      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
+        <h2 class="moments-heading">Recent Key Moments</h2>
+        <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.35);">5 of <span id="hero-node-count">68</span> documented</span>
+      </div>
       <div class="carousel-nav">
         <button class="carousel-btn" id="carousel-prev" aria-label="Previous">←</button>
         <span class="carousel-counter"><span id="carousel-cur">1</span> / <span id="carousel-total">…</span></span>
