@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Slop 'Til You Drop — Tracking how AI is reshaping the world, in real time</title>
 
 <meta name="description" content="A real-time map of every moment AI-generated content crossed a line — into a courtroom, a newsroom, a child’s video feed, a scientific journal. By Ellie Damashek.">
@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="Slop ‘Til You Drop">
 <meta property="og:url" content="https://sloptilyoudrop.com">
 <meta property="og:title" content="Slop ‘Til You Drop — Tracking how AI is reshaping the world, in real time">
-<meta property="og:description" content="A real-time map of every moment AI-generated content crossed a line. 68+ documented moments and growing. By Ellie Damashek.">
+<meta property="og:description" content="A real-time map of every moment AI-generated content crossed a line. Documented and growing. By Ellie Damashek.">
 <meta property="og:image" content="https://sloptilyoudrop.com/social-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -21,958 +21,476 @@
 <meta name="twitter:description" content="Tracking how AI-generated content is reshaping the world, in real time. A living map of every moment it crossed a line.">
 <meta name="twitter:image" content="https://sloptilyoudrop.com/social-card.png">
 <meta name="twitter:image:alt" content="Slop ‘Til You Drop — A living map of the AI slop era">
-<meta name="theme-color" content="#1A1612">
+<meta name="theme-color" content="#F4F6F8">
 <link rel="canonical" href="https://sloptilyoudrop.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-
+/* ── TOKENS ─────────────────────────────────────────────── */
 :root {
-  --bg:       #F5F5F0;
-  --fg:       #121210;
-  --yellow:   #E8F000;   /* aggressive yellow — primary CTA */
-  --lime:     #8FE000;   /* lime green — replaces olive */
-  --lav:      #A8A8E8;   /* lavender */
-  --lav-dark: #6060A8;   /* readable lavender for text on white */
-  --forest:   #1A3A2A;   /* deep forest — dark sections */
-  --sub:      #5A5A50;
-  --dim:      #DDDDD5;
-  --panel:    #EBEBE5;
+  --bg: #F4F6F8;
+  --ink: #0A0B0D;
+  --grey: #656C75;
+  --rule: #D3D8DE;
+  --panel: #E8EBEF;
+  --acc: #2F4BFF;
+  --acc-deep: #1A2FC9;
+  --on-acc: #FFFFFF;
+  --f-display: 'Inter Tight', system-ui, sans-serif;
+  --f-body: 'Inter', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --gut: max(20px, env(safe-area-inset-left, 0px));
+  --gut-r: max(20px, env(safe-area-inset-right, 0px));
+  color-scheme: light;
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--f-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { background:var(--bg); color:var(--fg); font-family:'Plus Jakarta Sans',sans-serif; -webkit-font-smoothing:antialiased; }
+.pad { padding-left: var(--gut); padding-right: var(--gut-r); }
 
-/* ── SWATCH BAR ── */
-.swatch-bar { display:flex; height:8px; }
-.sw { flex:1; }
+/* Shared bits */
+.label-h {
+  display: inline-block; padding: 6px 12px 7px;
+  background: var(--acc); color: var(--on-acc);
+  font: 700 clamp(20px, 3vw, 26px)/1.1 var(--f-display); letter-spacing: -0.02em;
+}
+.mono { font: 400 11px/1.4 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--grey); }
+.btn {
+  display: inline-block; padding: 12px 18px; text-decoration: none; cursor: pointer;
+  font: 500 12px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase;
+  color: var(--ink); background: transparent; border: 1px solid var(--ink);
+  transition: background .15s, color .15s;
+}
+.btn:hover { background: var(--ink); color: var(--bg); }
+.btn-p { background: var(--ink); color: var(--bg); }
+.btn-p:hover { background: var(--acc); border-color: var(--acc); color: var(--on-acc); }
 
-/* ── NAV ── */
+/* ── NAV ────────────────────────────────────────────────── */
 nav {
-  position:sticky; top:0; z-index:100;
-  background:var(--bg);
-  border-bottom:1.5px solid var(--fg);
-  display:flex; align-items:stretch; justify-content:space-between;
-  height:52px;
+  position: sticky; top: 0; z-index: 50;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px;
+  padding: 14px var(--gut-r) 14px var(--gut);
+  background: var(--bg); border-bottom: 1px solid var(--rule);
 }
-.nav-brand {
-  font-family:'Instrument Serif',serif;
-  font-size:18px;
-  color:var(--fg);
-  text-decoration:none;
-  display:flex; align-items:center;
-  padding:0 24px;
-  letter-spacing:-.01em;
-  border-right:1px solid var(--dim);
-}
-.nav-brand 
-.nav-brand 
-.nav-links { display:flex; align-items:stretch; }
-.nav-links a {
-  font-family:'Space Mono',monospace;
-  font-size:7.5px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--sub);
-  text-decoration:none;
-  display:flex; align-items:center;
-  padding:0 18px;
-  border-left:1px solid var(--dim);
-  transition:color .15s;
-}
-.nav-links a:hover { color:var(--fg); }
-.nav-links a.submit { color:#5A9000; }
-.nav-links a.cta {
-  background:var(--yellow);
-  color:var(--fg);
-  font-weight:700;
-  border-left:1.5px solid var(--fg);
-}
-.nav-links a.cta:hover { background:var(--lime); }
+.nav-brand { font: 700 17px/1 var(--f-display); letter-spacing: -0.02em; text-decoration: none; }
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; }
+.nav-links a { font: 400 11px/1.3 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; text-decoration: none; color: var(--grey); transition: color .15s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.cta { color: var(--acc); font-weight: 500; }
 
-/* ── TICKER ── */
-.ticker {
-  background:var(--forest);
-  height:32px;
-  display:flex; align-items:center;
-  overflow:hidden;
-  border-bottom:1.5px solid var(--fg);
-}
-.ticker-inner {
-  display:inline-flex; gap:32px;
-  white-space:nowrap;
-  font-family:'Space Mono',monospace;
-  font-size:7px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,.4);
-  animation:tick 28s linear infinite;
-}
- to { transform:translateX(-50%); } } to{transform:translateX(-50%)} }
+/* ── TICKER ─────────────────────────────────────────────── */
+.ticker { overflow: hidden; background: var(--panel); border-bottom: 1px solid var(--rule); padding: 9px 0; white-space: nowrap; }
+.ticker-inner { display: inline-block; font: 400 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink); animation: tick 70s linear infinite; }
+.ticker-inner span { margin-right: 14px; }
+.ticker-inner .d { color: var(--acc); }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-inner { animation: none; } }
 
-/* ── HERO ── */
+/* ── HERO ───────────────────────────────────────────────── */
 .hero {
-  display:grid;
-  grid-template-columns:5fr 6fr;
-  border-bottom:1.5px solid var(--fg);
-  min-height:min(calc(100vh - 84px), 680px);
+  display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px;
+  padding-top: 56px; padding-bottom: 64px;
+  border-bottom: 1px solid var(--rule);
 }
-.hero-left {
-  background:var(--forest);
-  border-right:1.5px solid var(--fg);
-  padding:48px 40px 40px 40px;
-  display:flex; flex-direction:column;
-  overflow:visible;
-}
+.hero-kicker { margin-bottom: 22px; }
+.hero-title { font: 700 clamp(56px, 11vw, 140px)/0.9 var(--f-display); letter-spacing: -0.045em; margin-bottom: 24px; }
+.hero-title span { display: block; }
+.hero-sub { max-width: 34ch; font-size: 18px; line-height: 1.5; color: var(--grey); margin-bottom: 28px; }
+.hero-btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
-.hero-kicker {
-  font-family:'Space Mono',monospace;
-  font-size:7.5px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:rgba(143,224,0,.6);
-  margin-bottom:16px;
+.hero-def {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 320px; padding: 22px; color: var(--on-acc);
+  background: linear-gradient(180deg, var(--acc) 0%, var(--acc) 38%, color-mix(in srgb, var(--acc) 0%, var(--bg)) 100%);
 }
-.hero-title {
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(52px,7.5vw,96px);
-  line-height:.88;
-  letter-spacing:-.025em;
-  flex:1;
-  display:flex; flex-direction:column; justify-content:flex-start;
-  padding-top:20px;
+.hero-def::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(circle at 78% 22%, var(--acc-deep) 0 5px, transparent 6px),
+    radial-gradient(circle at 62% 38%, var(--acc-deep) 0 3px, transparent 4px),
+    radial-gradient(circle at 88% 46%, var(--acc-deep) 0 4px, transparent 5px),
+    radial-gradient(circle at 70% 12%, var(--acc-deep) 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 92% 14%, var(--acc-deep) 0 3px, transparent 4px),
+    repeating-linear-gradient(90deg, transparent 0 22px, color-mix(in srgb, var(--acc-deep) 35%, transparent) 22px 23px);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 85%);
+          mask-image: linear-gradient(180deg, #000 0%, #000 45%, transparent 85%);
 }
-.hero-title 
-.hero-title 
+.hero-def-label { position: absolute; top: 22px; left: 22px; font: 500 11px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; }
+.hero-def-block { background: var(--bg); color: var(--ink); padding: 18px 18px 16px; }
+.hero-def-term { font: 700 32px/1 var(--f-display); letter-spacing: -0.03em; margin-bottom: 10px; }
+.hero-def-term span { font: 400 12px/1 var(--f-mono); color: var(--grey); letter-spacing: .02em; margin-left: 8px; }
+.hero-def-body { font-size: 16px; line-height: 1.5; }
+.hero-def-src { margin-top: 12px; }
 
-.hero-bottom {
-  padding-top:20px;
-  border-top:1px solid rgba(245,245,240,.15);
-  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
-}
-.btn-p {
-  background:var(--lime);
-  color:var(--fg);
-  font-family:'Space Mono',monospace;
-  font-size:8px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  padding:12px 22px;
-  text-decoration:none;
-  font-weight:700;
-  border:1.5px solid var(--fg);
-  transition:background .15s;
-}
-.btn-p:hover { background:#74C400; }
-.btn-s {
-  background:none;
-  color:var(--fg);
-  font-family:'Space Mono',monospace;
-  font-size:8px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  padding:11px 22px;
-  text-decoration:none;
-  border:1.5px solid rgba(10,10,8,.4);
-  transition:all .15s;
-}
-.btn-s:hover { background:rgba(10,10,8,.08); }
-
-/* Hero right — lavender panel */
-.hero-right {
-  background:#F0EBE0;
-  padding:48px 40px 40px;
-  display:flex; flex-direction:column; justify-content:flex-start;
-}
-.letter-label {
-  font-family:'Space Mono',monospace;
-  font-size:7.5px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--sub);
-  margin-bottom:16px;
-}
-.letter-body {
-  font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:13.5px;
-  line-height:1.72;
-  color:var(--fg);
-  flex:1;
-}
-.letter-body p { margin-bottom:1.3em; }
-.letter-body p:last-child { margin-bottom:0; }
-.letter-divider { height:1px; background:var(--dim); margin:28px 0 20px; }
-.slop-def {
-  font-family:'Instrument Serif',serif;
-  font-size:13px;
-  line-height:1.55;
-  color:var(--sub);
-  font-style:italic;
-}
-
-/* ── MOMENTS ── */
-.moments-section {
-  padding:56px 40px;
-  border-bottom:1.5px solid var(--fg);
-  background:#fff;
-}
-.section-header {
-  display:flex; align-items:baseline; justify-content:space-between;
-  margin-bottom:0;
-  padding-bottom:16px;
-  border-bottom:1.5px solid var(--fg);
-  flex-wrap:wrap; gap:12px;
-}
-.section-heading {
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(24px,3.5vw,38px);
-  letter-spacing:-.01em;
-  font-style:italic;
-  color:var(--fg);
-}
-.carousel-nav { display:flex; align-items:center; gap:6px; }
-.carousel-btn {
-  background:none; border:1.5px solid var(--fg);
-  color:var(--fg); width:28px; height:28px;
-  cursor:pointer; font-size:11px;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .15s;
-}
-.carousel-btn:hover { background:var(--yellow); border-color:var(--fg); }
-.carousel-counter {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.1em; color:var(--sub); min-width:32px; text-align:center;
-}
-.carousel-track-wrap { overflow:hidden; border-bottom:1px solid var(--dim); }
-.carousel-track { display:flex; background:var(--bg); gap:1px; margin-top:1px; }
+/* ── RECENT KEY MOMENTS ─────────────────────────────────── */
+.moments-section { padding-top: 64px; padding-bottom: 72px; border-bottom: 1px solid var(--rule); }
+.moments-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+.carousel-nav { display: flex; align-items: center; gap: 12px; }
+.carousel-btn { width: 40px; height: 40px; background: transparent; color: var(--ink); border: 1px solid var(--ink); font: 500 16px/1 var(--f-mono); cursor: pointer; transition: background .15s, color .15s; }
+.carousel-btn:hover:not(:disabled) { background: var(--ink); color: var(--bg); }
+.carousel-btn:disabled { opacity: .25; cursor: default; }
+.carousel-counter { font: 400 12px/1 var(--f-mono); color: var(--grey); letter-spacing: .05em; min-width: 52px; text-align: center; }
+.carousel-track-wrap { overflow: hidden; border: 1px solid var(--rule); }
+.carousel-track { display: flex; transition: transform .45s cubic-bezier(.4, 0, .2, 1); }
 .moment-card {
-  flex:0 0 calc(33.333% - 1px);
-  background:var(--bg);
-  padding:24px 24px 20px;
-  text-decoration:none; color:inherit;
-  display:flex; flex-direction:column;
-  transition:background .15s;
-  overflow:hidden;
+  flex: 0 0 33.3333%; min-width: 0; display: flex; flex-direction: column;
+  background: var(--panel); border-right: 1px solid var(--rule);
+  text-decoration: none; color: var(--ink);
 }
-.moment-card:hover { background:var(--panel); }
-.moment-card:nth-child(2) { background:var(--forest); }
-.moment-card:nth-child(2):hover { background:#244832; }
-.moment-cat {
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:var(--lav-dark); margin-bottom:8px;
+.moment-card-img {
+  position: relative; height: 110px; flex: none; overflow: hidden; isolation: isolate;
+  background: linear-gradient(180deg, var(--acc) 0%, color-mix(in srgb, var(--acc) 55%, var(--panel)) 55%, var(--panel) 100%);
 }
-.moment-card:nth-child(2) .moment-cat { color:var(--lime); }
-.moment-headline {
-  font-family:'Instrument Serif',serif; font-size:17px;
-  line-height:1.25; letter-spacing:-.01em;
-  margin-bottom:10px; flex:1;
+.moment-card-img::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 9px, color-mix(in srgb, var(--acc-deep) 45%, transparent) 9px 10px),
+    repeating-linear-gradient(90deg, transparent 0 9px, color-mix(in srgb, var(--acc-deep) 45%, transparent) 9px 10px);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 90%);
+          mask-image: linear-gradient(180deg, #000 0%, transparent 90%);
 }
-.moment-card:nth-child(2) .moment-headline { color:var(--bg); }
-.moment-body { font-size:11.5px; line-height:1.6; color:var(--sub); margin-bottom:14px; }
-.moment-card:nth-child(2) .moment-body { color:rgba(245,245,240,.5); }
-.moment-card-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:8px; }
-.moment-cat { font-family:'Space Mono',monospace; font-size:6.5px; letter-spacing:.12em; text-transform:uppercase; padding:3px 7px; border-radius:2px; flex-shrink:0; }
-.moment-source { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; color:rgba(26,22,18,.4); }
-.moment-impact-badge { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.08em; text-transform:uppercase; color:rgba(26,22,18,.45); padding:2px 6px; border:1px solid rgba(26,22,18,.15); }
-.moment-footer {
-  display:flex; justify-content:space-between; align-items:center;
-  padding-top:10px; border-top:1px solid var(--dim);
-}
-.moment-card:nth-child(2) .moment-footer { border-color:rgba(255,255,255,.12); }
-.moment-impact { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:var(--sub); }
-.moment-card:nth-child(2) .moment-impact { color:rgba(245,245,240,.4); }
-.moment-arrow { font-family:'Space Mono',monospace; font-size:7px; letter-spacing:.1em; text-transform:uppercase; color:var(--lav-dark); }
-.moment-card:nth-child(2) .moment-arrow { color:var(--lime); }
-/* CTA card */
-.moment-card.cta-card { background:var(--yellow); justify-content:space-between; }
-.moment-card.cta-card:hover { background:#d4dc00; }
-.cta-num { font-family:'Instrument Serif',serif; font-size:64px; line-height:1; letter-spacing:-.03em; color:var(--fg); }
-.cta-text { font-family:'Space Mono',monospace; font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:rgba(18,18,16,.6); margin-bottom:12px; }
-.cta-link { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--fg); border-bottom:1px solid var(--fg); display:inline-block; padding-bottom:1px; }
+.moment-cat { position: absolute; top: 12px; left: 12px; padding: 4px 8px; background: var(--bg); color: var(--ink); font: 500 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; }
+.moment-card-body { flex: 1; display: flex; flex-direction: column; padding: 4px 20px 18px; }
+.moment-date { margin-bottom: 8px; }
+.moment-headline { font: 600 19px/1.22 var(--f-display); letter-spacing: -0.015em; margin-bottom: 10px; text-wrap: balance; }
+.moment-body { font-size: 14px; line-height: 1.55; color: var(--grey); margin-bottom: 16px; }
+.moment-footer { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid var(--rule); font: 400 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--grey); }
+.moment-arrow { color: var(--ink); }
+.moment-card:hover .moment-arrow { color: var(--acc); }
+.moment-card-cta { justify-content: flex-end; padding: 22px 20px; background: var(--acc); color: var(--on-acc); border-right: 0; }
+.moment-cta-text { font: 700 clamp(26px, 3vw, 34px)/1 var(--f-display); letter-spacing: -0.035em; margin-bottom: 18px; }
+.moment-cta-link { font: 500 12px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; }
 
-/* ── HOW TO READ IT ── */
-.how-section { padding:56px 40px; border-bottom:1.5px solid var(--fg); background:#fff; }
-.how-sub { font-family:'Plus Jakarta Sans',sans-serif; font-size:13px; color:#3A3A34; margin-bottom:32px; margin-top:6px; }
-.how-grid {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  border:1.5px solid var(--fg);
-  background:var(--fg);
-  gap:1px;
-}
-.how-card { background:var(--bg); padding:28px 24px 24px; border-top:4px solid var(--lime); }
-.how-card:nth-child(2) { background:var(--lav); border-top:4px solid var(--fg); }
-.how-card:nth-child(3) { border-top:4px solid var(--yellow); }
-.how-card:nth-child(4) { border-top:4px solid var(--orange, #FF6B35); }
-.how-num {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.16em; color:var(--fg);
-  margin-bottom:14px; margin-top:8px;
-  display:inline-block;
-}
-.how-card:nth-child(2) .how-num { color:#0A0820; }
-.how-title { font-family:'Instrument Serif',serif; font-size:18px; line-height:1.2; letter-spacing:-.01em; margin-bottom:10px; color:var(--fg); }
-.how-card:nth-child(2) .how-title { color:#0A0820; }
-.how-body { font-size:12px; line-height:1.65; color:#3A3A34; }
-.how-card:nth-child(2) .how-body { color:rgba(10,8,32,.55); }
-.how-cta-row {
-  margin-top:32px; padding-top:24px;
-  border-top:1px solid rgba(10,10,8,.2);
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:16px;
-}
-.how-cta-text { font-size:13px; line-height:1.6; color:var(--sub); max-width:440px; }
+/* ── HOW TO READ IT ─────────────────────────────────────── */
+.how-section { padding-top: 64px; padding-bottom: 72px; border-bottom: 1px solid var(--rule); }
+.how-sub { margin: 16px 0 32px; max-width: 56ch; color: var(--grey); font-size: 16px; }
+.how-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.how-card { background: var(--bg); padding: 26px 22px 28px; border-top: 2px solid var(--ink); }
+.how-num { margin-bottom: 14px; color: var(--acc); font-weight: 500; }
+.how-title { font: 700 21px/1.15 var(--f-display); letter-spacing: -0.025em; margin-bottom: 12px; }
+.how-body { font-size: 14px; line-height: 1.6; color: var(--grey); }
 
-/* ── CTA ── */
+/* ── ABOUT (project + editor, side by side) ───────────── */
+.about { padding-top: 72px; padding-bottom: 80px; border-bottom: 1px solid var(--rule); }
+.about-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); grid-template-rows: auto auto 1fr auto; }
+.about-col { display: grid; grid-template-rows: subgrid; grid-row: 1 / span 4; min-width: 0; }
+.about-col:first-child { padding-right: 40px; }
+.about-col + .about-col { padding-left: 40px; border-left: 1px solid var(--rule); }
+.about-col .label-h { justify-self: start; align-self: start; margin-bottom: 16px; }
+.about-head { font: 700 clamp(28px, 3.6vw, 42px)/1.04 var(--f-display); letter-spacing: -0.035em; margin-bottom: 18px; text-wrap: balance; }
+.about-body > p { font: 400 15px/1.7 var(--f-body); margin-bottom: 14px; max-width: 60ch; }
+.about-body > p.pull { font-weight: 600; }
+.about-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; padding-top: 10px; }
+
+/* ── THE RECORD (synthesis band) ───────────────────────── */
+.record { padding-top: 56px; padding-bottom: 60px; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.record-line { max-width: 22ch; font: 700 clamp(30px, 5vw, 60px)/1 var(--f-display); letter-spacing: -0.04em; padding-left: 18px; border-left: 4px solid var(--acc); text-wrap: balance; }
+.record .btn { justify-self: start; }
+
+/* ── CLOSING BAND ───────────────────────────────────────── */
 .cta-section {
-  padding:64px 40px;
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:24px;
-  background:var(--yellow);
-  border-bottom:1.5px solid var(--fg);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;
+  padding-top: 56px; padding-bottom: 56px;
+  background: linear-gradient(90deg, var(--acc) 0%, var(--acc) 55%, color-mix(in srgb, var(--acc) 35%, var(--bg)) 100%);
+  color: var(--on-acc);
 }
-.cta-heading { font-family:'Instrument Serif',serif; font-size:clamp(40px,6vw,72px); letter-spacing:-.025em; line-height:.88; font-style:italic; color:var(--fg); }
-.btn-cta {
-  background:var(--fg); color:var(--bg);
-  font-family:'Space Mono',monospace; font-size:8.5px;
-  letter-spacing:.12em; text-transform:uppercase;
-  padding:14px 28px; text-decoration:none;
-  transition:background .15s;
-  border:1.5px solid var(--fg);
-  white-space:nowrap;
-}
-.btn-cta:hover { background:var(--forest); }
+.cta-heading { font: 700 clamp(44px, 8vw, 96px)/0.9 var(--f-display); letter-spacing: -0.045em; }
+.cta-section .btn { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.cta-section .btn:hover { background: var(--bg); color: var(--ink); border-color: var(--bg); }
 
-/* ── SUBMIT ── */
-.submit-section { background:var(--forest); padding:72px 40px; }
-.submit-inner { max-width:640px; }
-.submit-kicker { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
-.submit-heading { font-family:'Instrument Serif',serif; font-size:clamp(36px,5.5vw,56px); letter-spacing:-.02em; line-height:.9; color:#F5F5F0; font-style:italic; margin-bottom:20px; }
-.submit-body { font-size:14px; line-height:1.75; color:rgba(245,245,240,.55); margin-bottom:36px; max-width:500px; }
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.form-field label {
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.14em; text-transform:uppercase;
-  color:rgba(245,245,240,.35); display:block; margin-bottom:5px;
-}
-.form-field label .req { color:var(--lime); }
+/* ── SUBMIT ─────────────────────────────────────────────── */
+.submit-section { background: var(--ink); color: #F2F4F6; padding-top: 72px; padding-bottom: 80px; }
+.submit-inner { max-width: 640px; }
+.submit-kicker { color: #8A919A; margin-bottom: 16px; }
+.submit-heading { font: 700 clamp(36px, 5vw, 60px)/0.98 var(--f-display); letter-spacing: -0.04em; margin-bottom: 20px; }
+.submit-body { font-size: 16px; line-height: 1.7; color: #B4BAC2; margin-bottom: 36px; max-width: 54ch; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.form-field { margin-bottom: 12px; }
+.form-grid .form-field { margin-bottom: 0; }
+.form-field label { display: block; margin-bottom: 6px; font: 400 11px/1.3 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: #8A919A; }
+.form-field label .req { color: #8FA0FF; }
 .form-field input, .form-field textarea {
-  width:100%;
-  background:rgba(245,245,240,.06);
-  border:1px solid rgba(245,245,240,.15);
-  color:#F5F5F0; font-family:'Plus Jakarta Sans',sans-serif;
-  font-size:13px; padding:10px 12px; outline:none;
-  transition:border .18s;
+  width: 100%; background: #15171A; border: 1px solid #2E3238; color: #F2F4F6;
+  font: 400 15px/1.4 var(--f-body); padding: 12px 14px; outline: none; border-radius: 0; transition: border-color .15s;
 }
-.form-field input:focus, .form-field textarea:focus { border-color:var(--lime); }
-.form-full { margin-bottom:10px; }
-.submit-btn {
-  background:var(--yellow); color:var(--fg);
-  font-family:'Space Mono',monospace; font-size:8.5px;
-  letter-spacing:.13em; text-transform:uppercase;
-  border:none; padding:13px 28px; cursor:pointer;
-  font-weight:700; margin-top:14px;
-  transition:background .15s;
+.form-field input:focus, .form-field textarea:focus { border-color: #8FA0FF; }
+.form-field textarea { resize: vertical; }
+.submit-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+.submit-btn { padding: 14px 24px; border: 0; background: var(--acc); color: var(--on-acc); font: 500 12px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background .15s; }
+.submit-btn:hover { background: #4C65FF; }
+.submit-btn:disabled { opacity: .6; cursor: default; }
+#sub-status { font: 400 12px/1.4 var(--f-mono); letter-spacing: .04em; color: #8A919A; }
+.submit-thanks { display: none; border-left: 3px solid var(--acc); padding: 18px 22px; }
+.submit-thanks h3 { font: 700 28px/1.1 var(--f-display); letter-spacing: -0.03em; margin-bottom: 8px; }
+.submit-thanks p { font-size: 15px; line-height: 1.7; color: #B4BAC2; }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+footer { position: relative; padding: 28px var(--gut-r) calc(28px + env(safe-area-inset-bottom, 0px)) var(--gut); background: var(--bg); border-top: 1px solid var(--rule); }
+.footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.footer-copy { font: 400 11px/1.4 var(--f-mono); letter-spacing: .06em; color: var(--grey); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.footer-links a { font: 400 11px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: var(--grey); transition: color .15s; }
+.footer-links a:hover { color: var(--ink); }
+.land { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--rule); max-width: 70ch; font-size: 13px; line-height: 1.6; color: var(--grey); }
+#admin-btn { position: absolute; right: var(--gut-r); bottom: 6px; width: 14px; height: 14px; background: var(--rule); border: 0; border-radius: 50%; opacity: .35; cursor: pointer; }
+
+/* ── EDIT MODE ──────────────────────────────────────────── */
+[contenteditable="true"] { outline: none; border-bottom: 1px dashed rgba(0,0,0,.25); cursor: text; }
+#edit-bar { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px var(--gut-r) 10px var(--gut); background: var(--ink); color: #F2F4F6; font: 400 11px/1.3 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; }
+#edit-bar.visible { display: flex; }
+#edit-bar button { padding: 8px 14px; font: 500 11px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; border: 1px solid #F2F4F6; background: transparent; color: #F2F4F6; }
+#edit-bar button.go { background: var(--acc); border-color: var(--acc); }
+#save-confirm { display: none; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .how-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.submit-btn:hover { background:var(--lime); }
-
-/* ── FOOTER ── */
-footer {
-  background:var(--forest);
-  padding:20px 40px;
-  display:flex; align-items:center; justify-content:space-between;
-  border-top:1px solid rgba(255,255,255,.08);
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .about-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; gap: 40px; }
+  .about-col { display: block; grid-row: auto; }
+  .about-col:first-child { padding-right: 0; }
+  .about-col + .about-col { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); padding-top: 40px; }
+  .about-col .label-h { margin-bottom: 20px; }
+  .hero { padding-top: 40px; padding-bottom: 48px; }
+  .hero-def { min-height: 280px; }
+  .about, .moments-section, .how-section { padding-top: 48px; padding-bottom: 56px; }
+  .moment-card { flex-basis: 86%; }
 }
-.footer-copy { font-family:'Space Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:rgba(245,245,240,.5); }
-.footer-links { display:flex; gap:20px; }
-.footer-links a {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.1em; text-transform:uppercase;
-  color:rgba(245,245,240,.5); text-decoration:none;
-  transition:color .15s;
-}
-.footer-links a:hover { color:rgba(245,245,240,.8); }
-
-
-/* ── Editable content styles ── */
-[contenteditable="true"] { outline:none; border-bottom:1px dashed rgba(0,0,0,.2); cursor:text; }
-
-
-
-
-
-
-
-.hero-left {
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-left > * { position: relative; z-index: 1; }
-
-/* CTA section: node cluster bottom-right on yellow bg */
-.cta-section {
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-section > * { position: relative; z-index: 1; }
-
-/* Submit section: node cluster top-right on forest bg */
-.submit-section {
-  position: relative;
-  overflow: hidden;
-}
-
-.submit-section > * { position: relative; z-index: 1; }
-
-/* ═══════════════════════════════════════════════
-   RESPONSIVE — MOBILE
-   ═══════════════════════════════════════════════ */
-
-@media (max-width: 768px) {
-
-  /* Nav — hide text links, keep brand + galaxy CTA */
-  nav { height: 48px; padding: 0; }
-  .nav-brand { padding: 0 16px; font-size: 16px; border-right: none; }
-  .nav-links a:not(.cta) { display: none; }
-  .nav-links a.cta {
-    padding: 0 16px;
-    font-size: 7px;
-    border-left: 1px solid var(--dim);
-  }
-
-  /* Ticker — smaller */
-  .ticker { height: 28px; }
-  .ticker-inner { font-size: 6.5px; gap: 24px; }
-
-  /* Hero — stack vertically */
-  .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-left {
-    padding: 40px 20px 36px;
-    min-height: auto;
-    border-right: none;
-    border-bottom: 1.5px solid var(--fg);
-  }
-  .hero-title {
-    font-size: clamp(64px, 18vw, 96px);
-    padding-top: 20px;
-  }
-  .hero-kicker { margin-bottom: 16px; }
-  .hero-bottom { gap: 8px; margin-top: 28px; }
-  .btn-p, .btn-s { font-size: 7.5px; padding: 10px 16px; }
-
-  .hero-right { padding: 36px 20px 40px; }
-  .letter-label { margin-bottom: 16px; }
-  .letter-body { font-size: 14px; }
-  .letter-body p { margin-bottom: 1.1em; }
-
-  /* Moments — single card visible */
-  .moments-section { padding: 40px 20px; }
-  .moment-card { flex: 0 0 85vw; }
-  .moment-img { height: 140px; }
-
-  /* How to read it — stack cards */
-  .how-section { padding: 40px 20px; }
-  .how-grid { grid-template-columns: 1fr; }
-  .how-card:nth-child(2) { border-top: 4px solid var(--fg); }
-  .how-card:nth-child(3) { border-top: 4px solid var(--yellow); }
-  .how-cta-row { flex-direction: column; align-items: flex-start; gap: 12px; }
-
-  /* Editor — stack photo below text */
-  
-  
-  
-  
-
-  /* CTA */
-  .cta-section { padding: 48px 20px; gap: 20px; flex-direction: column; align-items: flex-start; }
-  .cta-heading { font-size: clamp(40px, 12vw, 64px); }
-
-  /* Submit */
-  .submit-section { padding: 48px 20px; }
-  .form-grid { grid-template-columns: 1fr; }
-
-  /* Footer */
-  footer { padding: 16px 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
-  .footer-links { flex-wrap: wrap; gap: 12px; }
-
-  /* Section headings */
-  .section-heading { font-size: clamp(22px, 6vw, 32px); }
-  .how-heading { font-size: clamp(22px, 6vw, 32px); }
-  
-
-  /* Node motif smaller on mobile */
-  
-  
-  
-}
-
-@media (max-width: 480px) {
-  .hero-title { font-size: clamp(56px, 16vw, 80px); }
-  .nav-brand { font-size: 14px; }
-  .moment-card { flex: 0 0 92vw; }
-}
-
-
-/* ── Carousel card internals (JS-rendered) ── */
-.moment-img {
-  height:140px; overflow:hidden; margin:-24px -24px 16px;
-  position:relative; background:var(--panel);
-}
-.moment-img img { width:100%; height:100%; object-fit:cover; display:block; }
-.moment-img-credit {
-  position:absolute; bottom:6px; right:8px;
-  font-family:'Space Mono',monospace; font-size:6px;
-  letter-spacing:.08em; color:rgba(255,255,255,.5);
-}
-.moment-card-body { display:flex; flex-direction:column; flex:1; }
-.moment-date {
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:var(--sub); margin-bottom:8px;
-}
-.moment-headline {
-  font-family:'Instrument Serif',serif; font-size:17px;
-  line-height:1.25; letter-spacing:-.01em;
-  color:var(--fg); margin-bottom:10px; flex:1;
-}
-.moment-body { font-size:11.5px; line-height:1.6; color:var(--sub); margin-bottom:14px; }
-.moment-footer {
-  display:flex; justify-content:space-between; align-items:center;
-  padding-top:10px; border-top:1px solid var(--dim);
-  margin-top:auto;
-}
-.moment-impact {
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--sub);
-}
-.moment-arrow {
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--lav-dark);
-}
-/* CTA card */
-.moment-card-cta {
-  background:var(--yellow) !important;
-  display:flex; flex-direction:column; justify-content:space-between;
-  text-decoration:none; color:var(--fg) !important;
-}
-.moment-cta-num {
-  font-family:'Instrument Serif',serif;
-  font-size:72px; line-height:1; letter-spacing:-.03em; color:var(--fg);
-}
-.moment-cta-label {
-  font-family:'Space Mono',monospace; font-size:8px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:rgba(18,18,16,.55); margin-bottom:12px;
-}
-.moment-cta-text {
-  font-family:'Plus Jakarta Sans',sans-serif; font-size:13px;
-  line-height:1.5; color:var(--fg); margin-bottom:16px;
-}
-.moment-cta-link {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:var(--fg); border-bottom:1px solid var(--fg);
-  display:inline-block; padding-bottom:1px;
-}
-
-/* Nav brand color spans */
-.nav-brand .y { color:var(--lime); font-style:italic; }
-.nav-brand .l { color:var(--lav-dark); font-style:italic; }
-
-/* Ticker bullet spans — bright on dark bg */
-.ticker .y { color:var(--yellow); }
-.ticker .l { color:var(--lime); }
-
-.moments-heading { font-family:'Instrument Serif',serif; font-size:clamp(28px,4vw,44px); letter-spacing:-.01em; line-height:1; color:var(--fg); font-style:italic; }
-
-/* Hero-left forest bg — title colors */
-.hero-left .hero-title { color:#F5F5F0; }
-.hero-left .hero-title .y { color:var(--lime); font-style:italic; }
-.hero-left .hero-title .l { color:var(--lav); font-style:italic; }
-
-.hero-left .btn-s {
-  color:rgba(245,245,240,.75);
-  border-color:rgba(245,245,240,.3);
-}
-.hero-left .btn-s:hover {
-  background:rgba(245,245,240,.1);
-  border-color:rgba(245,245,240,.6);
-}
-
-@keyframes tick { from { transform:translateX(0); } to { transform:translateX(-50%); } }
-
-
-
-
-
-
-
-
-
-
-
-/* Photo version */
-
-
-
-/* Typed version */
-
-
-
-
-
-
-.letter-divider { height:1px; background:var(--dim); margin:12px 0 10px; }
-.slop-def {
-  font-family:'Instrument Serif',serif;
-  font-size:12px; line-height:1.55;
-  color:var(--sub); font-style:italic;
-  padding:0 20px 20px;
-  flex-shrink:0;
-}
-
-/* ── Editor section — redesigned ── */
-
-
-
-
-
-
-
-
-
-/* Right side — photo fills column, tinted panel behind */
-
-
-
-
-/* Photo credit / context strip at bottom of photo */
-.editor-photo-label {
-  position:absolute;
-  bottom:16px; right:16px;
-  z-index:2;
-  font-family:'Space Mono',monospace;
-  font-size:7px; letter-spacing:.14em;
-  text-transform:uppercase;
-  color:rgba(10,8,30,.4);
-}
-
-@media(max-width:768px) {
-  
-  
-  
-  
-}
-
-.editor-section {
-  display:grid; grid-template-columns:1fr 420px;
-  border-bottom:1.5px solid var(--fg);
-  min-height:380px; position:relative; overflow:hidden;
-}
-.editor-left {
-  padding:64px 56px 56px 40px;
-  display:flex; flex-direction:column; justify-content:space-between;
-  background:#EAE8F5;
-}
-.editor-label {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.18em; text-transform:uppercase;
-  color:var(--lav-dark); margin-bottom:12px;
-}
-.editor-name {
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(40px,5.5vw,68px);
-  letter-spacing:-.03em; line-height:.9;
-  color:#0E0C28; margin-bottom:28px;
-}
-.editor-bio {
-  font-size:15px; line-height:1.75;
-  color:#1A1830; margin-bottom:32px; max-width:520px;
-}
-.editor-links { display:flex; flex-wrap:wrap; gap:20px; }
-.editor-links a {
-  font-family:'Space Mono',monospace; font-size:7.5px;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:#0E0C28; text-decoration:none;
-  border-bottom:1.5px solid #0E0C28; padding-bottom:2px;
-  transition:color .15s, border-color .15s;
-}
-.editor-links a:hover { color:var(--lav-dark); border-color:var(--lav); }
-.editor-right {
-  position:relative; background:#EAE8F5;
-  overflow:hidden; min-height:380px;
-}
-.editor-photo {
-  width:100%; height:100%; object-fit:cover;
-  object-position:center 12%; display:block;
-  position:absolute; top:0; left:0; opacity:0.95;
-}
-.editor-photo-label {
-  position:absolute; bottom:16px; right:16px; z-index:2;
-  font-family:'Space Mono',monospace; font-size:7px;
-  letter-spacing:.14em; text-transform:uppercase;
-  color:rgba(10,8,30,.4);
-}
-@media(max-width:768px) {
-  .editor-section { grid-template-columns:1fr; }
-  .editor-right { min-height:280px; }
-  .editor-left { padding:40px 20px; }
-}
-
-/* ── CORNER ADMIN BUTTON ── */
-
-
-#admin-btn.active { background:rgba(26,58,42,0.2); border-color:rgba(26,58,42,0.5); }
-
-#admin-btn {
-  width:18px; height:18px; border-radius:50%;
-  background:rgba(245,245,240,0.12); border:1px solid rgba(245,245,240,0.2);
-  cursor:pointer; transition:all .2s; padding:0;
-  flex-shrink:0; display:inline-block;
-  margin-left:16px;
-}
-#admin-btn:hover { background:rgba(245,245,240,0.28); border-color:rgba(245,245,240,0.5); }
-#admin-btn.active { background:rgba(143,224,0,0.2); border-color:rgba(143,224,0,0.5); }
-
-/* ── MELT/DROP SCROLL EFFECT ── */
-
-
-
-
-/* ── HERO DROP EFFECT ── */
-.hero-title .drop-word {
-  display:block;
-  transform-origin:50% 0%;
-  transition:none;
+@media (max-width: 560px) {
+  .how-grid { grid-template-columns: minmax(0, 1fr); }
+  .form-grid { grid-template-columns: minmax(0, 1fr); }
+  .nav-links { gap: 6px 16px; }
 }
 </style>
 </head>
 <body>
+
 <!-- NAV -->
 <nav>
-  <a href="/" class="nav-brand"><span class="y">Slop</span> 'Til You <span class="l">Drop</span></a>
+  <a href="/" class="nav-brand">Slop 'Til You Drop</a>
   <div class="nav-links">
+    <a href="#about">About</a>
     <a href="#how">How to read it</a>
-    <a href="#editor">About Ellie</a>
-    <a href="#submit" class="submit">Submit some slop</a>
-    <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="cta">The Slop Galaxy ↗</a>
+    <a href="#submit">Submit some slop</a>
+    <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="cta">The Slop Galaxy ↗</a>
   </div>
 </nav>
 
-
 <!-- TICKER -->
-<div class="ticker">
+<div class="ticker" aria-hidden="true">
   <div class="ticker-inner">
-    <span class="y">◆</span><span>Wikipedia bans AI-generated content</span>
-    <span class="l">◆</span><span>Iran is winning the AI slop propaganda war</span>
-    <span class="y">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
-    <span class="l">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
-    <span class="y">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
-    <span class="l">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
-    <span class="y">◆</span><span>Google tells users to eat glue on their pizza</span>
-    <span class="l">◆</span><span>Fruit Love Island: 300M views, then banned</span>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <span class="y">◆</span><span>Wikipedia bans AI-generated content</span>
-    <span class="l">◆</span><span>Iran is winning the AI slop propaganda war</span>
-    <span class="y">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
-    <span class="l">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
-    <span class="y">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
-    <span class="l">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
-    <span class="y">◆</span><span>Google tells users to eat glue on their pizza</span>
-    <span class="l">◆</span><span>Fruit Love Island: 300M views, then banned</span>
+    <span class="d">◆</span><span>Wikipedia bans AI-generated content</span>
+    <span class="d">◆</span><span>Iran is winning the AI slop propaganda war</span>
+    <span class="d">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
+    <span class="d">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
+    <span class="d">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
+    <span class="d">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
+    <span class="d">◆</span><span>Google tells users to eat glue on their pizza</span>
+    <span class="d">◆</span><span>Fruit Love Island: 300M views, then banned</span>
+    <span class="d">◆</span><span>Wikipedia bans AI-generated content</span>
+    <span class="d">◆</span><span>Iran is winning the AI slop propaganda war</span>
+    <span class="d">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
+    <span class="d">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
+    <span class="d">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
+    <span class="d">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
+    <span class="d">◆</span><span>Google tells users to eat glue on their pizza</span>
+    <span class="d">◆</span><span>Fruit Love Island: 300M views, then banned</span>
   </div>
 </div>
 
-
 <!-- HERO -->
-<section class="hero">
+<section class="hero pad">
   <div class="hero-left">
-    <div class="hero-kicker">A living record of the AI slop era</div>
+    <p class="hero-kicker mono">A living record of the AI slop era</p>
     <h1 class="hero-title">
-      <span class="y" data-editable="hero-line1" contenteditable="false">Slop</span>
+      <span data-editable="hero-line1" contenteditable="false">Slop</span>
       <span data-editable="hero-line2" contenteditable="false">'Til You</span>
-      <span class="l" data-editable="hero-line3" contenteditable="false">Drop</span>
+      <span data-editable="hero-line3" contenteditable="false">Drop</span>
     </h1>
-    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.65;color:rgba(245,245,240,.55);margin-bottom:24px;max-width:340px;">Tracking how AI-generated content is reshaping the world, in real time.</p>
-    <div class="hero-bottom" style="align-items:flex-start;flex-wrap:wrap;gap:20px;">
-      <!-- Left: buttons -->
-      <div style="display:flex;flex-direction:column;gap:10px;flex-shrink:0;">
-        <div style="display:flex;gap:10px;">
-          <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-p">Enter the Galaxy →</a>
-          <a href="#how" class="btn-s">How it works</a>
-        </div>
-
-      </div>
-  </div>
-        </div>
-      </div>
+    <p class="hero-sub">Tracking how AI-generated content is reshaping the world, in real time.</p>
+    <div class="hero-btns">
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="btn btn-p">Enter the Galaxy →</a>
+      <a href="#how" class="btn">How it works</a>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="letter-label">About the slop 'til you drop project</div>
-    <div class="letter-body">
-        <p>This is a project about AI slop.</p>
-        <p>Of course I’m captivated by slop. AI-generated content is the medium du jour, the pixelated embodiment of the times, showing us how meaning, information, and values are transforming before our eyes.</p>
-        <p>The first trickles of slop were irreverent and goofy: odd DMs from family members, posts from old acquaintances. Then, it spread into work chats, wedding invitations, news, LinkedIn posts. On its surface, this is harmless tinkering, like MS Paint, but for the AI age.</p>
-        <p>But this felt different. The implications are bigger and harder to pin down. And beyond their impact: the <i>feeling</i> of these images left me with something adjacent to the Uncanny Valley but with more dimension: a growing unease rooted in the feeling of loss, without knowing just what’s being lost.</p>
-        <p>That’s why I started this project. A way to track the sociocultural cost and impact of slop.</p>
-        <p>As more prominent slop moments become the norm - think Superbowl commercials, political campaign ads, kids' TV shows - new questions swirl every day: What’s acceptable as AI-generated artifacts become indistinguishable from human work? What is the cost of tools that mimic humanity but lack its randomness, patina, imperfections? What’s degrading?</p>
-        <p><a href="https://galaxy.sloptilyoudrop.com" target="_blank" style="color:var(--lime);text-decoration:underline;text-underline-offset:3px;">The Slop Galaxy</a> is the record: a living map of the key moments AI-generated content crossed a line and changed our norms.</p>
-        <p>Maybe you’re on this “Slop Watch” too. Either way, something is shifting, and you’re invited to join the ride.</p>
-      </div>
-    <div class="letter-divider"></div>
-    <p class="slop-def"><strong>slop</strong> — digital content of low quality, produced in quantity by means of artificial intelligence. <em>Merriam-Webster Word of the Year, 2025.</em></p>
-  </div>
+  <aside class="hero-def">
+    <span class="hero-def-label">Definition</span>
+    <div class="hero-def-block">
+      <p class="hero-def-term">slop<span>noun</span></p>
+      <p class="hero-def-body">Digital content of low quality, produced in quantity by means of artificial intelligence.</p>
+      <p class="hero-def-src mono">Merriam-Webster Word of the Year, 2025</p>
+    </div>
+  </aside>
 </section>
+
 <!-- RECENT KEY MOMENTS -->
-<section id="moments" class="moments-section">
-  <div class="moments-inner">
-    <div class="moments-header">
-      <div style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;">
-        <h2 class="moments-heading">Recent Key Moments</h2>
-        <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(245,245,240,.35);">5 of <span id="hero-node-count">68</span> documented</span>
-      </div>
-      <div class="carousel-nav">
-        <button class="carousel-btn" id="carousel-prev" aria-label="Previous">←</button>
-        <span class="carousel-counter"><span id="carousel-cur">1</span> / <span id="carousel-total">…</span></span>
-        <button class="carousel-btn" id="carousel-next" aria-label="Next">→</button>
-      </div>
+<section id="moments" class="moments-section pad">
+  <div class="moments-header">
+    <h2 class="label-h">Recent Key Moments</h2>
+    <div class="carousel-nav">
+      <button class="carousel-btn" id="carousel-prev" aria-label="Previous">←</button>
+      <span class="carousel-counter"><span id="carousel-cur">1</span> / <span id="carousel-total">…</span></span>
+      <button class="carousel-btn" id="carousel-next" aria-label="Next">→</button>
     </div>
-    <div class="carousel-track-wrap">
-      <div class="carousel-track" id="carousel-track">
-        <div class="moment-card" style="justify-content:center;align-items:center;opacity:.4;">
-          <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);">Loading moments…</div>
-        </div>
+  </div>
+  <div class="carousel-track-wrap">
+    <div class="carousel-track" id="carousel-track">
+      <div class="moment-card" style="justify-content:center;align-items:center;min-height:240px;">
+        <div class="mono">Loading moments…</div>
       </div>
     </div>
   </div>
 </section>
 
-
-<!-- HOW TO READ IT -->
-<section class="how-section" id="how">
-  <div class="section-header">
-    <h2 class="section-heading">How to read it</h2>
-  </div>
-  <p class="how-sub">Every node is a documented moment. Here’s the logic behind what you’re looking at.</p>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-num">01</div>
-      <div class="how-title">Size is impact</div>
-      <p class="how-body">The larger the node, the more consequential the moment. Scored 1–10, it’s a curated judgment of how much this event moved the world.</p>
-    </div>
-    <div class="how-card">
-      <div class="how-num">02</div>
-      <div class="how-title">Slop vs. Spill</div>
-      <p class="how-body">The vertical axis is the argument. Lower nodes are slop — the artifacts: fake images, ghost-written articles, synthetic personas. Higher nodes are spills — the consequences: lawsuits, bans, legislation, cultural reckonings. The same moment can be both. The axis shows where it landed.</p>
-    </div>
-    <div class="how-card">
-      <div class="how-num">03</div>
-      <div class="how-title">The through-line</div>
-      <p class="how-body">Two arcs connect the defining moments — one tracing the slop, one tracing the spills. Each segment is annotated. The gap between them is the argument. Toggle it on from the sidebar. Follow both. That’s the thesis.</p>
-    </div>
-    <div class="how-card">
-      <div class="how-num">04</div>
-      <div class="how-title">Every node has a story</div>
-      <p class="how-body">Tap any node to read what happened, why it matters, and where to go deeper. Select nodes carry an editor’s note.</p>
-    </div>
-  </div>
-
+<!-- THE RECORD -->
+<section class="record pad">
+  <p class="mono">What the record shows</p>
+  <p class="record-line">Accountability is falling behind the pace of harm.</p>
+  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="btn">Read the full synthesis in the Galaxy →</a>
 </section>
 
-
-<!-- ABOUT ELLIE -->
-<section id="editor" class="editor-section">
-  <div class="editor-left">
-    <div class="editor-label">About the editor</div>
-    <div class="editor-name">Ellie<br>Damashek</div>
-    <p class="editor-bio">Ellie Damashek is a strategist and researcher specializing in organizational change and emerging technology. She helps large, complex organizations diagnose disruption, build institutional responses, and communicate through uncertainty, in work that spans sectors, scales, and cultures. Before her current role, she spent a decade in consumer research and product development, helping companies translate emerging trends into market-ready products and campaigns.</p>
-    <p class="editor-bio" style="margin-top:-16px;">She has lived and worked across the US, Japan, Europe, and China, shaping her sensitivity to cultural shifts and patterns.</p>
-    <p class="editor-bio" style="margin-top:-16px;">The Slop Galaxy is built for anyone trying to understand the impacts of this AI-saturated moment. It broadens the aperture on the AI conversation, looking beyond isolated incidents to detect patterns emerging across platforms, industries, and years.</p>
-    <p class="editor-bio" style="margin-top:-16px;">To date, the patterns tracked here illustrate that institutional accountability is consistently falling behind the pace of harm. As the galaxy grows each week, researchers, journalists, policymakers, and anyone trying to understand what is actually happening are invited to review the record and the new patterns and norms that follow.</p>
-    <div class="editor-links">
-      <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a href="mailto:ellie@sloptilyoudrop.com">Email</a>
-      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener">The Galaxy ↗</a>
+<!-- ABOUT -->
+<section id="about" class="about pad">
+  <div class="about-grid">
+    <div class="about-col">
+      <h2 class="label-h">About the project</h2>
+      <p class="about-head">Get in loser, we're going slopping.</p>
+      <div class="about-body">
+        <p>In a slop-saturated world, meaning, information, and values are transforming before our eyes. What started as irreverent, goofy, AI-generated content has seeped into everyday life: wedding invitations, restaurant menus, holiday cards, and the far more meaningful places we once reserved for human hands.</p>
+        <p class="pull">It’s easy to find frustration and anger at AI. It's harder to quantify or diagnose what exactly is being lost.</p>
+        <p>This project tracks the sociocultural cost of AI slop. As AI is granted authorship in spaces that used to be human, new questions swirl: What’s acceptable once AI artifacts are indistinguishable from human work? What is the cost of using tools that mimic humanity but lack its randomness, patina, and imperfections? What’s eroding?</p>
+        <p>The Slop Galaxy is a living map of the moments AI-generated content crossed a line and changed our norms.</p>
+        <p>So grab your popcorn, your pen, and your slop-hunting boots. View the Slop Galaxy to see what’s been tracked to date or submit some slop in the form below.</p>
+      </div>
+      <div class="about-actions">
+        <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="btn btn-p">View the Slop Galaxy →</a>
+        <a href="#submit" class="btn">Submit some slop ↓</a>
+      </div>
     </div>
-  </div>
-  <div class="editor-right">
-    <img class="editor-photo" src="https://github.com/eeeeedam/sloptilyoudrop-site/blob/main/Gemini_Generated_Image_gh89q4gh89q4gh89.png?raw=true" alt="Ellie Damashek">
+    <div class="about-col">
+      <h2 class="label-h">About the editor</h2>
+      <p class="about-head">Ellie Damashek</p>
+      <div class="about-body">
+        <p>Ellie is a strategist and researcher specializing in organizational change and emerging technology, helping large, complex organizations diagnose disruption, build institutional responses, and communicate through uncertainty, in work that spans sectors, scales, and cultures.</p>
+        <p>Before this, a decade in consumer research and product development meant translating emerging trends into market-ready products and campaigns. Living and working across the US, Japan, Europe, and China shaped a sensitivity to cultural shifts and patterns.</p>
+      </div>
+      <div class="about-actions">
+        <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank" rel="noopener" class="btn">LinkedIn ↗</a>
+        <a href="mailto:ellie@sloptilyoudrop.com" class="btn">Email</a>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- ENTER THE GALAXY -->
-<section class="cta-section">
+<section class="cta-section pad">
   <h2 class="cta-heading">Enter<br>the Galaxy</h2>
-  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" class="btn-cta">Open the Galaxy →</a>
+  <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="btn">Open the Galaxy →</a>
 </section>
 
+<!-- HOW TO READ IT -->
+<section class="how-section pad" id="how">
+  <h2 class="label-h">How to read it</h2>
+  <p class="how-sub">Every node is a documented moment. Here’s the logic behind what you’re looking at.</p>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num mono">01</div>
+      <div class="how-title">Size is impact</div>
+      <p class="how-body">The larger the node, the more consequential the moment. Scored 1–10, it’s a curated judgment of how much this event moved the world.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num mono">02</div>
+      <div class="how-title">Slop vs. Spill</div>
+      <p class="how-body">The vertical axis is the argument. Higher nodes are slop — the artifacts: fake images, ghost-written articles, synthetic personas. Lower nodes are spills — the consequences: lawsuits, bans, legislation, cultural reckonings. The same moment can be both. The axis shows where it landed.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num mono">03</div>
+      <div class="how-title">The through-line</div>
+      <p class="how-body">Two arcs connect the defining moments — one tracing the slop, one tracing the spills. Each segment is annotated. The gap between them is the argument. Toggle it on from the sidebar. Follow both. That’s the thesis.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num mono">04</div>
+      <div class="how-title">Every node has a story</div>
+      <p class="how-body">Tap any node to read what happened, why it matters, and where to go deeper. Select nodes carry an editor’s note.</p>
+    </div>
+  </div>
+</section>
 
 <!-- SUBMIT A NODE -->
-<section id="submit" style="background:var(--forest);border-top:1px solid rgba(245,241,232,0.1);padding:72px 40px;">
-  <div style="max-width:680px;">
-
-    <div style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,241,232,0.4);margin-bottom:16px;">Contribute</div>
-    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,56px);letter-spacing:-.02em;line-height:1;color:#f5f1e8;margin-bottom:20px;">Submit some slop</h2>
-    <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.75;color:rgba(245,241,232,0.7);margin-bottom:40px;max-width:520px;">The galaxy grows through collective attention. If you’ve spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it here. Ellie reviews every submission. If yours is added, your name appears on the node.</p>
+<section id="submit" class="submit-section pad">
+  <div class="submit-inner">
+    <p class="submit-kicker mono">Contribute</p>
+    <h2 class="submit-heading">Submit some slop</h2>
+    <p class="submit-body">The galaxy grows through collective attention. If you’ve spotted a moment worth documenting — a piece of slop, a platform decision, a cultural threshold — submit it here. Ellie reviews every submission. If yours is added, your name appears on the node.</p>
 
     <div id="submit-form-wrap">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-        <div>
-          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your name <span style="color:var(--lime)">*</span></label>
-          <input id="sub-name" type="text" placeholder="Name" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="sub-name">Your name <span class="req">*</span></label>
+          <input id="sub-name" type="text" placeholder="Name" autocomplete="name">
         </div>
-        <div>
-          <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Your email <span style="color:var(--lime)">*</span></label>
-          <input id="sub-email" type="email" placeholder="you@example.com" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+        <div class="form-field">
+          <label for="sub-email">Your email <span class="req">*</span></label>
+          <input id="sub-email" type="email" placeholder="you@example.com" autocomplete="email">
         </div>
       </div>
-      <div style="margin-bottom:12px;">
-        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Article or page URL <span style="color:var(--lime)">*</span></label>
-        <input id="sub-url" type="url" placeholder="https://..." style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'">
+      <div class="form-field">
+        <label for="sub-url">Article or page URL <span class="req">*</span></label>
+        <input id="sub-url" type="url" placeholder="https://...">
       </div>
-      <div style="margin-bottom:24px;">
-        <label style="font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,241,232,0.4);display:block;margin-bottom:6px;">Why does this belong in the galaxy? <span style="opacity:.5">(optional)</span></label>
-        <textarea id="sub-note" placeholder="What crossed the line here. What it means." rows="3" style="width:100%;background:rgba(245,241,232,0.06);border:1px solid rgba(245,241,232,0.15);color:#f5f1e8;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:vertical;transition:border .18s;" onfocus="this.style.borderColor='rgba(245,241,232,0.5)'" onblur="this.style.borderColor='rgba(245,241,232,0.15)'"></textarea>
+      <div class="form-field">
+        <label for="sub-note">Why does this belong in the galaxy? (optional)</label>
+        <textarea id="sub-note" placeholder="What crossed the line here. What it means." rows="3"></textarea>
       </div>
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <button id="sub-btn" onclick="submitNode()" style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:#1A3A2A;color:#f5f1e8;border:none;padding:13px 28px;cursor:pointer;transition:background .18s;" onmouseover="this.style.background='#a82806'" onmouseout="this.style.background='#c93208'">SUBMIT FOR REVIEW →</button>
-        <span id="sub-status" style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;color:rgba(245,241,232,0.5);"></span>
+      <div class="submit-actions">
+        <button id="sub-btn" class="submit-btn" type="button" onclick="submitNode()">Submit for review →</button>
+        <span id="sub-status" role="status"></span>
       </div>
     </div>
 
-    <div id="submit-thanks" style="display:none;">
-      <div style="border-left:2px solid #c93208;padding:20px 24px;">
-        <div style="font-family:'Instrument Serif',serif;font-size:28px;letter-spacing:.04em;color:#f5f1e8;margin-bottom:8px;">Received.</div>
-        <p style="font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;line-height:1.7;color:rgba(245,241,232,0.7);margin:0;">Ellie reviews every submission. You'll hear back either way — check your inbox. If your submission makes it into the galaxy, your name will be on the node.</p>
-      </div>
+    <div id="submit-thanks" class="submit-thanks">
+      <h3>Received.</h3>
+      <p>Ellie reviews every submission. You'll hear back either way — check your inbox. If your submission makes it into the galaxy, your name will be on the node.</p>
     </div>
-
   </div>
 </section>
 
-
-
-
-<div style="position:relative;">
+<!-- FOOTER -->
 <footer>
-  <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
-  <div class="footer-links">
-    <a href="#editor">About</a>
-    <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank">LinkedIn</a>
-    <a href="https://galaxy.sloptilyoudrop.com" target="_blank">Galaxy</a>
-    <a href="#" onclick="event.preventDefault();document.getElementById('footer-contact-popup').style.display=document.getElementById('footer-contact-popup').style.display==='block'?'none':'block';" style="position:relative;">Contact
-      <span id="footer-contact-popup" style="display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);font-family:'Space Mono',monospace;font-size:9px;padding:8px 14px;white-space:nowrap;letter-spacing:.06em;z-index:100;"><a href="/cdn-cgi/l/email-protection#cbaea7a7a2ae8bb8a7a4bbbfa2a7b2a4beafb9a4bbe5a8a4a6" style="color:var(--bg);text-decoration:none;"><span class="__cf_email__" data-cfemail="67020b0b0e0227140b0817130e0b1e0812031508174904080a">[email&#160;protected]</span></a></span>
-    </a>
+  <div class="footer-row">
+    <div class="footer-copy" data-editable="footer-copy" contenteditable="false">© 2026 Ellie Damashek</div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="https://www.linkedin.com/in/elenadamashek/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener">Galaxy</a>
+      <a href="mailto:ellie@sloptilyoudrop.com">Contact</a>
+    </div>
   </div>
-  <button id="admin-btn" onclick="promptAdmin()" title="Edit mode"></button>
+  <p class="land" data-editable="land-ack" contenteditable="false">This project is made in Seattle, on the traditional lands of the Coast Salish peoples, including the Duwamish, who have stewarded this place since time immemorial.</p>
+  <button id="admin-btn" onclick="promptAdmin()" title="Edit mode" aria-label="Edit mode"></button>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<!-- EDIT BAR -->
+<div id="edit-bar">
+  <span>✎ Edit mode — click underlined text to edit</span>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="go" onclick="saveEdits()">⇩ Export for repo</button>
+    <button onclick="cancelEdit()">Cancel</button>
+  </div>
+  <span id="save-confirm"></span>
+</div>
+
+<script>
+// ── SUBMIT FORM ──────────────────────────────────────────────
 const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbwHMmWocCZJ-p6uwDGf6SBDwzifh10LY5ZyEE3mVyoXrUV6xNfqRfxAVCKCzkBom5od/exec';
+const ERR = '#FF7A66';
 
 function submitNode() {
   const name  = document.getElementById('sub-name').value.trim();
@@ -982,12 +500,12 @@ function submitNode() {
   const btn    = document.getElementById('sub-btn');
   const status = document.getElementById('sub-status');
 
-  if (!name)  { status.textContent = 'Name is required.'; status.style.color='#c93208'; return; }
-  if (!email) { status.textContent = 'Email is required.'; status.style.color='#c93208'; return; }
-  if (!url || !url.startsWith('http')) { status.textContent = 'A valid URL is required.'; status.style.color='#c93208'; return; }
+  if (!name)  { status.textContent = 'Name is required.'; status.style.color = ERR; return; }
+  if (!email) { status.textContent = 'Email is required.'; status.style.color = ERR; return; }
+  if (!url || !url.startsWith('http')) { status.textContent = 'A valid URL is required.'; status.style.color = ERR; return; }
 
   btn.disabled = true;
-  btn.textContent = 'SENDING…';
+  btn.textContent = 'Sending…';
   status.textContent = '';
 
   fetch(SUBMIT_URL, {
@@ -1002,415 +520,201 @@ function submitNode() {
   })
   .catch(() => {
     btn.disabled = false;
-    btn.textContent = 'SUBMIT FOR REVIEW →';
+    btn.textContent = 'Submit for review →';
     status.textContent = 'Something went wrong — try again.';
-    status.style.color = '#c93208';
+    status.style.color = ERR;
   });
 }
-</script>
-<script>
-  // ── EDITOR MODE ──────────────────────────────────────────────────────────────
-  const PASS = 'remiagua22';
-  let editMode = false;
-  function promptAdmin() {
-    const pw = prompt('Enter edit password:');
-    if (pw === PASS) enableEdit();
-    else if (pw !== null) alert('Incorrect password.');
-  }
-  function enableEdit() {
-    editMode = true;
-    document.body.classList.add('edit-mode');
-    const eb = document.getElementById('edit-bar'); if(eb) eb.classList.add('visible');
-    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
-  }
-  function cancelEdit() {
-    editMode = false;
-    document.body.classList.remove('edit-mode');
-    document.getElementById('edit-bar').classList.remove('visible');
-    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
-  }
-  function saveEdits() {
-    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
-    const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-    document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
-    const blob = new Blob([html], {type:'text/html'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    const date = new Date().toISOString().slice(0,10);
-    a.download = 'sloptilyoudrop-' + date + '.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-    const c = document.getElementById('save-confirm');
-    if (c) {
-      c.textContent = '\u2713 Downloaded \u2014 upload to sloptilyoudrop repo as index.html';
-      c.style.display = 'block';
-      setTimeout(() => c.style.display = 'none', 4000);
-    }
-  }
 
+// ── EDITOR MODE ──────────────────────────────────────────────
+const PASS = 'remiagua22';
+let editMode = false;
+function promptAdmin() {
+  const pw = prompt('Enter edit password:');
+  if (pw === PASS) enableEdit();
+  else if (pw !== null) alert('Incorrect password.');
+}
+function enableEdit() {
+  editMode = true;
+  document.body.classList.add('edit-mode');
+  const eb = document.getElementById('edit-bar'); if (eb) eb.classList.add('visible');
+  document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
+}
+function cancelEdit() {
+  editMode = false;
+  document.body.classList.remove('edit-mode');
+  document.getElementById('edit-bar').classList.remove('visible');
+  document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
+}
+function saveEdits() {
+  document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'false');
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  document.querySelectorAll('[data-editable]').forEach(el => el.contentEditable = 'true');
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sloptilyoudrop-' + new Date().toISOString().slice(0, 10) + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  const c = document.getElementById('save-confirm');
+  if (c) {
+    c.textContent = '✓ Downloaded — upload to sloptilyoudrop repo as index.html';
+    c.style.display = 'inline';
+    setTimeout(() => c.style.display = 'none', 4000);
+  }
+}
+
+// ── CAROUSEL — pulls recent nodes from the galaxy SEED ───────
 const STATIC_FALLBACK = [
-  {id:47,title:'The New Yorker Asks What AI Is Doing to Culture',image:'https://media.newyorker.com/photos/6941ecf57c9dbe9bfbdb11b8/2:2/w_1920,c_limit/NewYorker_AiSlop_final3%20(1).jpg',image_credit:'The New Yorker',date:'September 2025',category:'Media',impact:9,description:'The New Yorker published a long-form piece examining AI\'s effect on culture — not as a technology story but as a question about what art, meaning, and human cre…'},
-  {id:49,title:'Wikipedia Bans AI-Generated Content After Editors Are Overwhelmed',image:'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/800px-Wikipedia-logo-v2.svg.png',image_credit:'Wikipedia',date:'March 2026',category:'Legislation',impact:9,description:'After months of debate, Wikipedia\'s volunteer editors voted to prohibit the use of large language models to generate or rewrite article content. The policy stat…'},
-  {id:51,title:'Iran Is Winning the AI Slop Propaganda War',image:'https://ichef.bbci.co.uk/news/1024/cpsprodpb/141f/live/f4df2dc0-3759-11f1-9d5c-8ba507d7dbde.jpg.webp',image_credit:'BBC',date:'March 2026',category:'Societal',impact:9,description:'An AI-generated LEGO video from Iran\'s \'Explosive News Team\' — depicting Trump as a warmongering villain set to a viral rap — spread across American social medi…'},
-  {id:45,title:'Anthropic Opens \'Zero Slop Zone\' Pop-Up in NYC — Entry Requires Downloading Claude',date:'March 2026',category:'Platform',impact:8,description:'Anthropic opened a pop-up in New York\'s West Village described as a \'Zero Slop Zone,\' encouraging visitors to disconnect from devices, drink coffee, and read a …'},
-  {id:48,title:'WebinarTV Is Secretly Recording Your Zoom Calls and Turning Them into AI Podcasts',date:'March 2026',category:'Platform',impact:8,description:'WebinarTV, which bills itself as a search engine for webinars, was found to be scanning the internet for Zoom meeting links, recording calls without permission,…'}
+  {id:72,title:'Federal Courts Overwhelmed by Flood of AI-Generated Lawsuits',date:'June 2026',category:'legislation',impact:7,description:'Federal magistrate judges like Maritza Braswell are dealing with stacks of AI-generated legal documents flooding court systems. Courts are being forced to de…'},
+  {id:68,title:'Hacker News Bans AI-Generated and AI-Edited Comments',date:'April 2026',category:'platform',impact:7,description:'Y Combinator\'s Hacker News updated its guidelines to explicitly prohibit AI-generated or AI-edited comments, citing that such content degrades the quality o…'},
+  {id:66,title:'OpenAI Backs Illinois Bill to Shield AI Firms From Mass Casualty Liability',date:'April 2026',category:'legislation',impact:9,description:'OpenAI publicly backed Illinois SB 3444, a bill that would shield frontier AI developers from civil liability even when their models contribute to mass casua…'},
+  {id:67,title:'Anthropic Breaks With OpenAI, Opposes Illinois Liability Shield',date:'April 2026',category:'legislation',impact:9,description:'Anthropic publicly opposed SB 3444 — the same Illinois bill OpenAI backed — calling it a \'get-out-of-jail-free card.\' Anthropic instead lobbied for SB 3261…'},
+  {id:57,title:'Indianapolis Councilor\'s Home Shot At After Voting to Approve AI Data Center',date:'April 2026',category:'societal',impact:9,description:'Councilor Ron Gibson and his 8-year-old son were woken by gunfire at their Indianapolis home around 1am. Thirteen shots were fired at the front door. A note …'}
 ];
-  const STATIC_TOTAL = 58;
 
-  // ── CAROUSEL — dynamic, pulls from galaxy SEED ─────────────────────────────
-  (function() {
-    const track  = document.getElementById('carousel-track');
-    const prev   = document.getElementById('carousel-prev');
-    const next   = document.getElementById('carousel-next');
-    const curEl  = document.getElementById('carousel-cur');
-    const totEl  = document.getElementById('carousel-total');
-    if (!track) return;
+(function () {
+  const track = document.getElementById('carousel-track');
+  const prev  = document.getElementById('carousel-prev');
+  const next  = document.getElementById('carousel-next');
+  const curEl = document.getElementById('carousel-cur');
+  const totEl = document.getElementById('carousel-total');
+  if (!track) return;
 
-    const GALAXY = 'https://galaxy.sloptilyoudrop.com';
-    const CAT_LABELS = {
-      platform:'Platform', media:'Media', cultural:'Cultural',
-      legislation:'Legislation', research:'Research', societal:'Societal'
-    };
+  const GALAXY = 'https://galaxy.sloptilyoudrop.com';
+  const CAT_LABELS = { platform:'Platform', media:'Media', cultural:'Cultural', legislation:'Legislation', research:'Research', societal:'Societal' };
 
-    // Fetch galaxy, extract SEED, sort, render
-    fetch(GALAXY)
-      .then(r => r.text())
-      .then(html => {
-        // Extract nodes by scanning line by line for field patterns
-        // This avoids regex issues with } inside string values
-        const nodes = [];
-        const lines = html.split('\n');
-        let current = null;
+  fetch(GALAXY)
+    .then(r => r.text())
+    .then(html => {
+      // Scan line by line for field patterns (avoids regex trouble with } inside strings)
+      const nodes = [];
+      const lines = html.split('\n');
+      let current = null;
 
-        const unesc = function(s) {
-          return s.replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\n/g, ' ');
-        };
-        const getField = function(line, key) {
-          // Match key:"value" or key:'value'
-          var dq = new RegExp(key + ':\\s*"((?:[^"\\\\]|\\\\.)*)"');
-          var sq = new RegExp(key + ":\\s*'((?:[^'\\\\]|\\\\.)*)'");
-          var m = dq.exec(line) || sq.exec(line);
-          return m ? unesc(m[1]) : null;
-        };
-        const getNum = function(line, key) {
-          var m = new RegExp(key + ':\\s*([\\d.]+)').exec(line);
-          return m ? parseFloat(m[1]) : null;
-        };
+      const unesc = s => s.replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\n/g, ' ');
+      const getField = function (line, key) {
+        var dq = new RegExp(key + ':\\s*"((?:[^"\\\\]|\\\\.)*)"');
+        var sq = new RegExp(key + ":\\s*'((?:[^'\\\\]|\\\\.)*)'");
+        var m = dq.exec(line) || sq.exec(line);
+        return m ? unesc(m[1]) : null;
+      };
+      const getNum = function (line, key) {
+        var m = new RegExp(key + ':\\s*([\\d.]+)').exec(line);
+        return m ? parseFloat(m[1]) : null;
+      };
 
-        for (var li = 0; li < lines.length; li++) {
-          var line = lines[li];
-          // New node starts with { id:N,
-          var idMatch = /^\s*\{\s*id:(\d+),/.exec(line);
-          if (idMatch) {
-            if (current && current.id) nodes.push(current);
-            current = { id: parseInt(idMatch[1]) };
-          }
-          if (!current) continue;
+      for (var li = 0; li < lines.length; li++) {
+        var line = lines[li];
+        var idMatch = /^\s*\{\s*id:(\d+),/.exec(line);
+        if (idMatch) {
+          if (current && current.id) nodes.push(current);
+          current = { id: parseInt(idMatch[1]) };
+          var ym = /year:\s*(\d{4})/.exec(line); if (ym) current.year = parseInt(ym[1]);
+        }
+        if (!current) continue;
 
-          // Extract fields from current line (nodes are mostly one per line but
-          // description/significance can span — we collect into a buffer)
-          if (!current.title) { var v = getField(line, 'title'); if (v) current.title = v; }
-          if (!current.date && current.title) { var v = getField(line, 'date'); if (v) current.date = v; }
-          if (!current.category) { var v = getField(line, 'category'); if (v) current.category = v; }
-          if (!current.impact) { var v = getNum(line, 'impact'); if (v) current.impact = v; }
-          if (!current.description) { var v = getField(line, 'description'); if (v) current.description = v; }
-          if (!current.image) { var v = getField(line, 'image'); if (v) current.image = v; }
-          if (!current.image_credit) { var v = getField(line, 'image_credit'); if (v) current.image_credit = v; }
-          if (!current.date_added) {
-            // Try string format first
-            var ds = getField(line, 'date_added');
-            if (ds && /^\d{4}-/.test(ds)) { current.date_added = ds; }
-            else {
-              // Try numeric timestamp
-              var dm = /date_added:\s*(\d{10,13})/.exec(line);
-              if (dm) {
-                var ts = parseInt(dm[1]);
-                var d = new Date(ts);
-                current.date_added = d.getFullYear() + '-' +
-                  String(d.getMonth()+1).padStart(2,'0') + '-' +
-                  String(d.getDate()).padStart(2,'0');
-              }
+        var v;
+        if (!current.title) { v = getField(line, 'title'); if (v) current.title = v; }
+        if (!current.date && current.title) { v = getField(line, 'date'); if (v) current.date = v; }
+        if (!current.category) { v = getField(line, 'category'); if (v) current.category = v; }
+        if (!current.impact) { v = getNum(line, 'impact'); if (v) current.impact = v; }
+        if (!current.description) { v = getField(line, 'description'); if (v) current.description = v; }
+        if (!current.date_added) {
+          var ds = getField(line, 'date_added');
+          if (ds && /^\d{4}-/.test(ds)) { current.date_added = ds; }
+          else {
+            var dm = /date_added:\s*(\d{10,13})/.exec(line);
+            if (dm) {
+              var d = new Date(parseInt(dm[1]));
+              current.date_added = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
             }
           }
         }
-        if (current && current.id) nodes.push(current);
-        if (!nodes.length) throw new Error('No nodes parsed');
-        const SEED = nodes;
+      }
+      if (current && current.id) nodes.push(current);
+      if (!nodes.length) throw new Error('No nodes parsed');
 
-        // Sort: primary = date_added descending, secondary = impact descending
-        const sorted = [...SEED]
-          .filter(n => n.date_added)
-          .sort((a, b) => {
-            const da = a.date_added, db = b.date_added;
-            if (db !== da) return db.localeCompare(da);
-            return (b.impact || 0) - (a.impact || 0);
-          });
-        renderCards(sorted.slice(0, 5), SEED.length);
-        var heroStat = document.getElementById('hero-node-count');
-        if (heroStat) heroStat.textContent = SEED.length;
-      })
-      .catch(() => {
-        // Fallback: render STATIC_FALLBACK nodes then CTA
-        renderCards(STATIC_FALLBACK.slice(0, 5), STATIC_TOTAL);
-        var heroStat = document.getElementById('hero-node-count');
-        if (heroStat) heroStat.textContent = STATIC_TOTAL;
-      });
+      // Most recent EVENT first (the date shown on each card), ties broken by when it was added, then impact.
+      const MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+      const eventDec = function (n) {
+        var m = /([A-Za-z]+)\s+(\d{4})/.exec(n.date || '');
+        if (m && MONTHS.indexOf(m[1].toLowerCase()) > -1) return parseInt(m[2]) + MONTHS.indexOf(m[1].toLowerCase()) / 12;
+        var y = /(\d{4})/.exec(n.date || '');
+        return y ? parseInt(y[1]) : (n.year || 0);
+      };
+      const sorted = nodes
+        .filter(n => n.title && eventDec(n) > 0)
+        .sort((a, b) => {
+          const ea = eventDec(a), eb = eventDec(b);
+          if (eb !== ea) return eb - ea;
+          const da = a.date_added || '', db = b.date_added || '';
+          if (db !== da) return db.localeCompare(da);
+          return (b.impact || 0) - (a.impact || 0);
+        });
+      renderCards(sorted.slice(0, 5));
+    })
+    .catch(() => renderCards(STATIC_FALLBACK));
 
-    function renderCards(top5, nodeTotal) {
-      const cards = top5.map(function(n) {
-        const label = CAT_LABELS[n.category] || n.category;
-        const dateStr = n.date || '';
-        const impact  = n.impact || '';
-        const url     = GALAXY + '?node=' + n.id;
-        const desc    = n.description ? n.description.slice(0,160) + (n.description.length > 160 ? '\u2026' : '') : '';
-        const card = document.createElement('a');
-        card.href = url; card.target = '_blank'; card.className = 'moment-card';
-        var catColor = {
-          platform:'#E8F000', media:'#8FE000', cultural:'#A8A8E8',
-          legislation:'#38bdf8', research:'#f472b6', societal:'#FF6B35'
-        }[n.category] || '#8FE000';
-        card.innerHTML =
-          '<div class="moment-card-body">' +
-          '<div class="moment-card-top">' +
-            '<span class="moment-cat" style="background:' + catColor + '22;color:' + catColor + '">' + label + '</span>' +
-            '<span class="moment-date">' + dateStr + '</span>' +
-          '</div>' +
+  function renderCards(top5) {
+    track.innerHTML = '';
+    top5.forEach(function (n) {
+      const cat   = String(n.category || '').toLowerCase();
+      const label = CAT_LABELS[cat] || n.category || '';
+      const desc  = n.description ? n.description.slice(0, 160) + (n.description.length > 160 ? '…' : '') : '';
+      const card  = document.createElement('a');
+      card.href = GALAXY + '?node=' + n.id; card.target = '_blank'; card.rel = 'noopener'; card.className = 'moment-card';
+      card.innerHTML =
+        '<div class="moment-card-img" aria-hidden="true"><span class="moment-cat">' + label + '</span></div>' +
+        '<div class="moment-card-body">' +
+          '<div class="moment-date mono">' + (n.date || '') + '</div>' +
           '<div class="moment-headline">' + n.title + '</div>' +
           '<p class="moment-body">' + desc + '</p>' +
-          '<div class="moment-footer">' +
-            '<span class="moment-source">' + (n.source || '') + '</span>' +
-            '<span class="moment-impact-badge">Impact ' + impact + '/10</span>' +
-            '<span class="moment-arrow">View →</span>' +
-          '</div>' +
-          '</div>';
-        return card;
-      });
-      const ctaEl = document.createElement('a');
-      ctaEl.href = GALAXY; ctaEl.target = '_blank';
-      ctaEl.className = 'moment-card moment-card-cta';
-      ctaEl.innerHTML =
-        '<div class="moment-cta-num">' + nodeTotal + '</div>' +
-        '<div class="moment-cta-text">moments documented in the galaxy.</div>' +
-        '<div class="moment-cta-link">See all \u2192</div>';
-      track.innerHTML = '';
-      cards.forEach(function(c) { track.appendChild(c); });
-      track.appendChild(ctaEl);
-      init();
-    }
+          '<div class="moment-footer"><span>Impact ' + (n.impact || '') + '/10</span><span class="moment-arrow">View →</span></div>' +
+        '</div>';
+      track.appendChild(card);
+    });
+    const cta = document.createElement('a');
+    cta.href = GALAXY; cta.target = '_blank'; cta.rel = 'noopener'; cta.className = 'moment-card moment-card-cta';
+    cta.innerHTML = '<div class="moment-cta-text">See the full record.</div><div class="moment-cta-link">Open the Galaxy →</div>';
+    track.appendChild(cta);
+    init();
+  }
 
-    let cur = 0;
-    let total = 1;
+  let cur = 0, total = 1, wired = false;
 
-    function cw() {
-      return window.innerWidth <= 768
-        ? track.parentElement.offsetWidth * 0.86
-        : track.parentElement.offsetWidth / 3;
-    }
-
-    function go(i) {
-      const cards = track.querySelectorAll('.moment-card');
-      total = cards.length;
-      cur = Math.max(0, Math.min(i, total - 1));
-      track.style.transform = 'translateX(-' + (cur * (cw() + 1)) + 'px)';
-      curEl.textContent = cur + 1;
-      totEl.textContent = total;
-      prev.disabled = cur === 0;
-      next.disabled = cur === total - 1;
-    }
-
-    function init() {
-      go(0);
-      prev.addEventListener('click', () => go(cur - 1));
-      next.addEventListener('click', () => go(cur + 1));
-      let tx = 0;
-      track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
-      track.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
-      }, {passive:true});
-      window.addEventListener('resize', () => go(cur));
-    }
-  })();
-
-  // ── GUIDE SLIDESHOW ──────────────────────────────────────────────────────────
-  (function() {
-    const track = document.getElementById('guide-track');
-    const prev  = document.getElementById('guide-prev');
-    const next  = document.getElementById('guide-next');
-    const curEl = document.getElementById('guide-cur');
-    if (!track) return;
-    const slides = track.querySelectorAll('.guide-slide');
-    const total  = slides.length;
-    let cur = 0;
-    function go(i) {
-      cur = Math.max(0, Math.min(i, total - 1));
-      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
-      curEl.textContent = cur + 1;
-      prev.disabled = cur === 0;
-      next.disabled = cur === total - 1;
-    }
+  function step() {
+    const first = track.querySelector('.moment-card');
+    return first ? first.getBoundingClientRect().width : 0;
+  }
+  function go(i) {
+    total = track.querySelectorAll('.moment-card').length;
+    const visible = window.innerWidth <= 860 ? 1 : 3;
+    const max = Math.max(0, total - visible);
+    cur = Math.max(0, Math.min(i, max));
+    track.style.transform = 'translateX(-' + (cur * step()) + 'px)';
+    curEl.textContent = cur + 1;
+    totEl.textContent = max + 1;
+    prev.disabled = cur === 0;
+    next.disabled = cur >= max;
+  }
+  function init() {
+    go(0);
+    if (wired) return;
+    wired = true;
     prev.addEventListener('click', () => go(cur - 1));
     next.addEventListener('click', () => go(cur + 1));
     let tx = 0;
-    track.addEventListener('touchstart', e => tx = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
     track.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - tx;
       if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
-    }, {passive:true});
-    go(0);
-  })();
-
-  // ── GUIDE SLIDESHOW ──────────────────────────────────────────────────────────
-  (function() {
-    var track = document.getElementById('guide-slides-track');
-    var prevBtn = document.getElementById('guide-prev-btn');
-    var nextBtn = document.getElementById('guide-next-btn');
-    var curNum = document.getElementById('guide-cur-num');
-    if (!track) return;
-    var cur = 0; var total = 4;
-    function go(i) {
-      cur = Math.max(0, Math.min(i, total - 1));
-      track.style.transform = 'translateX(-' + (cur * 100) + '%)';
-      if (curNum) curNum.textContent = cur + 1;
-      if (prevBtn) prevBtn.disabled = cur === 0;
-      if (nextBtn) nextBtn.disabled = cur === total - 1;
-    }
-    window.guidePrev = function() { go(cur - 1); };
-    window.guideNext = function() { go(cur + 1); };
-    var tx = 0;
-    track.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; }, {passive:true});
-    track.addEventListener('touchend', function(e) {
-      var dx = e.changedTouches[0].clientX - tx;
-      if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
-    }, {passive:true});
-    go(0);
-  })();
-
-// ── Letter toggle ─────────────────────────────────────────────────────────────
-function showLetter(mode) {
-  var photo  = document.getElementById('letter-photo');
-  var typed  = document.getElementById('letter-typed');
-  var btnH   = document.getElementById('toggle-handwritten');
-  var btnT   = document.getElementById('toggle-typed');
-  if (mode === 'handwritten') {
-    photo.classList.add('visible');    typed.classList.remove('visible');
-    btnH.classList.add('active');      btnT.classList.remove('active');
-  } else {
-    typed.classList.add('visible');    photo.classList.remove('visible');
-    btnT.classList.add('active');      btnH.classList.remove('active');
+    }, { passive: true });
+    window.addEventListener('resize', () => go(cur));
   }
-}
-</script>
-
-
-<!-- EDIT BAR -->
-<div id="edit-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--forest);color:#F5F5F0;padding:10px 20px;display:none;align-items:center;justify-content:space-between;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;">
-  <span style="color:rgba(143,224,0,.7);">✎ EDIT MODE — click underlined text to edit</span>
-  <div style="display:flex;gap:10px;">
-    <button onclick="saveEdits()" style="background:var(--lime);color:var(--fg);border:none;padding:7px 16px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">&#x21E9; Export for Repo</button>
-    <button onclick="cancelEdit()" style="background:none;border:1px solid rgba(245,245,240,.3);color:rgba(245,245,240,.7);padding:7px 14px;font-family:'Space Mono',monospace;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;">Cancel</button>
-  </div>
-</div>
-<script>
-
-// ── HERO TITLE MELT / DROP EFFECT ────────────────────────────────────────────
-(function() {
-  var hero = document.querySelector('.hero');
-  var spans = document.querySelectorAll('.hero-title span');
-  if (!hero || !spans.length) return;
-
-  var delays  = [0, 0.18, 0.36];   // each word starts melting later
-  var weights = [1.2, 0.9, 1.6];   // Drop falls hardest
-
-  function onScroll() {
-    var heroH = hero.offsetHeight;
-    var scrollY = window.scrollY || window.pageYOffset;
-    var raw = Math.max(0, Math.min(1, scrollY / (heroH * 0.65)));
-
-    for (var i = 0; i < spans.length; i++) {
-      var p = Math.max(0, Math.min(1, (raw - delays[i]) / (1 - delays[i])));
-      // ease-in curve — slow start, then accelerates
-      var ease = p * p;
-
-      var dropY   = ease * 55 * weights[i];
-      var scaleY  = 1 + ease * 0.14 * weights[i];  // stretches as it falls
-      var scaleX  = 1 - ease * 0.06;
-      var blur    = ease * 5 * weights[i];
-      var opacity = Math.max(0, 1 - ease * 0.88);
-
-      spans[i].style.transform = 'translateY(' + dropY + 'px) scaleX(' + scaleX + ') scaleY(' + scaleY + ')';
-      spans[i].style.filter    = 'blur(' + blur + 'px)';
-      spans[i].style.opacity   = opacity;
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
 })();
-
-</script>
-<script>
-
-// ── HERO TITLE DROP EFFECT ────────────────────────────────────────────────────
-(function() {
-  var hero = document.querySelector('.hero-left');
-  var titleEl = document.querySelector('.hero-title');
-  if (!hero || !titleEl) return;
-
-  // Wrap each span text in a positioned container
-  var spans = titleEl.querySelectorAll('span');
-
-  function getProgress() {
-    var heroRect = hero.getBoundingClientRect();
-    var heroH = hero.offsetHeight;
-    // Start effect when hero top goes above 20% of viewport height
-    var scrolled = -heroRect.top;
-    // Full effect over the first 60% of hero height
-    return Math.max(0, Math.min(1, scrolled / (heroH * 0.6)));
-  }
-
-  var ticking = false;
-  function update() {
-    var p = getProgress();
-
-    // Stagger: word 0 (Slop) starts at p=0, word 1 at p=0.1, word 2 (Drop) at p=0.22
-    var offsets = [0, 0.12, 0.26];
-    var masses  = [1.0, 0.8, 1.5]; // Drop is heaviest
-
-    spans.forEach(function(span, i) {
-      var local = Math.max(0, Math.min(1, (p - offsets[i]) / (1 - offsets[i])));
-      // Cubic ease-in for gravity feel
-      var ease = local * local * local;
-
-      var drop    = ease * 180 * masses[i];   // px — very dramatic
-      var scaleY  = 1 + ease * 0.5 * masses[i]; // tall stretch as it falls
-      var scaleX  = 1 - ease * 0.15;             // slight compress
-      var blur    = ease * 12 * masses[i];        // heavy blur
-      var opacity = 1 - ease * 0.95;             // nearly disappears
-
-      span.style.display = 'block';
-      span.style.transform = 'translateY(' + drop + 'px) scaleX(' + scaleX + ') scaleY(' + scaleY + ')';
-      span.style.filter = blur > 0.1 ? 'blur(' + blur.toFixed(1) + 'px)' : '';
-      span.style.opacity = Math.max(0, opacity).toFixed(3);
-      span.style.willChange = 'transform, opacity, filter';
-      span.style.transformOrigin = '50% 0%';
-    });
-
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  update(); // initial state
-})();
-
 </script>
 </body>
 </html>
