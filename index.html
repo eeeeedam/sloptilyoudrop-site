@@ -87,6 +87,9 @@ nav {
 .ticker-inner { display: inline-block; font: 400 11px/1 var(--f-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--ink); animation: tick 70s linear infinite; }
 .ticker-inner span { margin-right: 14px; }
 .ticker-inner .d { color: var(--acc); }
+.ticker-inner a { margin-right: 14px; color: inherit; text-decoration: none; }
+.ticker-inner a:hover, .ticker-inner a:focus-visible { color: var(--acc); text-decoration: underline; text-underline-offset: 3px; }
+.ticker:hover .ticker-inner { animation-play-state: paused; }
 @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .ticker-inner { animation: none; } }
 
@@ -189,6 +192,7 @@ nav {
 
 /* ── THE RECORD (synthesis band) ───────────────────────── */
 .record { padding-top: 56px; padding-bottom: 60px; border-bottom: 1px solid var(--rule); display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.record-sub { max-width: 62ch; font: 400 17px/1.6 var(--f-body); margin: 0 0 4px 22px; }
 .record-line { max-width: 22ch; font: 700 clamp(30px, 5vw, 60px)/1 var(--f-display); letter-spacing: -0.04em; padding-left: 18px; border-left: 4px solid var(--acc); text-wrap: balance; }
 .record .btn { justify-self: start; }
 
@@ -284,25 +288,8 @@ footer { position: relative; padding: 28px var(--gut-r) calc(28px + env(safe-are
 </nav>
 
 <!-- TICKER -->
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-inner">
-    <span class="d">◆</span><span>Wikipedia bans AI-generated content</span>
-    <span class="d">◆</span><span>Iran is winning the AI slop propaganda war</span>
-    <span class="d">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
-    <span class="d">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
-    <span class="d">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
-    <span class="d">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
-    <span class="d">◆</span><span>Google tells users to eat glue on their pizza</span>
-    <span class="d">◆</span><span>Fruit Love Island: 300M views, then banned</span>
-    <span class="d">◆</span><span>Wikipedia bans AI-generated content</span>
-    <span class="d">◆</span><span>Iran is winning the AI slop propaganda war</span>
-    <span class="d">◆</span><span>Hachette pulls 'Shy Girl' over AI use</span>
-    <span class="d">◆</span><span>OpenAI shuts down Sora — Disney deal collapses</span>
-    <span class="d">◆</span><span>The Atlantic catches AI in the NYT's Modern Love</span>
-    <span class="d">◆</span><span>Merriam-Webster names 'slop' word of the year</span>
-    <span class="d">◆</span><span>Google tells users to eat glue on their pizza</span>
-    <span class="d">◆</span><span>Fruit Love Island: 300M views, then banned</span>
-  </div>
+<div class="ticker" aria-label="Recent key moments">
+  <div class="ticker-inner"><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=49" target="_blank" rel="noopener">Wikipedia bans AI-generated content</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=51" target="_blank" rel="noopener">Iran is winning the AI slop propaganda war</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=40" target="_blank" rel="noopener">Hachette pulls 'Shy Girl' over AI use</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=39" target="_blank" rel="noopener">OpenAI shuts down Sora — Disney deal collapses</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=41" target="_blank" rel="noopener">The Atlantic catches AI in the NYT's Modern Love</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=29" target="_blank" rel="noopener">Merriam-Webster names 'slop' word of the year</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=9" target="_blank" rel="noopener">Google tells users to eat glue on their pizza</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=42" target="_blank" rel="noopener">Fruit Love Island: 300M views, then banned</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=49" target="_blank" rel="noopener">Wikipedia bans AI-generated content</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=51" target="_blank" rel="noopener">Iran is winning the AI slop propaganda war</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=40" target="_blank" rel="noopener">Hachette pulls 'Shy Girl' over AI use</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=39" target="_blank" rel="noopener">OpenAI shuts down Sora — Disney deal collapses</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=41" target="_blank" rel="noopener">The Atlantic catches AI in the NYT's Modern Love</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=29" target="_blank" rel="noopener">Merriam-Webster names 'slop' word of the year</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=9" target="_blank" rel="noopener">Google tells users to eat glue on their pizza</a><span class="d">◆</span><a href="https://galaxy.sloptilyoudrop.com/?node=42" target="_blank" rel="noopener">Fruit Love Island: 300M views, then banned</a></div>
 </div>
 
 <!-- HERO -->
@@ -352,7 +339,8 @@ footer { position: relative; padding: 28px var(--gut-r) calc(28px + env(safe-are
 <!-- THE RECORD -->
 <section class="record pad">
   <p class="mono">What the record shows</p>
-  <p class="record-line">Accountability is falling behind the pace of harm.</p>
+  <p class="record-line">The harm lands first. Accountability, if it comes, comes later.</p>
+  <p class="record-sub">Across the moments tracked so far, readers, editors, teachers, artists and victims tend to absorb the cost before the people who build and deploy these tools are asked to answer for it. It is too early to know whether that lag is temporary.</p>
   <a href="https://galaxy.sloptilyoudrop.com" target="_blank" rel="noopener" class="btn">Read the full synthesis in the Galaxy →</a>
 </section>
 
