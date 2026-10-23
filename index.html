@@ -186,6 +186,8 @@ nav {
 .about-col + .about-col { padding-left: 40px; border-left: 1px solid var(--rule); }
 .about-col .label-h { justify-self: start; align-self: start; margin-bottom: 16px; }
 .about-head { font: 700 clamp(28px, 3.6vw, 42px)/1.04 var(--f-display); letter-spacing: -0.035em; margin-bottom: 18px; text-wrap: balance; }
+.about-cite { display:block; font: 500 13px/1.4  var(--f-mono, 'IBM Plex Mono', monospace); margin: 10px 0 0; letter-spacing:0; text-transform:none; color: var(--grey); }
+.about-cite a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .about-body > p { font: 400 15px/1.7 var(--f-body); margin-bottom: 14px; max-width: 60ch; }
 .about-body > p.pull { font-weight: 600; }
 .about-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; padding-top: 10px; }
@@ -349,7 +351,7 @@ footer { position: relative; padding: 28px var(--gut-r) calc(28px + env(safe-are
   <div class="about-grid">
     <div class="about-col">
       <h2 class="label-h">About the project</h2>
-      <p class="about-head">Get in loser, we're going slopping.</p>
+      <p class="about-head">Get in loser, we're going slopping.<span class="about-cite"><a class="cite" href="https://knowyourmeme.com/memes/get-in-loser-were-going-shopping" target="_blank" rel="noopener">Know Your Meme</a></span></p>
       <div class="about-body">
         <p>In a slop-saturated world, meaning, information, and values are transforming before our eyes. What started as irreverent, goofy, AI-generated content has seeped into everyday life: wedding invitations, restaurant menus, holiday cards, and the far more meaningful places we once reserved for human hands.</p>
         <p class="pull">It’s easy to find frustration and anger at AI. It's harder to quantify or diagnose what exactly is being lost.</p>
